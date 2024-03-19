@@ -7,6 +7,8 @@ def loadProcessDescription(processDescriptionFile: str) -> dict:
           processDescription = processDescriptionFile.read()
           parsedProcessDescription = json.loads(processDescription)
           
+          #print(parsedProcessDescription)
+          
         return parsedProcessDescription
     
     except Exception as e:
@@ -34,6 +36,29 @@ def convertProcessDescription2GalaxyTool(parsedProcessDescription: dict):
     description = xml.etree.ElementTree.Element("description") 
     description.text = parsedProcessDescription["description"]
     tool.append(description) 
+    
+    #add inputs
+    inputs = xml.etree.ElementTree.Element("inputs") 
+    
+    
+    #add params
+    for param in parsedProcessDescription["inputs"]:
+        parsedParam = parsedProcessDescription["inputs"][param]
+        
+        paramName = str(param)
+        paramLabel = parsedParam["title"]
+        paramType = parsedParam["schema"]["type"]
+        paramHelp = parsedParam["description"]
+        
+        
+        param = xml.etree.ElementTree.Element("param") 
+        param.set('name', paramName)
+        param.set('label', paramLabel)
+        param.set('help', paramHelp)
+        param.set('type', paramType)
+        inputs.append(param)
+        
+    tool.append(inputs)
     
     tree = xml.etree.ElementTree.ElementTree(tool) 
     
