@@ -1,5 +1,5 @@
 import json
-import xml.etree.ElementTree
+import xml.etree.ElementTree as ET
 import urllib.request 
 import warnings
 import sys
@@ -40,13 +40,77 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     Returns:
     None: Function has no return value. Converted processes are stores as .xml-files.
     """
+
+    #add tool
+    tool = ET.Element("tool") 
+    tool.set('id', "generic_ogc_processes_wrapper")
+    tool.set('name', "Generic OGC Processes Wrapper")
+    tool.set('version', "0.1.0")
+
+    #add description
+    description = ET.Element("description") 
+    description.text = "executes OGC API Processes"
+    tool.append(description) 
+
+    #add exit code
+    stdio = ET.Element("stdio") 
+    exitCode = ET.Element("exit_code")
+    exitCode.set("range", "1:") 
+    stdio.append(exitCode) 
+    tool.append(stdio)
+
+    #add requriements
+    requirements = ET.Element("requirements")
+    requirement1 = ET.Element("requirement")
+    requirement1.set("type", "package")
+    requirement1.set("version", "4.1.2")
+    requirement1.text = "R"
+
+    requirement2 = ET.Element("requirement")
+    requirement2.set("type", "package")
+    requirement2.set("version", "0.2.3")
+    requirement2.text = "httr2"
+
+    requirement3 = ET.Element("requirement")
+    requirement3.set("type", "package")
+    requirement3.set("version", "1.2.0")
+    requirement3.text = "getopt"
+
+    requirement4 = ET.Element("requirement")
+    requirement4.set("type", "package")
+    requirement4.set("version", "1.8.7")
+    requirement4.text = "jsonlite"
+
+    requirements.append(requirement1)
+    requirements.append(requirement2)
+    requirements.append(requirement3)
+    requirements.append(requirement4)
+
+    tool.append(requirements)
+
+    #add command
+    command = ET.Element("command")
+    command.text = "<![CDATA[ Rscript $__tool_directory__/generic.R --file $file ADD INPUT PARAMETERS ]]>" # not yet parsed correctly in xml
+    tool.append(command)
+
+    #add inputs
+    inputs = ET.Element("inputs")
+
     
     #load config
     with open(configFile) as configFile:
         configJSON = json.load(configFile)
 
-    for api in configJSON: 
+    conditional_server = ET.Element("conditional")
+    conditional_server.set("name", "conditional_server")
+    select_server = ET.Element("param")
+    select_server.set("name", "select_server")
+    select_server.set("type", "select")
+    select_server.set("label", "Select server")
 
+    index = 0
+    for api in configJSON: 
+        index = index +1
         #check conformance
         with urllib.request.urlopen(api["server_url"] + "conformance") as conformanceURL:
             conformanceData = json.load(conformanceURL)
@@ -55,8 +119,25 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                 if confClass not in confClasses:
                     msg = "Specified API available via:" + baseURL + " does not conform to " + confClass + "." + "This may lead to issues when converting its processes to Galaxy tools."
                     warnings.warn(msg, Warning)
-        
-        #get processes
+
+        server = ET.Element("option")
+        server.text = api["server_url"]
+        server.set("value", api["server_url"])
+        select_server.append(server)
+        #make sure select server is at the beginning
+        if index == len(configJSON):
+            conditional_server.append(select_server)
+
+        when_server = ET.Element("when")
+        when_server.set("value", api["server_url"])
+
+        conditional_process = ET.Element("conditional")
+        conditional_process.set("name", "conditional_process")
+        select_process = ET.Element("param")
+        select_process.set("name", "select_process")
+        select_process.set("type", "select")
+        select_process.set("label", "Select process")
+
         with urllib.request.urlopen(api["server_url"] + "processes") as processesURL:
             processesData = json.load(processesURL)
             
@@ -65,7 +146,27 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                     msg = "Specified API available via:" + baseURL + " does not provide any processes."
                     warnings.warn(msg, Warning)
 
+                with urllib.request.urlopen(api["server_url"] + "processes/" + process["id"]) as processURL:
+                    process = json.load(processURL)
+                    processElement = ET.Element("option")
+                    processElement.text = process["id"]
+                    processElement.set("value", process["id"])
+                    select_process.append(processElement)
+        conditional_process.append(select_process)    
+        when_server.append(conditional_process)
+    conditional_server.append(when_server)
+    '''
+    #get processes
+    with urllib.request.urlopen(api["server_url"] + "processes") as processesURL:
+            processesData = json.load(processesURL)
+            
+            for process in processesData["processes"]:
+                if len(processesData["processes"]) == 0:
+                    msg = "Specified API available via:" + baseURL + " does not provide any processes."
+                    warnings.warn(msg, Warning)
+                    
 
+                
                 with urllib.request.urlopen(api["server_url"] + "processes/" + process["id"]) as processURL:
                     
                     process = json.load(processURL)
@@ -78,22 +179,15 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                         toolID = process["id"]
                         toolName = process["title"]
                         toolVersion = process["version"]
-                
+                        print(toolID)
+                        
                         isComplex = False
 
-                        #add tool
-                        tool = xml.etree.ElementTree.Element("tool") 
-                        tool.set('id', toolID)
-                        tool.set('name', toolName)
-                        tool.set('version', toolVersion)
-                
-                        #add description
-                        description = xml.etree.ElementTree.Element("description") 
-                        description.text = str(process["description"])
-                        tool.append(description) 
+                        
                 
                         #add inputs
                         inputs = xml.etree.ElementTree.Element("inputs") 
+                        
                         
                         #add params
                         for param in process["inputs"]:
@@ -160,12 +254,15 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
 
                         #append outputs
                         tool.append(outputs)
-
+                        '''
                         #export tool 
-                        tree = xml.etree.ElementTree.ElementTree(tool) 
-                        with open ("Output/" + toolID + ".xml", "wb") as toolFile: 
-                            tree.write(toolFile) 
-                        print("--> " + toolID + " exported")
+    inputs.append(conditional_server)
+    tool.append(inputs)
+    tree = ET.ElementTree(tool) 
+    with open ("generic.xml", "wb") as toolFile: 
+        tree.write(toolFile) 
+    print("--> generic.xml exported")
+                        
 
 if __name__ == "__main__":
     configFile = " ".join( sys.argv[1:] )
