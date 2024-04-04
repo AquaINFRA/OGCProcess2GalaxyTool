@@ -2,6 +2,6 @@
     {
         "server_url": "https://ospd.geolabs.fr:8300/ogc-api/",
         "included_services": ["*"],
-        "excluded_services": ["hellojs", "display"]
+        "excluded_services": ["hellojs", "display", "hellojs1"]
     }
 ]

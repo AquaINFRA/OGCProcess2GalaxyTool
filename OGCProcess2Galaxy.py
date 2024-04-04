@@ -96,6 +96,9 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     #add inputs
     inputs = ET.Element("inputs")
 
+    #add outputs
+    outputs = ET.Element("ouputs")
+
     #load config
     with open(configFile) as configFile:
         configJSON = json.load(configFile)
@@ -143,33 +146,73 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             
             index_j = 0
             when_list = []
-            for process in processesData["processes"]:
-                index_j += 1
-                if index_j == 5:
-                    break
-                if len(processesData["processes"]) == 0:
-                    msg = "Specified API available via:" + baseURL + " does not provide any processes."
-                    warnings.warn(msg, Warning)
+            for process in processesData["processes"][0:50]: #only get 50 processes!
+                #check if process is excluded
+                if(process["id"] in api["excluded_services"]):
+                    continue
 
-                with urllib.request.urlopen(api["server_url"] + "processes/" + process["id"]) as processURL:
-                    process = json.load(processURL)
-                    processElement = ET.Element("option")
-                    processElement.text = process["title"]
-                    processElement.set("value", process["id"])
-                    select_process.append(processElement)
+                #check if process is included
+                if(process["id"] in api["included_services"] or ("*" in api["included_services"] and len(api["included_services"]) == 1)):
+                    index_j += 1
+                    if len(processesData["processes"]) == 0:
+                        msg = "Specified API available via:" + baseURL + " does not provide any processes."
+                        warnings.warn(msg, Warning)
 
-                    when_process = ET.Element("when")
-                    when_process.set("value", process["id"])
-                    
-                    input1 = ET.Element("param")
-                    input1.set("name", process["id"])
-                    input1.set("type", "text")
-                    input1.set("label", process["title"])
-                    input1.set("help", process["description"])
-                    when_process.append(input1)
-                    when_list.append(when_process)
+                    with urllib.request.urlopen(api["server_url"] + "processes/" + process["id"]) as processURL:
+                        process = json.load(processURL)
+                        processElement = ET.Element("option")
+                        processElement.text = process["title"]
+                        processElement.set("value", process["id"])
+                        select_process.append(processElement)
 
-                    print(process["id"])
+                        when_process = ET.Element("when")
+                        when_process.set("value", process["id"])
+
+                        #iterate over process params
+                        for param in process["inputs"]:
+                            process_input = ET.Element("param")
+
+                            #set param name
+                            process_input.set("name", param) 
+                            
+                            #set param title
+                            if "title" in process["inputs"][param].keys():
+                                    process_input.set("label", param)
+                            else:
+                                msg = "Parameter " + paramID + " of process " + toolID + " has not title attribute."
+                                warnings.warn(msg, Warning)
+                                process_input.set("name", "?")
+                            
+                            #set param description
+                            if "description" in process["inputs"][param].keys():
+                                process_input.set("help", process["inputs"][param]["description"])
+                            else:
+                                msg = "Parameter " + paramID + " of process " + toolID + " has not description attribute."
+                                warnings.warn(msg, Warning)
+                                process_input.set("help", "No description provided!")
+
+                            #set param type
+                            if 'type' in process["inputs"][param]["schema"].keys(): #simple schema
+                                if process["inputs"][param]["schema"]["type"] in typeMapping.keys():
+                                    process_input.set("type", typeMapping[process["inputs"][param]["schema"]["type"]])
+                            elif 'oneOf' in process["inputs"][param]["schema"].keys(): #simple schema
+                                isComplex = True
+                                paramFormats = ""
+                                for format in process["inputs"][param]["schema"]["oneOf"]:
+                                    if format["type"] == "string":
+                                        process_input.set("type", typeMapping["string"])
+                                        process_input.set("format", format["contentMediaType"])
+                                    if format["type"] == "object":
+                                        process_input.set("type", typeMapping["object"])
+                            else:
+                                msg = "Parameter " + paramID + " of process " + toolID + " has no simple shema."
+                                warnings.warn(msg, Warning)
+
+                            when_process.append(process_input)
+
+                        when_list.append(when_process)
+
+                        print(process["id"])
         conditional_process.append(select_process)
         for when in when_list:
             conditional_process.append(when)    
@@ -265,6 +308,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                         #export tool 
     inputs.append(conditional_server)
     tool.append(inputs)
+    tool.append(outputs)
     tree = ET.ElementTree(tool) 
     with open ("generic.xml", "wb") as toolFile: 
         ET.indent(tree, space="\t", level=0)
