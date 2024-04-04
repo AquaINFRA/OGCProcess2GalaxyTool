@@ -96,7 +96,6 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     #add inputs
     inputs = ET.Element("inputs")
 
-    
     #load config
     with open(configFile) as configFile:
         configJSON = json.load(configFile)
@@ -124,7 +123,8 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
         server.text = api["server_url"]
         server.set("value", api["server_url"])
         select_server.append(server)
-        #make sure select server is at the beginning
+
+        #make sure select-server dropdown is at the beginning
         if index_i == len(configJSON):
             conditional_server.append(select_server)
 
@@ -142,6 +142,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             processesData = json.load(processesURL)
             
             index_j = 0
+            when_list = []
             for process in processesData["processes"]:
                 index_j += 1
                 if index_j == 5:
@@ -153,28 +154,30 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                 with urllib.request.urlopen(api["server_url"] + "processes/" + process["id"]) as processURL:
                     process = json.load(processURL)
                     processElement = ET.Element("option")
-                    processElement.text = process["id"]
+                    processElement.text = process["title"]
                     processElement.set("value", process["id"])
                     select_process.append(processElement)
-        conditional_process.append(select_process)    
+
+                    when_process = ET.Element("when")
+                    when_process.set("value", process["id"])
+                    
+                    input1 = ET.Element("param")
+                    input1.set("name", process["id"])
+                    input1.set("type", "text")
+                    input1.set("label", process["title"])
+                    input1.set("help", process["description"])
+                    when_process.append(input1)
+                    when_list.append(when_process)
+
+                    print(process["id"])
+        conditional_process.append(select_process)
+        for when in when_list:
+            conditional_process.append(when)    
         when_server.append(conditional_process)
     conditional_server.append(when_server)
     '''
     #get processes
-    with urllib.request.urlopen(api["server_url"] + "processes") as processesURL:
-            processesData = json.load(processesURL)
-            
-            for process in processesData["processes"]:
-                if len(processesData["processes"]) == 0:
-                    msg = "Specified API available via:" + baseURL + " does not provide any processes."
-                    warnings.warn(msg, Warning)
                     
-
-                
-                with urllib.request.urlopen(api["server_url"] + "processes/" + process["id"]) as processURL:
-                    
-                    process = json.load(processURL)
-
                     if(process["id"] in api["excluded_services"]):
                         continue
 
@@ -264,6 +267,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     tool.append(inputs)
     tree = ET.ElementTree(tool) 
     with open ("generic.xml", "wb") as toolFile: 
+        ET.indent(tree, space="\t", level=0)
         tree.write(toolFile) 
     print("--> generic.xml exported")
                         
