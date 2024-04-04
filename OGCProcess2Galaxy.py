@@ -108,9 +108,9 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     select_server.set("type", "select")
     select_server.set("label", "Select server")
 
-    index = 0
+    index_i = 0
     for api in configJSON: 
-        index = index +1
+        index_i += 1
         #check conformance
         with urllib.request.urlopen(api["server_url"] + "conformance") as conformanceURL:
             conformanceData = json.load(conformanceURL)
@@ -125,7 +125,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
         server.set("value", api["server_url"])
         select_server.append(server)
         #make sure select server is at the beginning
-        if index == len(configJSON):
+        if index_i == len(configJSON):
             conditional_server.append(select_server)
 
         when_server = ET.Element("when")
@@ -141,7 +141,11 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
         with urllib.request.urlopen(api["server_url"] + "processes") as processesURL:
             processesData = json.load(processesURL)
             
+            index_j = 0
             for process in processesData["processes"]:
+                index_j += 1
+                if index_j == 5:
+                    break
                 if len(processesData["processes"]) == 0:
                     msg = "Specified API available via:" + baseURL + " does not provide any processes."
                     warnings.warn(msg, Warning)
