@@ -1,0 +1,1 @@
+<tool id="SAGA.statistics_points.3" name="Minimum Distance Analysis" version="1.0.0"><description>Minimum Distance Analysis</description><inputs><param name="POINTS" label="Points" help="Points" type="data" format="text/xml, application/vnd.google-earth.kml+xml" /></inputs><outputs><data name="TABLE" label="Minimum Distance Analysis" /></outputs></tool>

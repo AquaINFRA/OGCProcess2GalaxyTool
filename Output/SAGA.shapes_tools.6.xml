@@ -1,0 +1,1 @@
+<tool id="SAGA.shapes_tools.6" name="Copy Selection to New Shapes Layer" version="1.0.0"><description>Copies selected shapes to a new shapes layer.</description><inputs><param name="INPUT" label="Input" help="Input" type="data" format="text/xml, application/vnd.google-earth.kml+xml" /></inputs><outputs><data name="OUTPUT" label="Output" /></outputs></tool>

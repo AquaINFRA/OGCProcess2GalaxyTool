@@ -1,0 +1,1 @@
+<tool id="SAGA.shapes_points.15" name="Convert Multipoints to Points" version="1.0.0"><description>Converts multipoints to points. </description><inputs><param name="MULTIPOINTS" label="Multipoints" help="Multipoints" type="data" format="text/xml, application/vnd.google-earth.kml+xml" /></inputs><outputs><data name="POINTS" label="Points" /></outputs></tool>

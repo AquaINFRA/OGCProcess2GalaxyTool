@@ -1,0 +1,1 @@
+<tool id="SAGA.pointcloud_tools.5" name="Point Cloud to Shapes" version="1.0.0"><description>Point Cloud to Shapes</description><inputs><param name="POINTS" label="Points" help="Points" type="text" format="application/x-ogc-lasf" /></inputs><outputs><data name="SHAPES" label="Shapes" /></outputs></tool>

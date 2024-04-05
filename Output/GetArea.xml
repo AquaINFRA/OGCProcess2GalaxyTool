@@ -1,0 +1,1 @@
+<tool id="GetArea" name="Compute geometry area." version="2.0.0"><description>Computes the area of a geometry</description><inputs><param name="InputPolygon" label="Polygon to compute are" help="URI to a set of GML that describes the polygon." type="text" format="text/xml, text/xml" /></inputs><outputs><data name="Area" label="Computed Area" /></outputs></tool>

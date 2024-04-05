@@ -1,0 +1,1 @@
+<tool id="SAGA.table_tools.1" name="Transpose Table" version="1.0.0"><description>Transposes a table, i.e. to swap rows and columns.</description><inputs><param name="INPUT" label="Input" help="Input" type="text" format="text/csv, text/csv" /></inputs><outputs><data name="OUTPUT" label="Output" /></outputs></tool>

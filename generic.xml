@@ -1,0 +1,135 @@
+<tool id="generic_ogc_processes_wrapper" name="Generic OGC Processes Wrapper" version="0.1.0">
+	<description>executes OGC API Processes</description>
+	<stdio>
+		<exit_code range="1:" />
+	</stdio>
+	<requirements>
+		<requirement type="package" version="4.1.2">R</requirement>
+		<requirement type="package" version="0.2.3">httr2</requirement>
+		<requirement type="package" version="1.2.0">getopt</requirement>
+		<requirement type="package" version="1.8.7">jsonlite</requirement>
+	</requirements>
+	<command><![CDATA[
+    Rscript '$__tool_directory__/generic.R'
+		--server '$select_server'
+        --process '$select_process'
+        --input '$in'
+		--fout '$fout'
+		--foutpos '$foutpos'
+		--ram '$ram'
+		--spatialr '$spatialr'
+		--ranger '$ranger'
+		--thres '$thres'
+		--maxiter '$maxiter'
+		--rangeramp '$rangeramp'
+		--modesearch '$modesearch'
+		--fout_out '$fout_out'
+		--foutpos_out '$foutpos_out'
+		--output_data '$output_data'
+    ]]></command>
+	<inputs>
+		<conditional name="conditional_server">
+			<param name="select_server" type="select" label="Select server">
+				<option value="https://ospd.geolabs.fr:8300/ogc-api/">https://ospd.geolabs.fr:8300/ogc-api/</option>
+			</param>
+			<when value="https://ospd.geolabs.fr:8300/ogc-api/">
+				<conditional name="conditional_process">
+					<param name="select_process" type="select" label="Select process">
+						<option value="OTB.MeanShiftSmoothing">OTB.MeanShiftSmoothing: This application smooths an image using the MeanShift algorithm.</option>
+						<option value="OTB.BundleToPerfectSensor">OTB.BundleToPerfectSensor: Perform P+XS pansharpening</option>
+					</param>
+					<when value="OTB.MeanShiftSmoothing">
+						<param name="in" label="in" help="The input image can be any single or multiband image. Beware of pontential imbalance between bands ranges as it may alter euclidean distance." type="text" />
+						<param name="fout" label="fout" value="float" help="This output image contains the final average spectral signatures of each pixel. The output type should be at least as wide as the input image type. Floating point encoding is advised. This output can be used as input image (in) of the LSMSSegmentation application [4,5]." type="select">
+							<option value="uint8">uint8</option>
+							<option value="uint16">uint16</option>
+							<option value="int16">int16</option>
+							<option value="int32">int32</option>
+							<option value="int32">int32</option>
+							<option value="float">float</option>
+							<option value="double">double</option>
+						</param>
+						<param name="foutpos" label="foutpos" optional="true" value="float" help="This output image contains the 2D displacement between the input pixel spatial position and the final position after convergence. Floating point encoding is mandatory. This output can be used as input image (in) of the LSMSSegmentation application [4,5]." type="select">
+							<option value="uint8">uint8</option>
+							<option value="uint16">uint16</option>
+							<option value="int16">int16</option>
+							<option value="int32">int32</option>
+							<option value="int32">int32</option>
+							<option value="float">float</option>
+							<option value="double">double</option>
+						</param>
+						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer" />
+						<param name="spatialr" label="spatialr" optional="true" value="5" help="Radius of the spatial neighborhood for averaging. Higher values will result in more smoothing and higher processing time." type="integer" />
+						<param name="ranger" label="ranger" optional="true" value="15" help="Threshold on spectral signature euclidean distance (expressed in radiometry unit) to consider neighborhood pixel for averaging. Higher values will be less edge-preserving (more similar to simple average in neighborhood), whereas lower values will result in less noise smoothing. Note that this parameter has no effect on processing time." type="float" />
+						<param name="thres" label="thres" optional="true" value="0.1" help="Algorithm will stop if update of average spectral signature and spatial position is below this threshold." type="float" />
+						<param name="maxiter" label="maxiter" optional="true" value="100" help="Algorithm will stop if convergence threshold is not met after the maximum number of iterations." type="integer" />
+						<param name="rangeramp" label="rangeramp" optional="true" value="0" help="Vary the range radius linearly with the central pixel intensity (experimental)." type="float" />
+						<param name="modesearch" label="modesearch" value="False" help="If activated pixel iterative convergence is stopped if the path crosses an already converged pixel. Be careful, with this option, the result will slightly depend on thread number and the results will not be stable (see [4] for more details)." type="boolean" truevalue="True" falsevalue="False" />
+						<param type="select" name="fout_out" label="fout" help="This output image contains the final average spectral signatures of each pixel. The output type should be at least as wide as the input image type. Floating point encoding is advised. This output can be used as input image (in) of the LSMSSegmentation application [4,5].">
+							<option value="image/tiff">image/tiff</option>
+							<option value="image/jpeg">image/jpeg</option>
+							<option value="image/png">image/png</option>
+						</param>
+						<param type="select" name="foutpos_out" label="foutpos" help="This output image contains the 2D displacement between the input pixel spatial position and the final position after convergence. Floating point encoding is mandatory. This output can be used as input image (in) of the LSMSSegmentation application [4,5].">
+							<option value="image/tiff">image/tiff</option>
+							<option value="image/jpeg">image/jpeg</option>
+							<option value="image/png">image/png</option>
+						</param>
+					</when>
+					<when value="OTB.BundleToPerfectSensor">
+						<param name="inp" label="inp" help="Input panchromatic image." type="text" />
+						<param name="inxs" label="inxs" help="Input XS image." type="text" />
+						<param name="out" label="out" value="float" help="Output image." type="select">
+							<option value="uint8">uint8</option>
+							<option value="uint16">uint16</option>
+							<option value="int16">int16</option>
+							<option value="int32">int32</option>
+							<option value="int32">int32</option>
+							<option value="float">float</option>
+							<option value="double">double</option>
+						</param>
+						<param name="elev.dem" label="elev.dem" optional="true" help="This parameter allows selecting a directory containing Digital Elevation Model files. Note that this directory should contain only DEM files. Unexpected behaviour might occurs if other images are found in this directory." type="text" />
+						<param name="elev.geoid" label="elev.geoid" help="Use a geoid grid to get the height above the ellipsoid in case there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles. A version of the geoid can be found on the OTB website(https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/blob/master/Input/DEM/egm96.grd)." type="text" />
+						<param name="elev.default" label="elev.default" value="0" help="This parameter allows setting the default height above ellipsoid when there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles, and no geoid file has been set. This is also used by some application as an average elevation value." type="float" />
+						<param name="mode" label="mode" value="default" help="Superimposition mode" type="select">
+							<option value="default">default</option>
+							<option value="phr">phr</option>
+						</param>
+						<param name="method" label="method" value="rcs" help="Selection of the pan-sharpening method." type="select">
+							<option value="rcs">rcs</option>
+							<option value="lmvm">lmvm</option>
+							<option value="bayes">bayes</option>
+						</param>
+						<param name="method.lmvm.radiusx" label="method.lmvm.radiusx" value="3" help="Set the x radius of the sliding window." type="integer" />
+						<param name="method.lmvm.radiusy" label="method.lmvm.radiusy" value="3" help="Set the y radius of the sliding window." type="integer" />
+						<param name="method.bayes.lambda" label="method.bayes.lambda" value="0.9999" help="Set the weighting value." type="float" />
+						<param name="method.bayes.s" label="method.bayes.s" value="1" help="Set the S coefficient." type="float" />
+						<param name="lms" label="lms" optional="true" value="4" help="Spacing of the deformation field. Default is 10 times the PAN image spacing." type="float" />
+						<param name="interpolator" label="interpolator" value="bco" help="This group of parameters allows defining how the input image will be interpolated during resampling." type="select">
+							<option value="bco">bco</option>
+							<option value="nn">nn</option>
+							<option value="linear">linear</option>
+						</param>
+						<param name="interpolator.bco.radius" label="interpolator.bco.radius" optional="true" value="0" help="Fill value for area outside the reprojected image" type="float" />
+						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer" />
+						<param type="select" name="out_out" label="out" help="Output image.">
+							<option value="image/tiff">image/tiff</option>
+							<option value="image/jpeg">image/jpeg</option>
+							<option value="image/png">image/png</option>
+						</param>
+					</when>
+				</conditional>
+			</when>
+		</conditional>
+	</inputs>
+	<outputs>
+		<collection name="output_data" type="list" label="Output">
+			<discover_datasets pattern="__name_and_ext__" />
+		</collection>
+	</outputs>
+	<help>Please help</help>
+	<citations>
+		<citation type="bibtex">@Manual{httr2, title = {httr2: Perform HTTP Requests and Process the Responses}, author = {Hadley Wickham}, year = {2023}, note = {R package version 1.0.0, https://github.com/r-lib/httr2}, url = {https://httr2.r-lib.org},}</citation>
+		<citation type="doi">10.48550/arXiv.1403.2805</citation>
+	</citations>
+</tool>

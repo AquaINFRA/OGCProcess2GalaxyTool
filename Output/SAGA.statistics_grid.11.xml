@@ -1,0 +1,1 @@
+<tool id="SAGA.statistics_grid.11" name="Longitudinal Grid Statistics" version="1.0.0"><description>Longitudinal Grid Statistics</description><inputs><param name="GRID" label="Grid" help="Grid" type="text" format="image/tiff, application/x-ogc-envi, application/x-ogc-aaigrid, image/png" /></inputs><outputs><data name="STATS" label="Latitudinal Statistics" /></outputs></tool>

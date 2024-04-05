@@ -1,0 +1,1 @@
+<tool id="SAGA.db_odbc.9" name="List ODBC Servers" version="1.0.0"><description>Lists all ODBC sources.</description><inputs><param name="CONNECTED" label="Only List Connected Servers" help="Only List Connected Servers" type="boolean" /></inputs><outputs><data name="SERVERS" label="Server" /></outputs></tool>

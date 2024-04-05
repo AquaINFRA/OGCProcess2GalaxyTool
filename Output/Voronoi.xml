@@ -1,0 +1,1 @@
+<tool id="Voronoi" name="Voronoi Diagram. " version="2.0.0"><description>Computes the edges of Voronoi diagram for a set of data points.</description><inputs><param name="InputPoints" label="Data points" help="The set of data points." type="text" format="text/xml, text/xml" /></inputs><outputs><data name="Result" label="Voronoi Diagram." /></outputs></tool>

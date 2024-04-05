@@ -90,14 +90,29 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
 
     #add command
     command = ET.Element("command")
-    command.text = "<![CDATA[ Rscript $__tool_directory__/generic.R --file $file ADD INPUT PARAMETERS ]]>" # not yet parsed correctly in xml
+    command.text = """<![CDATA[
+    Rscript '$__tool_directory__/generic.R'
+		--server '$select_server'
+        --process '$select_process'
+        --input '$in'
+		--fout '$fout'
+		--foutpos '$foutpos'
+		--ram '$ram'
+		--spatialr '$spatialr'
+		--ranger '$ranger'
+		--thres '$thres'
+		--maxiter '$maxiter'
+		--rangeramp '$rangeramp'
+		--modesearch '$modesearch'
+		--fout_out '$fout_out'
+		--foutpos_out '$foutpos_out'
+		--output_data '$output_data'
+    ]]>"""
+
     tool.append(command)
 
     #add inputs
     inputs = ET.Element("inputs")
-
-    #add outputs
-    outputs = ET.Element("ouputs")
 
     #load config
     with open(configFile) as configFile:
@@ -144,24 +159,22 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
         with urllib.request.urlopen(api["server_url"] + "processes") as processesURL:
             processesData = json.load(processesURL)
             
-            index_j = 0
-            when_list = []
-            for process in processesData["processes"][0:50]: #only get 50 processes!
+            when_list_processes = []
+            for process in processesData["processes"][49:51]: #only get 50 processes!
                 #check if process is excluded
                 if(process["id"] in api["excluded_services"]):
                     continue
 
                 #check if process is included
                 if(process["id"] in api["included_services"] or ("*" in api["included_services"] and len(api["included_services"]) == 1)):
-                    index_j += 1
                     if len(processesData["processes"]) == 0:
                         msg = "Specified API available via:" + baseURL + " does not provide any processes."
-                        warnings.warn(msg, Warning)
+                        #warnings.warn(msg, Warning)
 
                     with urllib.request.urlopen(api["server_url"] + "processes/" + process["id"]) as processURL:
                         process = json.load(processURL)
                         processElement = ET.Element("option")
-                        processElement.text = process["title"]
+                        processElement.text = process["id"] + ": " + process["title"]
                         processElement.set("value", process["id"])
                         select_process.append(processElement)
 
@@ -179,43 +192,84 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                             if "title" in process["inputs"][param].keys():
                                     process_input.set("label", param)
                             else:
-                                msg = "Parameter " + paramID + " of process " + toolID + " has not title attribute."
-                                warnings.warn(msg, Warning)
+                                msg = "Parameter " + param + " of process " + process["id"] + " has not title attribute."
+                                #warnings.warn(msg, Warning)
                                 process_input.set("name", "?")
+
+                            #set optional/required title
+                            if "nullable" in process["inputs"][param]["schema"].keys():
+                                if process["inputs"][param]["schema"]["nullable"]:
+                                    process_input.set("optional", "true")
+                            else:
+                                msg = "Parameter " + param + " of process " + process["id"] + " has no nullable information."
+                                #warnings.warn(msg, Warning)
+
+                            #set default
+                            if "default" in process["inputs"][param]["schema"].keys():
+                                process_input.set("value", str(process["inputs"][param]["schema"]["default"]))
+                            else:
+                                msg = "Parameter " + param + " of process " + process["id"] + " has no default value."
+                                #warnings.warn(msg, Warning)
                             
                             #set param description
                             if "description" in process["inputs"][param].keys():
                                 process_input.set("help", process["inputs"][param]["description"])
                             else:
-                                msg = "Parameter " + paramID + " of process " + toolID + " has not description attribute."
-                                warnings.warn(msg, Warning)
+                                msg = "Parameter " + param + " of process " + process["id"] + " has not description attribute."
+                                #warnings.warn(msg, Warning)
                                 process_input.set("help", "No description provided!")
 
                             #set param type
                             if 'type' in process["inputs"][param]["schema"].keys(): #simple schema
                                 if process["inputs"][param]["schema"]["type"] in typeMapping.keys():
                                     process_input.set("type", typeMapping[process["inputs"][param]["schema"]["type"]])
+                                    if process["inputs"][param]["schema"]["type"] == "boolean":
+                                        process_input.set("truevalue", "True") # Galaxy uses this for bools
+                                        process_input.set("falsevalue", "False")
+                                    if "enum" in process["inputs"][param]["schema"]: #create dropdown if enum exists
+                                        process_input.set("type", "select")
+                                        for enum in process["inputs"][param]["schema"]["enum"]:
+                                            option = ET.Element("option")
+                                            option.set("value", enum)
+                                            option.text = enum
+                                            process_input.append(option)
                             elif 'oneOf' in process["inputs"][param]["schema"].keys(): #simple schema
                                 isComplex = True
                                 paramFormats = ""
                                 for format in process["inputs"][param]["schema"]["oneOf"]:
                                     if format["type"] == "string":
                                         process_input.set("type", typeMapping["string"])
-                                        process_input.set("format", format["contentMediaType"])
+                                        #not sure if format is actually needed as a tag or if it just needs to be communicated to users via help, because the input will be just a link as a string.
+                                        #process_input.set("format", format["contentMediaType"])
                                     if format["type"] == "object":
                                         process_input.set("type", typeMapping["object"])
                             else:
-                                msg = "Parameter " + paramID + " of process " + toolID + " has no simple shema."
-                                warnings.warn(msg, Warning)
+                                msg = "Parameter " + param + " of process " + process["id"] + " has no simple shema."
+                                #warnings.warn(msg, Warning)
 
                             when_process.append(process_input)
+                        
+                        for output in process["outputs"]:
+                            outputName = output
+                            outputLabel = process["outputs"][output]["title"]
+                            if "extended-schema" in process["outputs"][output]:
+                                process_output = ET.Element("param")
+                                process_output.set("type", "select")
+                                process_output.set("name", outputName + "_out") #_out needed to avoid duplicates
+                                process_output.set("label", outputName)
+                                process_output.set("help", outputLabel)
+                                for enum in process["outputs"][output]["extended-schema"]["oneOf"][0]["allOf"][1]["properties"]["type"]["enum"]:
+                                    output_option = ET.Element("option")
+                                    output_option.set("value", enum)
+                                    output_option.text=enum
+                                    process_output.append(output_option)
+                                when_process.append(process_output)
 
-                        when_list.append(when_process)
+                        when_list_processes.append(when_process)
 
-                        print(process["id"])
         conditional_process.append(select_process)
-        for when in when_list:
-            conditional_process.append(when)    
+        for when_process in when_list_processes:
+            conditional_process.append(when_process)    
         when_server.append(conditional_process)
     conditional_server.append(when_server)
     '''
@@ -308,7 +362,37 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                         #export tool 
     inputs.append(conditional_server)
     tool.append(inputs)
+
+    #add outputs
+    outputs = ET.Element("outputs")
+    collection = ET.Element("collection")
+    collection.set("name", "output_data")
+    collection.set("type", "list")
+    collection.set("label", "Output")
+    discover_datasets = ET.Element("discover_datasets")
+    discover_datasets.set("pattern", "__name_and_ext__")
+    collection.append(discover_datasets)
+    outputs.append(collection)
     tool.append(outputs)
+
+    #add help
+    helpElement = ET.Element("help")
+    helpElement.text= "Please help"
+    tool.append(helpElement)
+
+    #add citation
+    citations = ET.Element("citations")
+    citation1 = ET.Element("citation")
+    citation1.set("type", "bibtex")
+    citation1.text = "@Manual{httr2, title = {httr2: Perform HTTP Requests and Process the Responses}, author = {Hadley Wickham}, year = {2023}, note = {R package version 1.0.0, https://github.com/r-lib/httr2}, url = {https://httr2.r-lib.org},}"
+    citation2 = ET.Element("citation")
+    citation2.set("type", "doi")
+    citation2.text = "10.48550/arXiv.1403.2805"
+    citations.append(citation1)
+    citations.append(citation2)
+    tool.append(citations)
+
+
     tree = ET.ElementTree(tool) 
     with open ("generic.xml", "wb") as toolFile: 
         ET.indent(tree, space="\t", level=0)

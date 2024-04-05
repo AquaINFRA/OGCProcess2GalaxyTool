@@ -1,0 +1,1 @@
+<tool id="SAGA.ta_morphometry.6" name="Real Surface Area" version="1.0.0"><description>Calculates real (not projected) cell area</description><inputs><param name="DEM" label="Elevation" help="Elevation" type="text" format="image/tiff, application/x-ogc-envi, application/x-ogc-aaigrid, image/png" /></inputs><outputs><data name="AREA" label="Surface Area" /></outputs></tool>

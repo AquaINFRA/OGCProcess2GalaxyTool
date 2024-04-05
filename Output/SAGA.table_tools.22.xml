@@ -1,0 +1,1 @@
+<tool id="SAGA.table_tools.22" name="Copy Table" version="1.0.0"><description>Creates a copy of a table.</description><inputs><param name="TABLE" label="Table" help="Table" type="text" format="text/csv, text/csv" /></inputs><outputs><data name="COPY" label="Copy" /></outputs></tool>

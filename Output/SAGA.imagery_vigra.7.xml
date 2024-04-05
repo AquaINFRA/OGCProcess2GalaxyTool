@@ -1,0 +1,1 @@
+<tool id="SAGA.imagery_vigra.7" name="Fourier Transform (Real, ViGrA)" version="1.0.0"><description>Fourier Transform (Real, ViGrA)</description><inputs><param name="INPUT" label="Input" help="Input" type="text" format="image/tiff, application/x-ogc-envi, application/x-ogc-aaigrid, image/png" /></inputs><outputs><data name="OUTPUT" label="Output" /></outputs></tool>

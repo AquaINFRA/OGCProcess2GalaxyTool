@@ -1,0 +1,1 @@
+<tool id="SAGA.shapes_grid.10" name="Grid System Extent" version="1.0.0"><description>Creates a polygon (rectangle) from a grid system's extent.</description><inputs><param name="CELLS" label="Border" help="Border" type="text" /></inputs><outputs><data name="SHAPES" label="Extent" /></outputs></tool>
