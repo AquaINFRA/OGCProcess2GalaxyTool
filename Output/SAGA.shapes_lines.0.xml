@@ -1,1 +1,0 @@
-<tool id="SAGA.shapes_lines.0" name="Convert Polygons to Lines" version="1.0.0"><description>Convert polygons to lines.</description><inputs><param name="POLYGONS" label="Polygons" help="Polygons" type="data" format="text/xml, application/vnd.google-earth.kml+xml" /></inputs><outputs><data name="LINES" label="Lines" /></outputs></tool>

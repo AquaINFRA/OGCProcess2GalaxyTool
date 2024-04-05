@@ -1,1 +1,0 @@
-<tool id="SAGA.imagery_classification.3" name="Decision Tree" version="1.0.0"><description>Decision Tree</description><inputs /><outputs><data name="CLASSES" label="Decision Tree" /></outputs></tool>

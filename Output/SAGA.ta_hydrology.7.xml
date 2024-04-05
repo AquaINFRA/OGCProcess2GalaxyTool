@@ -1,1 +1,0 @@
-<tool id="SAGA.ta_hydrology.7" name="Slope Length" version="1.0.0"><description>Slope Length</description><inputs><param name="DEM" label="Elevation" help="Elevation" type="text" format="image/tiff, application/x-ogc-envi, application/x-ogc-aaigrid, image/png" /></inputs><outputs><data name="LENGTH" label="Slope Length" /></outputs></tool>

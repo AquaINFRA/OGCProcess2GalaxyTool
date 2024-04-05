@@ -1,1 +1,0 @@
-<tool id="SAGA.grid_tools.17" name="Crop to Data" version="1.0.0"><description>Crop grids to valid data cells</description><inputs><param name="INPUT" label="Grids" help="Grids" type="text" format="image/tiff, application/x-ogc-envi, application/x-ogc-aaigrid, image/png" /></inputs><outputs><data name="OUTPUT" label="Cropped Grids" /></outputs></tool>

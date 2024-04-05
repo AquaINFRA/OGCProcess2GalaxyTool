@@ -1,1 +1,0 @@
-<tool id="SAGA.db_pgsql.0" name="List PostgreSQL Connections" version="1.0.0"><description>Lists all PostgreSQL sources.</description><inputs /><outputs><data name="CONNECTIONS" label="Connections" /></outputs></tool>

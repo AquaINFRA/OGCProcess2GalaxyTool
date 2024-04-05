@@ -1,1 +1,0 @@
-<tool id="SAGA.statistics_grid.12" name="Meridional Grid Statistics" version="1.0.0"><description>Meridional Grid Statistics</description><inputs><param name="GRID" label="Grid" help="Grid" type="text" format="image/tiff, application/x-ogc-envi, application/x-ogc-aaigrid, image/png" /></inputs><outputs><data name="STATS" label="Meridional Statistics" /></outputs></tool>
