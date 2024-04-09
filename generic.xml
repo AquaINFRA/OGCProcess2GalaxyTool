@@ -9,24 +9,6 @@
 		<requirement type="package" version="1.2.0">getopt</requirement>
 		<requirement type="package" version="1.8.7">jsonlite</requirement>
 	</requirements>
-	<command><![CDATA[
-    Rscript '$__tool_directory__/generic.R'
-		--server '$select_server'
-        --process '$select_process'
-        --input '$in'
-		--fout '$fout'
-		--foutpos '$foutpos'
-		--ram '$ram'
-		--spatialr '$spatialr'
-		--ranger '$ranger'
-		--thres '$thres'
-		--maxiter '$maxiter'
-		--rangeramp '$rangeramp'
-		--modesearch '$modesearch'
-		--fout_out '$fout_out'
-		--foutpos_out '$foutpos_out'
-		--output_data '$output_data'
-    ]]></command>
 	<inputs>
 		<conditional name="conditional_server">
 			<param name="select_server" type="select" label="Select server">
@@ -37,6 +19,13 @@
 					<param name="select_process" type="select" label="Select process">
 						<option value="OTB.MeanShiftSmoothing">OTB.MeanShiftSmoothing: This application smooths an image using the MeanShift algorithm.</option>
 						<option value="OTB.BundleToPerfectSensor">OTB.BundleToPerfectSensor: Perform P+XS pansharpening</option>
+						<option value="OTB.ConvertCartoToGeoPoint">OTB.ConvertCartoToGeoPoint: Convert cartographic coordinates to geographic ones.</option>
+						<option value="OTB.VectorDataTransform">OTB.VectorDataTransform: Apply a transform to each vertex of the input VectorData</option>
+						<option value="OTB.FusionOfClassifications">OTB.FusionOfClassifications: Fuses several classifications maps of the same image on the basis of class labels.</option>
+						<option value="OTB.VectorDataSetField">OTB.VectorDataSetField: Set a field in vector data.</option>
+						<option value="OTB.Pansharpening">OTB.Pansharpening: Perform P+XS pansharpening</option>
+						<option value="OTB.ConcatenateVectorData">OTB.ConcatenateVectorData: Concatenate vector data files</option>
+						<option value="OTB.GridBasedImageResampling">OTB.GridBasedImageResampling: Resamples an image according to a resampling grid</option>
 					</param>
 					<when value="OTB.MeanShiftSmoothing">
 						<param name="in" label="in" help="The input image can be any single or multiband image. Beware of pontential imbalance between bands ranges as it may alter euclidean distance." type="text" />
@@ -118,6 +107,148 @@
 							<option value="image/png">image/png</option>
 						</param>
 					</when>
+					<when value="OTB.ConvertCartoToGeoPoint">
+						<param name="carto.x" label="carto.x" help="X cartographic coordinates in the projection defined by mapproj parameter" type="float" />
+						<param name="carto.y" label="carto.y" help="Y cartographic coordinates in the projection defined by mapproj parameter" type="float" />
+						<param name="mapproj" label="mapproj" value="utm" help="Defines the map projection to be used." type="select">
+							<option value="utm">utm</option>
+							<option value="lambert2">lambert2</option>
+							<option value="lambert93">lambert93</option>
+							<option value="wgs">wgs</option>
+							<option value="epsg">epsg</option>
+						</param>
+						<param name="mapproj.utm.zone" label="mapproj.utm.zone" value="31" help="The zone number ranges from 1 to 60 and allows defining the transverse mercator projection (along with the hemisphere)" type="integer" />
+						<param name="mapproj.utm.northhem" label="mapproj.utm.northhem" value="False" help="The transverse mercator projections are defined by their zone number as well as the hemisphere. Activate this parameter if your image is in the northern hemisphere." type="boolean" truevalue="True" falsevalue="False" />
+						<param name="mapproj.epsg.code" label="mapproj.epsg.code" value="4326" help="See www.spatialreference.org to find which EPSG code is associated to your projection" type="integer" />
+					</when>
+					<when value="OTB.VectorDataTransform">
+						<param name="vd" label="vd" help="Input vector data file to transform" type="text" />
+						<param name="in" label="in" help="Image defining the reference coordinate system in which the transform is applied. Both projected and sensor images are supported." type="text" />
+						<param name="transform.tx" label="transform.tx" value="0" help="Translation in the X direction (in pixels)" type="float" />
+						<param name="transform.ty" label="transform.ty" value="0" help="Translation in the Y direction (in pixels)" type="float" />
+						<param name="transform.ro" label="transform.ro" value="0" help="Angle of the rotation (in degrees)" type="float" />
+						<param name="transform.centerx" label="transform.centerx" value="0" help="X coordinate of the rotation and scaling center (in physical units)" type="float" />
+						<param name="transform.centery" label="transform.centery" value="0" help="Y coordinate of the rotation and scaling center (in physical units)" type="float" />
+						<param name="transform.scale" label="transform.scale" value="1" help="The scale coefficient to apply" type="float" />
+						<param type="select" name="out_out" label="out" help="Output vector data with ">
+							<option value="text/xml">text/xml</option>
+							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
+							<option value="application/json">application/json</option>
+							<option value="application/zip">application/zip</option>
+						</param>
+					</when>
+					<when value="OTB.FusionOfClassifications">
+						<param name="il" label="il" help="List of input classification maps to fuse. Labels in each classification image must represent the same class." type="text" />
+						<param name="method" label="method" value="majorityvoting" help="Selection of the fusion method and its parameters." type="select">
+							<option value="majorityvoting">majorityvoting</option>
+							<option value="dempstershafer">dempstershafer</option>
+						</param>
+						<param name="method.dempstershafer.cmfl" label="method.dempstershafer.cmfl" value="precision" help="Type of confusion matrix measurement used to compute the masses of belief of each classifier." type="select">
+							<option value="precision">precision</option>
+							<option value="recall">recall</option>
+							<option value="accuracy">accuracy</option>
+							<option value="kappa">kappa</option>
+						</param>
+						<param name="nodatalabel" label="nodatalabel" value="0" help="Label for the NoData class. Such input pixels keep their NoData label in the output image and are not handled in the fusion process. By default, 'nodatalabel = 0'." type="integer" />
+						<param name="undecidedlabel" label="undecidedlabel" value="0" help="Label for the Undecided class. Pixels with more than 1 fused class are marked as Undecided. Please note that the Undecided value must be different from existing labels in the input classifications. By default, 'undecidedlabel = 0'." type="integer" />
+						<param name="out" label="out" value="uint8" help="The output classification image resulting from the fusion of the input classification images." type="select">
+							<option value="uint8">uint8</option>
+							<option value="uint16">uint16</option>
+							<option value="int16">int16</option>
+							<option value="int32">int32</option>
+							<option value="int32">int32</option>
+							<option value="float">float</option>
+							<option value="double">double</option>
+						</param>
+						<param type="select" name="out_out" label="out" help="The output classification image resulting from the fusion of the input classification images.">
+							<option value="image/tiff">image/tiff</option>
+							<option value="image/jpeg">image/jpeg</option>
+							<option value="image/png">image/png</option>
+						</param>
+					</when>
+					<when value="OTB.VectorDataSetField">
+						<param name="in" label="in" help="Input Vector Data" type="text" />
+						<param name="fn" label="fn" help="Field name" type="text" />
+						<param name="fv" label="fv" help="Field value" type="text" />
+						<param type="select" name="out_out" label="out" help="Output Vector Data">
+							<option value="text/xml">text/xml</option>
+							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
+							<option value="application/json">application/json</option>
+							<option value="application/zip">application/zip</option>
+						</param>
+					</when>
+					<when value="OTB.Pansharpening">
+						<param name="inp" label="inp" help="Input panchromatic image." type="text" />
+						<param name="inxs" label="inxs" help="Input XS image." type="text" />
+						<param name="out" label="out" value="float" help="Output image." type="select">
+							<option value="uint8">uint8</option>
+							<option value="uint16">uint16</option>
+							<option value="int16">int16</option>
+							<option value="int32">int32</option>
+							<option value="int32">int32</option>
+							<option value="float">float</option>
+							<option value="double">double</option>
+						</param>
+						<param name="method" label="method" value="rcs" help="Selection of the pan-sharpening method." type="select">
+							<option value="rcs">rcs</option>
+							<option value="lmvm">lmvm</option>
+							<option value="bayes">bayes</option>
+						</param>
+						<param name="method.lmvm.radiusx" label="method.lmvm.radiusx" value="3" help="Set the x radius of the sliding window." type="integer" />
+						<param name="method.lmvm.radiusy" label="method.lmvm.radiusy" value="3" help="Set the y radius of the sliding window." type="integer" />
+						<param name="method.bayes.lambda" label="method.bayes.lambda" value="0.9999" help="Set the weighting value." type="float" />
+						<param name="method.bayes.s" label="method.bayes.s" value="1" help="Set the S coefficient." type="float" />
+						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer" />
+						<param type="select" name="out_out" label="out" help="Output image.">
+							<option value="image/tiff">image/tiff</option>
+							<option value="image/jpeg">image/jpeg</option>
+							<option value="image/png">image/png</option>
+						</param>
+					</when>
+					<when value="OTB.ConcatenateVectorData">
+						<param name="vd" label="vd" help="Vector data files to be concatenated." type="text" />
+						<param type="select" name="out_out" label="out" help="Output conctenated vector data file.">
+							<option value="text/xml">text/xml</option>
+							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
+							<option value="application/json">application/json</option>
+							<option value="application/zip">application/zip</option>
+						</param>
+					</when>
+					<when value="OTB.GridBasedImageResampling">
+						<param name="io.in" label="io.in" help="The input image to resample" type="text" />
+						<param name="io.out" label="io.out" value="float" help="The resampled output image" type="select">
+							<option value="uint8">uint8</option>
+							<option value="uint16">uint16</option>
+							<option value="int16">int16</option>
+							<option value="int32">int32</option>
+							<option value="int32">int32</option>
+							<option value="float">float</option>
+							<option value="double">double</option>
+						</param>
+						<param name="grid.in" label="grid.in" help="The resampling grid" type="text" />
+						<param name="grid.type" label="grid.type" value="def" help="allows one to choose between two grid types" type="select">
+							<option value="def">def</option>
+							<option value="loc">loc</option>
+						</param>
+						<param name="out.ulx" label="out.ulx" value="0" help="X Coordinate of the upper-left pixel of the output resampled image" type="float" />
+						<param name="out.uly" label="out.uly" value="0" help="Y Coordinate of the upper-left pixel of the output resampled image" type="float" />
+						<param name="out.sizex" label="out.sizex" help="Size of the output resampled image along X (in pixels)" type="integer" />
+						<param name="out.sizey" label="out.sizey" help="Size of the output resampled image along Y (in pixels)" type="integer" />
+						<param name="out.spacingx" label="out.spacingx" value="1" help="Size of each pixel along X axis" type="float" />
+						<param name="out.spacingy" label="out.spacingy" value="1" help="Size of each pixel along Y axis" type="float" />
+						<param name="out.default" label="out.default" value="0" help="The default value to give to pixel that falls outside of the input image." type="float" />
+						<param name="interpolator" label="interpolator" value="bco" help="This group of parameters allows one to define how the input image will be interpolated during resampling." type="select">
+							<option value="nn">nn</option>
+							<option value="linear">linear</option>
+							<option value="bco">bco</option>
+						</param>
+						<param name="interpolator.bco.radius" label="interpolator.bco.radius" optional="true" value="128" help="Available memory for processing (in MB)" type="integer" />
+						<param type="select" name="io.out_out" label="io.out" help="The resampled output image">
+							<option value="image/tiff">image/tiff</option>
+							<option value="image/jpeg">image/jpeg</option>
+							<option value="image/png">image/png</option>
+						</param>
+					</when>
 				</conditional>
 			</when>
 		</conditional>
@@ -132,4 +263,5 @@
 		<citation type="bibtex">@Manual{httr2, title = {httr2: Perform HTTP Requests and Process the Responses}, author = {Hadley Wickham}, year = {2023}, note = {R package version 1.0.0, https://github.com/r-lib/httr2}, url = {https://httr2.r-lib.org},}</citation>
 		<citation type="doi">10.48550/arXiv.1403.2805</citation>
 	</citations>
+	<command>&lt;![CDATA[#if $conditional_server.select_process == "OTB.MeanShiftSmoothing":Rscript '$__tool_directory__/generic.R'--server '$select_server'--process '$select_process'--in'$in'--fout'$fout'--foutpos'$foutpos'--ram'$ram'--spatialr'$spatialr'--ranger'$ranger'--thres'$thres'--maxiter'$maxiter'--rangeramp'$rangeramp'--modesearch'$modesearch'#elif $conditional_server.select_process == "OTB.BundleToPerfectSensor":Rscript '$__tool_directory__/generic.R'--server '$select_server'--process '$select_process'--inp'$inp'--inxs'$inxs'--out'$out'--elev.dem'$elev.dem'--elev.geoid'$elev.geoid'--elev.default'$elev.default'--mode'$mode'--method'$method'--method.lmvm.radiusx'$method.lmvm.radiusx'--method.lmvm.radiusy'$method.lmvm.radiusy'--method.bayes.lambda'$method.bayes.lambda'--method.bayes.s'$method.bayes.s'--lms'$lms'--interpolator'$interpolator'--interpolator.bco.radius'$interpolator.bco.radius'--ram'$ram'#elif $conditional_server.select_process == "OTB.ConvertCartoToGeoPoint":Rscript '$__tool_directory__/generic.R'--server '$select_server'--process '$select_process'--carto.x'$carto.x'--carto.y'$carto.y'--mapproj'$mapproj'--mapproj.utm.zone'$mapproj.utm.zone'--mapproj.utm.northhem'$mapproj.utm.northhem'--mapproj.epsg.code'$mapproj.epsg.code'#elif $conditional_server.select_process == "OTB.VectorDataTransform":Rscript '$__tool_directory__/generic.R'--server '$select_server'--process '$select_process'--vd'$vd'--in'$in'--transform.tx'$transform.tx'--transform.ty'$transform.ty'--transform.ro'$transform.ro'--transform.centerx'$transform.centerx'--transform.centery'$transform.centery'--transform.scale'$transform.scale'#elif $conditional_server.select_process == "OTB.FusionOfClassifications":Rscript '$__tool_directory__/generic.R'--server '$select_server'--process '$select_process'--il'$il'--method'$method'--method.dempstershafer.cmfl'$method.dempstershafer.cmfl'--nodatalabel'$nodatalabel'--undecidedlabel'$undecidedlabel'--out'$out'#elif $conditional_server.select_process == "OTB.VectorDataSetField":Rscript '$__tool_directory__/generic.R'--server '$select_server'--process '$select_process'--in'$in'--fn'$fn'--fv'$fv'#elif $conditional_server.select_process == "OTB.Pansharpening":Rscript '$__tool_directory__/generic.R'--server '$select_server'--process '$select_process'--inp'$inp'--inxs'$inxs'--out'$out'--method'$method'--method.lmvm.radiusx'$method.lmvm.radiusx'--method.lmvm.radiusy'$method.lmvm.radiusy'--method.bayes.lambda'$method.bayes.lambda'--method.bayes.s'$method.bayes.s'--ram'$ram'#elif $conditional_server.select_process == "OTB.ConcatenateVectorData":Rscript '$__tool_directory__/generic.R'--server '$select_server'--process '$select_process'--vd'$vd'#elif $conditional_server.select_process == "OTB.GridBasedImageResampling":Rscript '$__tool_directory__/generic.R'--server '$select_server'--process '$select_process'--io.in'$io.in'--io.out'$io.out'--grid.in'$grid.in'--grid.type'$grid.type'--out.ulx'$out.ulx'--out.uly'$out.uly'--out.sizex'$out.sizex'--out.sizey'$out.sizey'--out.spacingx'$out.spacingx'--out.spacingy'$out.spacingy'--out.default'$out.default'--interpolator'$interpolator'--interpolator.bco.radius'$interpolator.bco.radius'#end if]]&gt;</command>
 </tool>

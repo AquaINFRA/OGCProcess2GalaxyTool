@@ -90,26 +90,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
 
     #add command
     command = ET.Element("command")
-    command.text = """<![CDATA[
-    Rscript '$__tool_directory__/generic.R'
-		--server '$select_server'
-        --process '$select_process'
-        --input '$in'
-		--fout '$fout'
-		--foutpos '$foutpos'
-		--ram '$ram'
-		--spatialr '$spatialr'
-		--ranger '$ranger'
-		--thres '$thres'
-		--maxiter '$maxiter'
-		--rangeramp '$rangeramp'
-		--modesearch '$modesearch'
-		--fout_out '$fout_out'
-		--foutpos_out '$foutpos_out'
-		--output_data '$output_data'
-    ]]>"""
-
-    tool.append(command)
+    commands = []
 
     #add inputs
     inputs = ET.Element("inputs")
@@ -160,7 +141,11 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             processesData = json.load(processesURL)
             
             when_list_processes = []
-            for process in processesData["processes"][49:51]: #only get 50 processes!
+            for process in processesData["processes"][49:58]: #only get 50 processes!
+                
+                #command information for process
+                processCommand = {"server": api["server_url"], "process": process["id"]}
+
                 #check if process is excluded
                 if(process["id"] in api["excluded_services"]):
                     continue
@@ -180,9 +165,13 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
 
                         when_process = ET.Element("when")
                         when_process.set("value", process["id"])
+                        
+                        #inputs for commands 
+                        inputCommand = []
 
                         #iterate over process params
                         for param in process["inputs"]:
+                            inputCommand.append(param)
                             process_input = ET.Element("param")
 
                             #set param name
@@ -249,6 +238,10 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
 
                             when_process.append(process_input)
                         
+                        #add inputs to command information for process
+                        processCommand["inputs"] = inputCommand
+                        commands.append(processCommand)
+
                         for output in process["outputs"]:
                             outputName = output
                             outputLabel = process["outputs"][output]["title"]
@@ -392,13 +385,33 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     citations.append(citation2)
     tool.append(citations)
 
+    #add command
+    commandText = "<![CDATA["
+
+    for i in range(0, len(commands)):
+        if i == 0:
+            commandText += "#if $conditional_server.select_process == \"" + commands[i]["process"] + "\":"
+            commandText += "Rscript '$__tool_directory__/generic.R'"
+            commandText += "--server '$select_server'"
+            commandText += "--process '$select_process'"
+            for y in commands[i]["inputs"]:
+                commandText += "--"+ y + "\'$" + y + "\'"
+        else:
+            commandText += "#elif $conditional_server.select_process == \"" + commands[i]["process"] + "\":"
+            commandText += "Rscript '$__tool_directory__/generic.R'"
+            commandText += "--server '$select_server'"
+            commandText += "--process '$select_process'"
+            for y in commands[i]["inputs"]:
+                commandText += "--"+ y + "\'$" + y + "\'"
+    commandText += "#end if]]>"
+    command.text = commandText
+    tool.append(command)
 
     tree = ET.ElementTree(tool) 
     with open ("generic.xml", "wb") as toolFile: 
-        ET.indent(tree, space="\t", level=0)
-        tree.write(toolFile) 
+        ET.indent(tree, space="\t",  level=0)
+        tree.write(toolFile, encoding=None)
     print("--> generic.xml exported")
-                        
 
 if __name__ == "__main__":
     configFile = " ".join( sys.argv[1:] )
