@@ -141,7 +141,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             processesData = json.load(processesURL)
             
             when_list_processes = []
-            for process in processesData["processes"][49:58]: #only get 50 processes!
+            for process in processesData["processes"][0:10]: #only get 50 processes!
                 
                 #command information for process
                 processCommand = {"server": api["server_url"], "process": process["id"]}
@@ -390,27 +390,35 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
 
     for i in range(0, len(commands)):
         if i == 0:
-            commandText += "#if $conditional_server.select_process == \"" + commands[i]["process"] + "\":"
-            commandText += "Rscript '$__tool_directory__/generic.R'"
-            commandText += "--server '$select_server'"
-            commandText += "--process '$select_process'"
+            commandText += "\n#if $conditional_server.select_process == \"" + commands[i]["process"] + "\":\n"
+            commandText += "\tRscript '$__tool_directory__/generic.R'\n"
+            commandText += "\t\t--server '$select_server' \n"
+            commandText += "\t\t--process '$select_process'"
             for y in commands[i]["inputs"]:
-                commandText += "--"+ y + "\'$" + y + "\'"
+                commandText += "\n\t\t--"+ y + " \'$" + y + "\'"
         else:
-            commandText += "#elif $conditional_server.select_process == \"" + commands[i]["process"] + "\":"
-            commandText += "Rscript '$__tool_directory__/generic.R'"
-            commandText += "--server '$select_server'"
-            commandText += "--process '$select_process'"
+            commandText += "\n#elif $conditional_server.select_process == \"" + commands[i]["process"] + "\":\n"
+            commandText += "\tRscript '$__tool_directory__/generic.R'\n"
+            commandText += "\t\t--server '$select_server' \n"
+            commandText += "\t\t--process '$select_process'"
             for y in commands[i]["inputs"]:
-                commandText += "--"+ y + "\'$" + y + "\'"
-    commandText += "#end if]]>"
+                commandText += "\n\t\t--"+ y + " \'$" + y + "\'"
+    commandText += "#end if\n]]>"
     command.text = commandText
     tool.append(command)
 
     tree = ET.ElementTree(tool) 
     with open ("generic.xml", "wb") as toolFile: 
-        ET.indent(tree, space="\t",  level=0)
-        tree.write(toolFile, encoding=None)
+        #ET.indent(tree, space="\t", level=0)
+        #tree.write(toolFile, encoding=None)
+
+        xmlstr = ET.tostring(tool, encoding='unicode')
+        xmlstr = xmlstr.replace("&lt;", "<")
+        xmlstr = xmlstr.replace("&gt;", ">")
+
+        f = open("generic.xml", "a")
+        f.write(xmlstr)
+        f.close()
     print("--> generic.xml exported")
 
 if __name__ == "__main__":
