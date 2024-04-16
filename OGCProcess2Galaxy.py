@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ET
 import urllib.request 
 import warnings
 import sys
+import xml.dom.minidom as md
 
 #OGC Process Description types to Galaxy Parameter types
 typeMapping = {
@@ -61,6 +62,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
 
     #add requriements
     requirements = ET.Element("requirements")
+    
     requirement1 = ET.Element("requirement")
     requirement1.set("type", "package")
     requirement1.set("version", "4.1.2")
@@ -265,94 +267,8 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             conditional_process.append(when_process)    
         when_server.append(conditional_process)
     conditional_server.append(when_server)
-    '''
-    #get processes
-                    
-                    if(process["id"] in api["excluded_services"]):
-                        continue
 
-                    if(process["id"] in api["included_services"] or ("*" in api["included_services"] and len(api["included_services"]) == 1)):
-
-                        toolID = process["id"]
-                        toolName = process["title"]
-                        toolVersion = process["version"]
-                        print(toolID)
-                        
-                        isComplex = False
-
-                        
-                
-                        #add inputs
-                        inputs = xml.etree.ElementTree.Element("inputs") 
-                        
-                        
-                        #add params
-                        for param in process["inputs"]:
-                            paramID = param
-
-                            #add param title
-                            if "title" in process["inputs"][param].keys():
-                                paramTitle = process["inputs"][param]["title"]
-                            else:
-                                msg = "Parameter " + paramID + " of process " + toolID + " has not title attribute."
-                                warnings.warn(msg, Warning)
-                                paramTitle = "?"
-
-                            if "description" in process["inputs"][param].keys():
-                                paramDescription = process["inputs"][param]["description"]
-                            else:
-                                msg = "Parameter " + paramID + " of process " + toolID + " has not description attribute."
-                                warnings.warn(msg, Warning)
-                                paramDescription = "No description provided!"
-
-                            #add param type
-                            if 'type' in process["inputs"][param]["schema"].keys(): #simple schema
-                                if process["inputs"][param]["schema"]["type"] in typeMapping.keys():
-                                    paramType = typeMapping[process["inputs"][param]["schema"]["type"]]
-                            elif 'oneOf' in process["inputs"][param]["schema"].keys(): #simple schema
-                                isComplex = True
-                                paramFormats = ""
-                                for format in process["inputs"][param]["schema"]["oneOf"]:
-                                    if format["type"] == "string":
-                                        paramType = typeMapping["string"]
-                                        paramFormats = paramFormats + ", " + format["contentMediaType"]
-                                    if format["type"] == "object":
-                                        paramType = typeMapping["object"]
-                            else:
-                                msg = "Parameter " + paramID + " of process " + toolID + " has no simple shema."
-                                warnings.warn(msg, Warning)
-
-                            #compile param
-                            param = xml.etree.ElementTree.Element("param") 
-                            param.set('name', paramID)
-                            param.set('label', paramTitle)
-                            param.set('help', paramDescription)
-                            param.set('type', paramType)
-                            if isComplex:
-                                param.set('format', paramFormats[2:])
-
-                            inputs.append(param)
-
-                        #append inputs 
-                        tool.append(inputs)
-
-                        #add outputs
-                        outputs = xml.etree.ElementTree.Element("outputs") 
-
-                        for output in process["outputs"]:
-                            outputName = output
-                            outputLabel = process["outputs"][output]["title"]
-
-                            #compile output
-                            output = xml.etree.ElementTree.Element("data") 
-                            output.set('name', outputName)
-                            output.set('label', outputLabel)
-                            outputs.append(output)
-
-                        #append outputs
-                        tool.append(outputs)
-                        '''
-                        #export tool 
+    #export tool 
     inputs.append(conditional_server)
     tool.append(inputs)
 
@@ -406,18 +322,16 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     commandText += "#end if\n]]>"
     command.text = commandText
     tool.append(command)
-
-    tree = ET.ElementTree(tool) 
     with open ("generic.xml", "wb") as toolFile: 
-        #ET.indent(tree, space="\t", level=0)
-        #tree.write(toolFile, encoding=None)
+        toolString = ET.tostring(tool, encoding='unicode')
+        toolString = toolString.replace("&lt;", "<")
+        toolString = toolString.replace("&gt;", ">")
 
-        xmlstr = ET.tostring(tool, encoding='unicode')
-        xmlstr = xmlstr.replace("&lt;", "<")
-        xmlstr = xmlstr.replace("&gt;", ">")
+        toolString = md.parseString(toolString)
+        toolString = toolString.toprettyxml()
 
         f = open("generic.xml", "a")
-        f.write(xmlstr)
+        f.write(toolString)
         f.close()
     print("--> generic.xml exported")
 
