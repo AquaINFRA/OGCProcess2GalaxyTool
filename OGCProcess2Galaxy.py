@@ -22,6 +22,19 @@ confClasses = [
 "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/json"
 ]
 
+def contains_ref(json_obj):
+    if isinstance(json_obj, dict):
+        if "$ref" in json_obj:
+            return True
+        for value in json_obj.values():
+            if contains_ref(value):
+                return True
+    elif isinstance(json_obj, list):
+        for item in json_obj:
+            if contains_ref(item):
+                return True
+    return False
+
 def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     """
     Function to convert processes form a given list of 
@@ -92,6 +105,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
 
     #add command
     command = ET.Element("command")
+    command.set("detect_errors", "exit_code")
     commands = []
 
     #add inputs
@@ -143,7 +157,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             processesData = json.load(processesURL)
             
             when_list_processes = []
-            for process in processesData["processes"][0:10]: #only get 50 processes!
+            for process in processesData["processes"][0:70]: #only get 50 processes!
                 
                 #command information for process
                 processCommand = {"server": api["server_url"], "process": process["id"]}
@@ -224,16 +238,19 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                                             option.set("value", enum)
                                             option.text = enum
                                             process_input.append(option)
-                            elif 'oneOf' in process["inputs"][param]["schema"].keys(): #simple schema
-                                isComplex = True
-                                paramFormats = ""
-                                for format in process["inputs"][param]["schema"]["oneOf"]:
-                                    if format["type"] == "string":
-                                        process_input.set("type", typeMapping["string"])
-                                        #not sure if format is actually needed as a tag or if it just needs to be communicated to users via help, because the input will be just a link as a string.
-                                        #process_input.set("format", format["contentMediaType"])
-                                    if format["type"] == "object":
-                                        process_input.set("type", typeMapping["object"])
+                            elif contains_ref(process["inputs"][param]["extended-schema"]):
+                                process_input.set("type", typeMapping["string"])
+                                # text input should be replace with data input to allow building workflows
+                                #process_input.set("type", typeMapping["object"])
+                                #process_input.set("format", "txt")
+                            #elif 'oneOf' in process["inputs"][param]["schema"].keys(): #simple schema
+                            #    isComplex = True
+                            #    paramFormats = ""
+                            #    for format in process["inputs"][param]["schema"]["oneOf"]:
+                            #        if format["type"] == "string":
+                            #            process_input.set("type", typeMapping["string"])
+                            #        if format["type"] == "object":
+                            #            process_input.set("type", typeMapping["object"])
                             else:
                                 msg = "Parameter " + param + " of process " + process["id"] + " has no simple shema."
                                 #warnings.warn(msg, Warning)
@@ -312,6 +329,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             commandText += "\t\t--process '$select_process'"
             for y in commands[i]["inputs"]:
                 commandText += "\n\t\t--"+ y + " \'$" + y + "\'"
+            commandText += "\n\t\t--outputData '$output_data'"
         else:
             commandText += "\n#elif $conditional_server.select_process == \"" + commands[i]["process"] + "\":\n"
             commandText += "\tRscript '$__tool_directory__/generic.R'\n"
@@ -319,7 +337,8 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             commandText += "\t\t--process '$select_process'"
             for y in commands[i]["inputs"]:
                 commandText += "\n\t\t--"+ y + " \'$" + y + "\'"
-    commandText += "#end if\n]]>"
+            commandText += "\n\t\t--outputData '$output_data'"
+    commandText += "\n#end if\n]]>"
     command.text = commandText
     tool.append(command)
     with open ("generic.xml", "wb") as toolFile: 
