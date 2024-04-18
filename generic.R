@@ -32,12 +32,16 @@ parseResponseBody <- function(body) {
   return(jsonObject)
 }
 
-getOutputs <- function(url, process) {
+getOutputs <- function(url, process, output) {
     url <- paste(paste(url, "/processes/", sep = ""), process, sep = "")
     request <- request(url)
     response <- req_perform(request)
     responseBody <- parseResponseBody(response$body)
     outputs <- list()
+
+    sink(paste0(output, "processDescription.json"))
+      print(toJSON(responseBody, pretty = TRUE))
+    sink()
 
     transmissionMode <- list("transmissionMode" = "reference")
     #missing: possibility to specify output type, see OTB.BandMath and
@@ -114,8 +118,7 @@ retrieveResults <- function(server, jobID, outputData) {
                 result <- getResult(server, jobID)
                 if (result$status_code == 200) {
                   resultBody <- parseResponseBody(result$body)
-                  #writeLines(resultBody$out$href, con = paste0(outputData, ".txt"))
-                  sink(paste0(outputData, ".txt"))
+                  sink(paste0(outputData, "_result1.txt"))
                     print(resultBody)
                   sink()
                 }
@@ -139,9 +142,10 @@ is_url <- function(x) {
 }
 
 inputs <- getParameters()
-outputs <- getOutputs(inputs$server, inputs$process)
 
 inputParameters <- inputs[3:length(inputs)]
+
+outputs <- getOutputs(inputs$server, inputs$process, inputParameters$outputData)
 
 for (key in names(inputParameters)) {
   if (is_url(inputParameters[[key]])) {
