@@ -205,7 +205,10 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                             if "nullable" in process["inputs"][param]["schema"].keys():
                                 if process["inputs"][param]["schema"]["nullable"]:
                                     process_input.set("optional", "true")
+                                else:
+                                    process_input.set("optional", "false")
                             else:
+                                process_input.set("optional", "false")
                                 msg = "Parameter " + param + " of process " + process["id"] + " has no nullable information."
                                 #warnings.warn(msg, Warning)
 
