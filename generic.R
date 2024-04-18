@@ -118,7 +118,7 @@ retrieveResults <- function(server, jobID, outputData) {
                 result <- getResult(server, jobID)
                 if (result$status_code == 200) {
                   resultBody <- parseResponseBody(result$body)
-                  sink(paste0(outputData, "_result1.txt"))
+                  sink(paste0(outputData, "_result.txt"))
                     print(resultBody)
                   sink()
                 }
