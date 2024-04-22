@@ -297,7 +297,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     collection = ET.Element("collection")
     collection.set("name", "output_data")
     collection.set("type", "list")
-    collection.set("label", "Output")
+    collection.set("label", "$conditional_server.select_process")
     discover_datasets = ET.Element("discover_datasets")
     discover_datasets.set("pattern", "__name_and_ext__")
     collection.append(discover_datasets)

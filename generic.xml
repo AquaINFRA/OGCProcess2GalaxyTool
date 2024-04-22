@@ -1806,7 +1806,7 @@
 		</conditional>
 	</inputs>
 	<outputs>
-		<collection name="output_data" type="list" label="Output">
+		<collection name="output_data" type="list" label="$conditional_server.select_process">
 			<discover_datasets pattern="__name_and_ext__"/>
 		</collection>
 	</outputs>
