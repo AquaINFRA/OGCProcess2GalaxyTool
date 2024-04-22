@@ -1,5 +1,9 @@
-# Example command: Rscript ./generic.R --server https://ospd.geolabs.fr:8300/ogc-api/ --process OTB.BandMath --il https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/31/U/ET/2019/4/S2B_31UET_20190421_0_L2A/TCI.tif --out float --ram 128 --exp im1b3,im1b2,im1b1 --outputData bandMathOutput
-# Example command: Rscript ./generic.R --server https://ospd.geolabs.fr:8300/ogc-api/ --process OTB.MeanShiftSmoothing --in https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/31/U/ET/2019/4/S2B_31UET_20190421_0_L2A/TCI.tif --fout float --foutpos float --ram 128 --spatialr 5 --ranger 15.0 --thres 0.1 --maxiter 100 --rangeramp 0.0 --modesearch true --outputData meanShiftSmoothingOutput
+# Example command: Rscript ./generic.R --server https://ospd.geolabs.fr:8300/ogc-api/ --process OTB.BandMath 
+# --il https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/31/U/ET/2019/4/S2B_31UET_20190421_0_L2A/TCI.tif 
+# --out float --ram 128 --exp im1b3,im1b2,im1b1 --outputData bandMathOutput
+# Example command: Rscript ./generic.R --server https://ospd.geolabs.fr:8300/ogc-api/ --process OTB.MeanShiftSmoothing 
+# --in https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/31/U/ET/2019/4/S2B_31UET_20190421_0_L2A/TCI.tif 
+# --fout float --foutpos float --ram 128 --spatialr 5 --ranger 15.0 --thres 0.1 --maxiter 100 --rangeramp 0.0 --modesearch true --outputData meanShiftSmoothingOutput
 
 library("httr2")
 library("jsonlite")
@@ -54,8 +58,7 @@ getOutputs <- function(url, process, output) {
     return(outputs)
 }
 
-
-executeProcess <- function(url, process, requestBodyData) {
+executeProcess <- function(url, process, requestBodyData, output) {
     url <- paste(paste(paste(url, "processes/", sep = ""), process, sep = ""), "/execution", sep = "")
     cat("\n url: ", url)
     response <- request(url) %>%
@@ -69,9 +72,13 @@ executeProcess <- function(url, process, requestBodyData) {
 
     cat("\n Process executed")
     cat("\n status: ", response$status_code)
-    cat("\n jobID: ", parseResponseBody(response$body)$jobID)
+    cat("\n jobID: ", parseResponseBody(response$body)$jobID, "\n")
 
     jobID <- parseResponseBody(response$body)$jobID
+
+    sink(paste0(output, "jobID.txt"))
+      print(jobID)
+    sink()
 
     return(jobID)
 }
@@ -83,7 +90,8 @@ checkJobStatus <- function(server, jobID) {
     ) %>%
     req_perform()
   jobStatus <- parseResponseBody(response$body)$status
-  cat("\n status: ", jobStatus)
+  jobProgress <- parseResponseBody(response$body)$progress
+  cat(paste0("\n status: ", jobStatus, ", progress: ", jobProgress))
   return(jobStatus)
 }
 
@@ -145,7 +153,9 @@ inputs <- getParameters()
 
 inputParameters <- inputs[3:length(inputs)]
 
-outputs <- getOutputs(inputs$server, inputs$process, inputParameters$outputData)
+outputLocation <- inputParameters$outputData
+
+outputs <- getOutputs(inputs$server, inputs$process, outputLocation)
 
 for (key in names(inputParameters)) {
   if (is_url(inputParameters[[key]])) {
@@ -158,6 +168,6 @@ jsonData <- list(
   "outputs" = outputs
 )
 
-jobID <- executeProcess(inputs$server, inputs$process, jsonData)
+jobID <- executeProcess(inputs$server, inputs$process, jsonData, outputLocation)
 
-retrieveResults(inputs$server, jobID, inputParameters$outputData)
+retrieveResults(inputs$server, jobID, outputLocation)

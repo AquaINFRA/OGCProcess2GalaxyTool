@@ -1,0 +1,10 @@
+$out
+$out$href
+[1] "https://ospd.geolabs.fr:8300/temp///BandMath_0_ec410bea-0081-11ef-81bb-0242ac10ee0a.tiff"
+
+$out$format
+$out$format$mediaType
+[1] "image/tiff"
+
+
+
