@@ -1,0 +1,20 @@
+$fout
+$fout$href
+[1] "https://ospd.geolabs.fr:8300/temp///MeanShiftSmoothing_0_4c38528c-0092-11ef-b14a-0242ac10ee0a.tiff"
+
+$fout$format
+$fout$format$mediaType
+[1] "image/tiff"
+
+
+
+$foutpos
+$foutpos$href
+[1] "https://ospd.geolabs.fr:8300/temp///MeanShiftSmoothing_1_4c38528c-0092-11ef-b14a-0242ac10ee0a.tiff"
+
+$foutpos$format
+$foutpos$format$mediaType
+[1] "image/tiff"
+
+
+

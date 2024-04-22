@@ -1,10 +1,3 @@
-# Example command: Rscript ./generic.R --server https://ospd.geolabs.fr:8300/ogc-api/ --process OTB.BandMath 
-# --il https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/31/U/ET/2019/4/S2B_31UET_20190421_0_L2A/TCI.tif 
-# --out float --ram 128 --exp im1b3,im1b2,im1b1 --outputData bandMathOutput
-# Example command: Rscript ./generic.R --server https://ospd.geolabs.fr:8300/ogc-api/ --process OTB.MeanShiftSmoothing 
-# --in https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/31/U/ET/2019/4/S2B_31UET_20190421_0_L2A/TCI.tif 
-# --fout float --foutpos float --ram 128 --spatialr 5 --ranger 15.0 --thres 0.1 --maxiter 100 --rangeramp 0.0 --modesearch true --outputData meanShiftSmoothingOutput
-
 library("httr2")
 library("jsonlite")
 library("getopt")
@@ -126,7 +119,12 @@ retrieveResults <- function(server, jobID, outputData) {
                 result <- getResult(server, jobID)
                 if (result$status_code == 200) {
                   resultBody <- parseResponseBody(result$body)
-                  sink(paste0(outputData, "_result.txt"))
+                  urls <- unname(unlist(lapply(resultBody, function(x) x$href)))
+                  urls_with_newline <- paste(urls, collapse = "\n")
+                  sink(paste0(outputData, "_result_urls.txt"))
+                    cat(urls_with_newline, "\n")
+                  sink()
+                  sink(paste0(outputData, "_result_full.txt"))
                     print(resultBody)
                   sink()
                 }
@@ -171,3 +169,14 @@ jsonData <- list(
 jobID <- executeProcess(inputs$server, inputs$process, jsonData, outputLocation)
 
 retrieveResults(inputs$server, jobID, outputLocation)
+
+# Example command: 
+# Rscript ./generic.R --server https://ospd.geolabs.fr:8300/ogc-api/ --process OTB.BandMath 
+# --il https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/31/U/ET/2019/4/S2B_31UET_20190421_0_L2A/TCI.tif 
+# --out float --ram 128 --exp im1b3,im1b2,im1b1 --outputData bandMathOutput
+# Example command: 
+# Rscript ./generic.R --server https://ospd.geolabs.fr:8300/ogc-api/ 
+# --process OTB.MeanShiftSmoothing 
+# --in https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/31/U/ET/2019/4/S2B_31UET_20190421_0_L2A/TCI.tif 
+# --fout float --foutpos float --ram 128 --spatialr 5 --ranger 15.0 --thres 0.1 --maxiter 100 
+# --rangeramp 0.0 --modesearch true --outputData meanShiftSmoothingOutput
