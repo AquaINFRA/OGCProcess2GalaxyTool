@@ -128,6 +128,8 @@ retrieveResults <- function(server, jobID, outputData) {
                     print(resultBody)
                   sink()
                 }
+            } else if (jobStatus == "failed") {
+              status <- jobStatus
             }
         Sys.sleep(3)
         }
@@ -155,9 +157,18 @@ outputLocation <- inputParameters$outputData
 
 outputs <- getOutputs(inputs$server, inputs$process, outputLocation)
 
+# 
 for (key in names(inputParameters)) {
-  if (is_url(inputParameters[[key]])) {
-    inputParameters[[key]] <- list("href" = inputParameters[[key]])
+  if (endsWith(inputParameters[[key]], ".txt")) {
+    con <- file(inputParameters[[key]], "r")
+    url_list <- list()
+    while (length(line <- readLines(con, n = 1)) > 0) {
+      if (is_url(line)) {
+        url_list <- c(url_list, list(list(href = line)))
+      }
+    }
+    close(con)
+    inputParameters[[key]] <- url_list
   }
 }
 

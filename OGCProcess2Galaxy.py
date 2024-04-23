@@ -242,10 +242,10 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                                             option.text = enum
                                             process_input.append(option)
                             elif contains_ref(process["inputs"][param]["extended-schema"]):
-                                process_input.set("type", typeMapping["string"])
+                                #process_input.set("type", typeMapping["string"])
                                 # text input should be replace with data input to allow building workflows
-                                #process_input.set("type", typeMapping["object"])
-                                #process_input.set("format", "txt")
+                                process_input.set("type", typeMapping["object"])
+                                process_input.set("format", "txt")
                             #elif 'oneOf' in process["inputs"][param]["schema"].keys(): #simple schema
                             #    isComplex = True
                             #    paramFormats = ""
