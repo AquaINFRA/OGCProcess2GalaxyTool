@@ -29,8 +29,8 @@ parseResponseBody <- function(body) {
   return(jsonObject)
 }
 
-getOutputs <- function(url, process, output) {
-    url <- paste(paste(url, "/processes/", sep = ""), process, sep = "")
+getOutputs <- function(inputs, output) {
+    url <- paste(paste(inputs$server, "/processes/", sep = ""), inputs$process, sep = "")
     request <- request(url)
     response <- req_perform(request)
     responseBody <- parseResponseBody(response$body)
@@ -41,9 +41,14 @@ getOutputs <- function(url, process, output) {
     sink()
 
     transmissionMode <- list("transmissionMode" = "reference")
-    #missing: possibility to specify output type, see OTB.BandMath and
-    # outputs.out.format.mediaType
     for (x in 1:length(responseBody$outputs)) {
+        outputformatName <- paste(names(responseBody$outputs[x]), "_outformat", sep="")
+        for (p in names(inputs)) {
+          if(p == outputformatName){
+            format <- list("mediaType" = inputs[[outputformatName]])
+            outputs[[x]] <- format
+          }
+        }
         outputs[[x]] <- transmissionMode
     }
 
@@ -53,7 +58,6 @@ getOutputs <- function(url, process, output) {
 
 executeProcess <- function(url, process, requestBodyData, output) {
     url <- paste(paste(paste(url, "processes/", sep = ""), process, sep = ""), "/execution", sep = "")
-    cat("\n url: ", url)
     response <- request(url) %>%
     req_headers(
       "accept" = "/*",
@@ -155,9 +159,8 @@ inputParameters <- inputs[3:length(inputs)]
 
 outputLocation <- inputParameters$outputData
 
-outputs <- getOutputs(inputs$server, inputs$process, outputLocation)
+outputs <- getOutputs(inputs, outputLocation)
 
-# 
 for (key in names(inputParameters)) {
   if (endsWith(inputParameters[[key]], ".dat")) {
     con <- file(inputParameters[[key]], "r")
@@ -176,8 +179,6 @@ jsonData <- list(
   "inputs" = inputParameters,
   "outputs" = outputs
 )
-
-print(toJSON(jsonData))
 
 jobID <- executeProcess(inputs$server, inputs$process, jsonData, outputLocation)
 

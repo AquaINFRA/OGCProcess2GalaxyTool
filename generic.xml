@@ -93,7 +93,7 @@
 					</when>
 					<when value="RVoronoi">
 						<param name="InputPoints" label="InputPoints" optional="false" help="The set of data points." type="data" format="txt"/>
-						<param type="select" name="Result_out" label="Result" help="Voronoi Diagram.">
+						<param type="select" name="Result_outformat" label="Result_outformat" help="Output format">
 							<option value="application/json">application/json</option>
 							<option value="image/png">image/png</option>
 							<option value="text/xml">text/xml</option>
@@ -145,17 +145,17 @@
 						<param name="radius" label="radius" optional="false" value="5" help="Initial radius of the structuring element (in pixels)" type="integer"/>
 						<param name="step" label="step" optional="false" value="1" help="Radius step along the profile (in pixels)" type="integer"/>
 						<param name="levels" label="levels" optional="false" value="1" help="Number of levels use for multi scale" type="integer"/>
-						<param type="select" name="outconvex_out" label="outconvex" help="The output convex image with N bands">
+						<param type="select" name="outconvex_outformat" label="outconvex_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
 						</param>
-						<param type="select" name="outconcave_out" label="outconcave" help="The output concave concave with N bands">
+						<param type="select" name="outconcave_outformat" label="outconcave_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
 						</param>
-						<param type="select" name="outleveling_out" label="outleveling" help="The output leveling image with N bands">
+						<param type="select" name="outleveling_outformat" label="outleveling_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -191,7 +191,7 @@
 						<param name="channels.rgb.green" label="channels.rgb.green" optional="false" help="Green channel index." type="integer"/>
 						<param name="channels.rgb.blue" label="channels.rgb.blue" optional="false" help="Blue channel index." type="integer"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="out_out" label="out" help="Output image">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -212,7 +212,7 @@
 							<option value="double">double</option>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="out_out" label="out" help="Output image containing predicted values">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -259,12 +259,12 @@
 							<option value="muellertopoldegandpower">muellertopoldegandpower</option>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="outc_out" label="outc" help="Output Complex image.">
+						<param type="select" name="outc_outformat" label="outc_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
 						</param>
-						<param type="select" name="outf_out" label="outf" help="Output Real image.">
+						<param type="select" name="outf_outformat" label="outf_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -295,12 +295,12 @@
 							<option value="double">double</option>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="out_out" label="out" help="Output image containing class labels">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
 						</param>
-						<param type="select" name="confmap_out" label="confmap" help="Confidence map of the produced classification. The confidence index depends on the model :   - LibSVM : difference between the two highest probabilities (needs a model with probability estimates, so that classes probabilities can be computed for each sample)  - OpenCV    * Boost : sum of votes    * DecisionTree : (not supported)    * GradientBoostedTree : (not supported)    * KNearestNeighbors : number of neighbors with the same label    * NeuralNetwork : difference between the two highest responses    * NormalBayes : (not supported)    * RandomForest : Confidence (proportion of votes for the majority class). Margin (normalized difference of the votes of the 2 majority classes) is not available for now.    * SVM : distance to margin (only works for 2-class models)">
+						<param type="select" name="confmap_outformat" label="confmap_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -329,7 +329,7 @@
 						<param name="mode.apply.mask" label="mode.apply.mask" optional="false" help="Mask to be applied on input image (valid pixels have non null values)" type="data" format="txt"/>
 						<param name="mode.apply.ndval" label="mode.apply.ndval" optional="false" value="0" help="No Data value used according to the mask image" type="float"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="out_out" label="out" help="Output image">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -353,7 +353,7 @@
 							<option value="float">float</option>
 							<option value="double">double</option>
 						</param>
-						<param type="select" name="out_out" label="out" help="Output image containing the SFS texture features.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -365,7 +365,7 @@
 						<param name="elev.dem" label="elev.dem" optional="true" help="This parameter allows selecting a directory containing Digital Elevation Model files. Note that this directory should contain only DEM files. Unexpected behaviour might occurs if other images are found in this directory." type="text"/>
 						<param name="elev.geoid" label="elev.geoid" optional="false" help="Use a geoid grid to get the height above the ellipsoid in case there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles. A version of the geoid can be found on the OTB website(https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/blob/master/Input/DEM/egm96.grd)." type="data" format="txt"/>
 						<param name="elev.default" label="elev.default" optional="false" value="0" help="This parameter allows setting the default height above ellipsoid when there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles, and no geoid file has been set. This is also used by some application as an average elevation value." type="float"/>
-						<param type="select" name="io.out_out" label="io.out" help="Output extracted vector data">
+						<param type="select" name="io.out_outformat" label="io.out_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
 							<option value="application/json">application/json</option>
@@ -390,7 +390,7 @@
 							<option value="isra">isra</option>
 							<option value="mdmdnmf">mdmdnmf</option>
 						</param>
-						<param type="select" name="out_out" label="out" help="The output abundance map. The abundance fraction are stored in a multispectral image where band N corresponds to the fraction of endmembers N in each pixel.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -419,12 +419,12 @@
 							<option value="float">float</option>
 							<option value="double">double</option>
 						</param>
-						<param type="select" name="outgt_out" label="outgt" help="The colored ground truth output image.">
+						<param type="select" name="outgt_outformat" label="outgt_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
 						</param>
-						<param type="select" name="outms_out" label="outms" help="The colored machine segmentation output image.">
+						<param type="select" name="outms_outformat" label="outms_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -447,7 +447,7 @@
 						<param name="ref.vector.nodata" label="ref.vector.nodata" optional="true" value="0" help="Label to be treated as no data in ref vector. Please note that this value is always used in vector mode, to generate default values. Please set it to a value that does not correspond to a class label." type="integer"/>
 						<param name="nodatalabel" label="nodatalabel" optional="true" value="0" help="Label to be treated as no data in input image" type="integer"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="out_out" label="out" help="Filename to store the output matrix (csv format)">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="text/csv">text/csv</option>
 						</param>
 					</when>
@@ -463,7 +463,7 @@
 							<option value="double">double</option>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="out_out" label="out" help="The concatenated output image.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -484,7 +484,7 @@
 						<param name="strategy.jitter.stdfactor" label="strategy.jitter.stdfactor" optional="false" value="10" help="The noise added to the input samples will have the standard deviation of the input features divided by the value of this parameter. " type="float"/>
 						<param name="strategy.smote.neighbors" label="strategy.smote.neighbors" optional="false" help="Number of nearest neighbors to be used in the SMOTE algorithm" type="integer"/>
 						<param name="seed" label="seed" optional="true" help="Set specific seed. with integer value." type="integer"/>
-						<param type="select" name="out_out" label="out" help="Output vector data file storing new samples(OGR format).">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
 							<option value="application/json">application/json</option>
@@ -517,7 +517,7 @@
 							<option value="float">float</option>
 							<option value="double">double</option>
 						</param>
-						<param type="select" name="out_out" label="out" help="Output image containing the selected texture features.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -554,11 +554,11 @@
 						<param name="elev.dem" label="elev.dem" optional="true" help="This parameter allows selecting a directory containing Digital Elevation Model files. Note that this directory should contain only DEM files. Unexpected behaviour might occurs if other images are found in this directory." type="text"/>
 						<param name="elev.geoid" label="elev.geoid" optional="false" help="Use a geoid grid to get the height above the ellipsoid in case there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles. A version of the geoid can be found on the OTB website(https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/blob/master/Input/DEM/egm96.grd)." type="data" format="txt"/>
 						<param name="elev.default" label="elev.default" optional="false" value="0" help="This parameter allows setting the default height above ellipsoid when there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles, and no geoid file has been set. This is also used by some application as an average elevation value." type="float"/>
-						<param type="select" name="out_out" label="out" help="File containing the list of tie points">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="text/plain">text/plain</option>
 						</param>
-						<param type="select" name="outvector_out" label="outvector" help="File containing segments representing matches ">
+						<param type="select" name="outvector_outformat" label="outvector_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="text/plain">text/plain</option>
 						</param>
@@ -574,7 +574,7 @@
 						<param name="desclist" label="desclist" optional="true" help="List of the descriptors to be used in the model (must be specified to perform an automatic initialization)" type="text"/>
 						<param name="maxnbit" label="maxnbit" optional="true" value="200" help="Maximum number of optimizer iteration (default 200)" type="integer"/>
 						<param name="optobs" label="optobs" optional="false" value="False" help="Activate the optimizer observer" type="boolean" truevalue="True" falsevalue="False"/>
-						<param type="select" name="out_out" label="out" help="Output model file name (xml file) contains the optimal model to perform information fusion.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 						</param>
 					</when>
@@ -628,7 +628,7 @@
 						<param name="interpolator.bco.radius" label="interpolator.bco.radius" optional="true" value="10" help="Enabling RPC modeling allows one to speed-up SPOT5 ortho-rectification. Value is the number of control points per axis for RPC estimation" type="integer"/>
 						<param name="opt.ram" label="opt.ram" optional="true" value="128" help="This allows setting the maximum amount of RAM available for processing. As the writing task is time consuming, it is better to write large pieces of data, which can be achieved by increasing this parameter (pay attention to your system capabilities)" type="integer"/>
 						<param name="opt.gridspacing" label="opt.gridspacing" optional="true" value="4" help="Resampling is done according to a coordinate mapping deformation grid, whose pixel size is set by this parameter, and expressed in the coordinate system of the output image The closer to the output spacing this parameter is, the more precise will be the ortho-rectified image,but increasing this parameter will reduce processing time." type="float"/>
-						<param type="select" name="io.out_out" label="io.out" help="The ortho-rectified output image">
+						<param type="select" name="io.out_outformat" label="io.out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -666,7 +666,7 @@
 						<param name="filter.opening.foreval" label="filter.opening.foreval" optional="false" value="1" help="Set the foreground value, default is 1.0." type="float"/>
 						<param name="filter.opening.backval" label="filter.opening.backval" optional="false" value="0" help="Set the background value, default is 0.0." type="float"/>
 						<param name="filter.closing.foreval" label="filter.closing.foreval" optional="false" value="1" help="Set the foreground value, default is 1.0." type="float"/>
-						<param type="select" name="out_out" label="out" help="Output image">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -734,12 +734,12 @@
 						<param name="bm.initdisp.maps.hrad" label="bm.initdisp.maps.hrad" optional="false" value="0" help="Horizontal exploration radius around the initial disparity estimate (in pixels)" type="integer"/>
 						<param name="bm.initdisp.maps.vrad" label="bm.initdisp.maps.vrad" optional="false" value="0" help="Vertical exploration radius around the initial disparity estimate (in pixels)" type="integer"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="io.out_out" label="io.out" help="An image containing the estimated disparities as well as the metric values if the option is used. If no metric is output and no sub-pixel interpolation is done, pixel type canbe a signed integer. In the other cases, floating point pixel is advised.">
+						<param type="select" name="io.out_outformat" label="io.out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
 						</param>
-						<param type="select" name="io.outmask_out" label="io.outmask" help="An output mask image corresponding to all citerions (see masking parameters). Only required if variance threshold or nodata criterions are set. Output pixel type is unsigned 8bit by default.">
+						<param type="select" name="io.outmask_outformat" label="io.outmask_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -753,7 +753,7 @@
 						<param name="elev.dem" label="elev.dem" optional="true" help="This parameter allows selecting a directory containing Digital Elevation Model files. Note that this directory should contain only DEM files. Unexpected behaviour might occurs if other images are found in this directory." type="text"/>
 						<param name="elev.geoid" label="elev.geoid" optional="false" help="Use a geoid grid to get the height above the ellipsoid in case there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles. A version of the geoid can be found on the OTB website(https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/blob/master/Input/DEM/egm96.grd)." type="data" format="txt"/>
 						<param name="elev.default" label="elev.default" optional="false" value="0" help="This parameter allows setting the default height above ellipsoid when there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles, and no geoid file has been set. This is also used by some application as an average elevation value." type="float"/>
-						<param type="select" name="out_out" label="out" help="Output Kmz product directory (with .kmz extension)">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="application/vnd.google-earth.kmz">application/vnd.google-earth.kmz</option>
 						</param>
 					</when>
@@ -767,7 +767,7 @@
 						<param name="elev.geoid" label="elev.geoid" optional="false" help="Use a geoid grid to get the height above the ellipsoid in case there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles. A version of the geoid can be found on the OTB website(https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/blob/master/Input/DEM/egm96.grd)." type="data" format="txt"/>
 						<param name="elev.default" label="elev.default" optional="false" value="0" help="This parameter allows setting the default height above ellipsoid when there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles, and no geoid file has been set. This is also used by some application as an average elevation value." type="float"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="out_out" label="out" help="The segmentation shape.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
 							<option value="application/json">application/json</option>
@@ -861,11 +861,11 @@
 						<param name="classifier.rf.acc" label="classifier.rf.acc" optional="false" value="0.01" help="Sufficient accuracy (OOB error)." type="float"/>
 						<param name="classifier.knn.k" label="classifier.knn.k" optional="false" value="32" help="The number of neighbors to use." type="integer"/>
 						<param name="rand" label="rand" optional="true" help="Set specific seed. with integer value." type="integer"/>
-						<param type="select" name="io.out_out" label="io.out" help="Output file containing the model estimated (.txt format).">
+						<param type="select" name="io.out_outformat" label="io.out_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="text/plain">text/plain</option>
 						</param>
-						<param type="select" name="io.confmatout_out" label="io.confmatout" help="Output file containing the confusion matrix or contingency table (.csv format).The contingency table is output when we unsupervised algorithms is used otherwise the confusion matrix is output.">
+						<param type="select" name="io.confmatout_outformat" label="io.confmatout_outformat" help="Output format">
 							<option value="text/csv">text/csv</option>
 						</param>
 					</when>
@@ -882,7 +882,7 @@
 							<option value="double">double</option>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="out_out" label="out" help="Multiband image containing change maps. Each map will be in the range [-1,1], so a floating point output type is advised.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -896,7 +896,7 @@
 						<param name="elev.default" label="elev.default" optional="false" value="0" help="This parameter allows setting the default height above ellipsoid when there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles, and no geoid file has been set. This is also used by some application as an average elevation value." type="float"/>
 						<param name="expr" label="expr" optional="false" help="The feature formula (b1 &amp;lt; 0.3) where b1 is the standard name of input image first band" type="text"/>
 						<param name="field" label="field" optional="false" help="The field name corresponding to the feature codename (NONDVI, ROADSA...)" type="text"/>
-						<param type="select" name="out_out" label="out" help="The output vector data containing polylines with a new field">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
 							<option value="application/json">application/json</option>
@@ -920,7 +920,7 @@
 							<option value="equal">equal</option>
 							<option value="custom">custom</option>
 						</param>
-						<param type="select" name="out_out" label="out" help="Output filename storing sampling rates (CSV format with class name, required samples, total samples, and rate). The given filename will be used with a suffix to indicate the corresponding input index (for instance: rates.csv will give rates_1.csv, rates_2.csv, ...).">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="text/csv">text/csv</option>
 						</param>
 					</when>
@@ -973,13 +973,13 @@
 							<option value="float">float</option>
 							<option value="double">double</option>
 						</param>
-						<param type="select" name="mode.vector.out_out" label="mode.vector.out" help="The output vector file or database (name can be anything understood by OGR)">
+						<param type="select" name="mode.vector.out_outformat" label="mode.vector.out_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
 							<option value="application/json">application/json</option>
 							<option value="application/zip">application/zip</option>
 						</param>
-						<param type="select" name="mode.raster.out_out" label="mode.raster.out" help="The output labeled image.">
+						<param type="select" name="mode.raster.out_outformat" label="mode.raster.out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -992,7 +992,7 @@
 						<param name="plasup" label="plasup" optional="false" help="Dempster Shafer study hypothesis to compute plausibility" type="text"/>
 						<param name="cri" label="cri" optional="true" value="((Belief + Plausibility)/2.)" help="Dempster Shafer criterion (by default (belief+plausibility)/2)" type="text"/>
 						<param name="thd" label="thd" optional="true" value="0.5" help="Criterion threshold (default 0.5)" type="float"/>
-						<param type="select" name="out_out" label="out" help="Output VectorData containing only the validated samples">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
 							<option value="application/json">application/json</option>
@@ -1004,7 +1004,7 @@
 						<param name="instats" label="instats" optional="false" help="XML file containing mean and variance of each feature." type="data" format="txt"/>
 						<param name="feat" label="feat" optional="false" help="Features to be calculated" type="text"/>
 						<param name="cfield" label="cfield" optional="false" value="predicted" help="Field containing the predicted class" type="text"/>
-						<param type="select" name="insvm_out" label="insvm" help="Input model filename.">
+						<param type="select" name="insvm_outformat" label="insvm_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="text/plain">text/plain</option>
 						</param>
@@ -1017,7 +1017,7 @@
 						<param name="elev.geoid" label="elev.geoid" optional="false" help="Use a geoid grid to get the height above the ellipsoid in case there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles. A version of the geoid can be found on the OTB website(https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/blob/master/Input/DEM/egm96.grd)." type="data" format="txt"/>
 						<param name="elev.default" label="elev.default" optional="false" value="0" help="This parameter allows setting the default height above ellipsoid when there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles, and no geoid file has been set. This is also used by some application as an average elevation value." type="float"/>
 						<param name="printclasses" label="printclasses" optional="false" value="False" help="Print the key/value classes available for the selected support image. If enabled, the OSM tag Key (-key) and the output (-out) become optional" type="boolean" truevalue="True" falsevalue="False"/>
-						<param type="select" name="out_out" label="out" help="Vector data file to store downloaded features">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
 							<option value="application/json">application/json</option>
@@ -1047,7 +1047,7 @@
 						<param name="elev.geoid" label="elev.geoid" optional="false" help="Use a geoid grid to get the height above the ellipsoid in case there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles. A version of the geoid can be found on the OTB website(https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/blob/master/Input/DEM/egm96.grd)." type="data" format="txt"/>
 						<param name="elev.default" label="elev.default" optional="false" value="0" help="This parameter allows setting the default height above ellipsoid when there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles, and no geoid file has been set. This is also used by some application as an average elevation value." type="float"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="io.out_out" label="io.out" help="Output elevation map in ground projection. Elevation values are in meters. Floating point pixel type are expected.">
+						<param type="select" name="io.out_outformat" label="io.out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -1060,7 +1060,7 @@
 						<param name="cfield" label="cfield" optional="false" value="predicted" help="Field containing the predicted class.Only geometries with this field available will be taken into account.The field is added either in the input file (if 'out' off) or in the output file.Caution, the 'cfield' must not exist in the input file if you are updating the file." type="text"/>
 						<param name="feat" label="feat" optional="false" help="List of field names in the input vector data used as features for training. Put the same field names as the TrainVectorClassifier application." type="text"/>
 						<param name="confmap" label="confmap" optional="false" value="False" help="Confidence map of the produced classification. The confidence index depends on the model :   - LibSVM : difference between the two highest probabilities (needs a model with probability estimates, so that classes probabilities can be computed for each sample)  - OpenCV    * Boost : sum of votes    * DecisionTree : (not supported)    * GradientBoostedTree : (not supported)    * KNearestNeighbors : number of neighbors with the same label    * NeuralNetwork : difference between the two highest responses    * NormalBayes : (not supported)    * RandomForest : Confidence (proportion of votes for the majority class). Margin (normalized difference of the votes of the 2 majority classes) is not available for now.    * SVM : distance to margin (only works for 2-class models)." type="boolean" truevalue="True" falsevalue="False"/>
-						<param type="select" name="out_out" label="out" help="Output vector data file storing sample values (OGR format).If not given, the input vector data file is updated.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
 							<option value="application/json">application/json</option>
@@ -1104,12 +1104,12 @@
 						<param name="iv" label="iv" optional="true" value="0" help="Maximum initial neuron weight" type="float"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param name="rand" label="rand" optional="true" help="Set specific seed. with integer value." type="integer"/>
-						<param type="select" name="out_out" label="out" help="Output classified image (each pixel contains the index of its corresponding vector in the SOM).">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
 						</param>
-						<param type="select" name="som_out" label="som" help="Output image containing the Self-Organizing Map">
+						<param type="select" name="som_outformat" label="som_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -1132,7 +1132,7 @@
 						<param name="map.utm.northhem" label="map.utm.northhem" optional="false" value="False" help="The transverse mercator projections are defined by their zone number as well as the hemisphere. Activate this parameter if your image is in the northern hemisphere." type="boolean" truevalue="True" falsevalue="False"/>
 						<param name="map.epsg.code" label="map.epsg.code" optional="false" value="4326" help="See www.spatialreference.org to find which EPSG code is associated to your projection" type="integer"/>
 						<param name="incolor" label="incolor" optional="false" help="If the color image has 4 bands it will be interpreted as Red, Green, Blue, NIR. In other cases, only the first one is used (gray scale colors). The color values are expected in the range 0 - 255, and will be embedded with each 3D point of the PLY file." type="data" format="txt"/>
-						<param type="select" name="out_out" label="out" help="The output Ply file will contain as many 3D points as pixels in the input DEM.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="text/plain">text/plain</option>
 						</param>
@@ -1183,22 +1183,22 @@
 							<option value="double">double</option>
 						</param>
 						<param name="inverse.ssrate" label="inverse.ssrate" optional="false" value="16" help="Grid inversion is an heavy process that implies spline regression on control points. To avoid eating to much memory, this parameter allows one to first sub-sample the field to invert." type="integer"/>
-						<param type="select" name="io.outleft_out" label="io.outleft" help="The deformation grid to resample the left image from sensor geometry to epipolar geometry.">
+						<param type="select" name="io.outleft_outformat" label="io.outleft_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
 						</param>
-						<param type="select" name="io.outright_out" label="io.outright" help="The deformation grid to resample the right image from sensor geometry to epipolar geometry.">
+						<param type="select" name="io.outright_outformat" label="io.outright_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
 						</param>
-						<param type="select" name="inverse.outleft_out" label="inverse.outleft" help="The deformation grid to resample the left image from the epipolar geometry back into its original sensor geometry.">
+						<param type="select" name="inverse.outleft_outformat" label="inverse.outleft_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
 						</param>
-						<param type="select" name="inverse.outright_out" label="inverse.outright" help="The output deformation grid to resample the right image from the epipolar geometry back into its original sensor geometry.">
+						<param type="select" name="inverse.outright_outformat" label="inverse.outright_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -1216,7 +1216,7 @@
 							<option value="double">double</option>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="out_out" label="out" help="Deburst image, with updated geom file that can be further used by Orthorectification application. If the input image is a raw Sentinel1 product, uint16 output type should be used (encoding of S1 product). Otherwise, output type should match type of input image.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -1234,7 +1234,7 @@
 						<param name="field" label="field" optional="false" help="Name of the field carrying the class name in the input vectors." type="text"/>
 						<param name="layer" label="layer" optional="true" value="0" help="Layer index to read in the input vector file." type="integer"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="out_out" label="out" help="Output vector data file storing samplevalues (OGR format). If not given, the input vector data file is updated">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
 							<option value="application/json">application/json</option>
@@ -1271,7 +1271,7 @@
 							<option value="classification">classification</option>
 						</param>
 						<param name="profile.classification.sigma" label="profile.classification.sigma" optional="false" value="1" help="Sigma value for leveling tolerance" type="float"/>
-						<param type="select" name="out_out" label="out" help="The output image.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -1304,12 +1304,12 @@
 						<param name="maxiter" label="maxiter" optional="true" value="100" help="Algorithm will stop if convergence threshold is not met after the maximum number of iterations." type="integer"/>
 						<param name="rangeramp" label="rangeramp" optional="true" value="0" help="Vary the range radius linearly with the central pixel intensity (experimental)." type="float"/>
 						<param name="modesearch" label="modesearch" optional="false" value="False" help="If activated pixel iterative convergence is stopped if the path crosses an already converged pixel. Be careful, with this option, the result will slightly depend on thread number and the results will not be stable (see [4] for more details)." type="boolean" truevalue="True" falsevalue="False"/>
-						<param type="select" name="fout_out" label="fout" help="This output image contains the final average spectral signatures of each pixel. The output type should be at least as wide as the input image type. Floating point encoding is advised. This output can be used as input image (in) of the LSMSSegmentation application [4,5].">
+						<param type="select" name="fout_outformat" label="fout_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
 						</param>
-						<param type="select" name="foutpos_out" label="foutpos" help="This output image contains the 2D displacement between the input pixel spatial position and the final position after convergence. Floating point encoding is mandatory. This output can be used as input image (in) of the LSMSSegmentation application [4,5].">
+						<param type="select" name="foutpos_outformat" label="foutpos_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -1351,7 +1351,7 @@
 						</param>
 						<param name="interpolator.bco.radius" label="interpolator.bco.radius" optional="true" value="0" help="Fill value for area outside the reprojected image" type="float"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="out_out" label="out" help="Output image.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -1380,7 +1380,7 @@
 						<param name="transform.centerx" label="transform.centerx" optional="false" value="0" help="X coordinate of the rotation and scaling center (in physical units)" type="float"/>
 						<param name="transform.centery" label="transform.centery" optional="false" value="0" help="Y coordinate of the rotation and scaling center (in physical units)" type="float"/>
 						<param name="transform.scale" label="transform.scale" optional="false" value="1" help="The scale coefficient to apply" type="float"/>
-						<param type="select" name="out_out" label="out" help="Output vector data with ">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
 							<option value="application/json">application/json</option>
@@ -1410,7 +1410,7 @@
 							<option value="float">float</option>
 							<option value="double">double</option>
 						</param>
-						<param type="select" name="out_out" label="out" help="The output classification image resulting from the fusion of the input classification images.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -1420,7 +1420,7 @@
 						<param name="in" label="in" optional="false" help="Input Vector Data" type="data" format="txt"/>
 						<param name="fn" label="fn" optional="false" help="Field name" type="text"/>
 						<param name="fv" label="fv" optional="false" help="Field value" type="text"/>
-						<param type="select" name="out_out" label="out" help="Output Vector Data">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
 							<option value="application/json">application/json</option>
@@ -1449,7 +1449,7 @@
 						<param name="method.bayes.lambda" label="method.bayes.lambda" optional="false" value="0.9999" help="Set the weighting value." type="float"/>
 						<param name="method.bayes.s" label="method.bayes.s" optional="false" value="1" help="Set the S coefficient." type="float"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="out_out" label="out" help="Output image.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -1457,7 +1457,7 @@
 					</when>
 					<when value="OTB.ConcatenateVectorData">
 						<param name="vd" label="vd" optional="false" help="Vector data files to be concatenated." type="data" format="txt"/>
-						<param type="select" name="out_out" label="out" help="Output conctenated vector data file.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
 							<option value="application/json">application/json</option>
@@ -1493,7 +1493,7 @@
 							<option value="bco">bco</option>
 						</param>
 						<param name="interpolator.bco.radius" label="interpolator.bco.radius" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="io.out_out" label="io.out" help="The resampled output image">
+						<param type="select" name="io.out_outformat" label="io.out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -1522,7 +1522,7 @@
 							<option value="cross">cross</option>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="out_out" label="out" help="Output image.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -1553,7 +1553,7 @@
 							<option value="opening">opening</option>
 							<option value="closing">closing</option>
 						</param>
-						<param type="select" name="out_out" label="out" help="Output image containing the filtered output image.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -1562,7 +1562,7 @@
 					<when value="OTB.ReadImageInfo">
 						<param name="in" label="in" optional="false" help="Input image to analyse" type="data" format="txt"/>
 						<param name="keywordlist" label="keywordlist" optional="false" value="False" help="Output the OSSIM keyword list. It contains metadata information (sensor model, geometry ). Information is stored in keyword list (pairs of key/value)" type="boolean" truevalue="True" falsevalue="False"/>
-						<param type="select" name="outkwl_out" label="outkwl" help="This option allows extracting the OSSIM keywordlist of the image into a geom file.">
+						<param type="select" name="outkwl_outformat" label="outkwl_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="text/plain">text/plain</option>
 						</param>
@@ -1574,7 +1574,7 @@
 						<param name="elev.geoid" label="elev.geoid" optional="false" help="Use a geoid grid to get the height above the ellipsoid in case there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles. A version of the geoid can be found on the OTB website(https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/blob/master/Input/DEM/egm96.grd)." type="data" format="txt"/>
 						<param name="elev.default" label="elev.default" optional="false" value="0" help="This parameter allows setting the default height above ellipsoid when there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles, and no geoid file has been set. This is also used by some application as an average elevation value." type="float"/>
 						<param name="proj" label="proj" optional="true" help="Projection to be used to compute the envelope (default is WGS84)" type="text"/>
-						<param type="select" name="out_out" label="out" help="Vector data file containing the envelope.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
 							<option value="application/json">application/json</option>
@@ -1587,7 +1587,7 @@
 						<param name="tilesizex" label="tilesizex" optional="false" value="500" help="Size of tiles along the X-axis for tile-wise processing." type="integer"/>
 						<param name="tilesizey" label="tilesizey" optional="false" value="500" help="Size of tiles along the Y-axis for tile-wise processing." type="integer"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="out_out" label="out" help="The output GIS vector file, representing the vectorized version of the segmented image where the features of the polygons are the radiometric means and variances.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
 							<option value="application/json">application/json</option>
@@ -1634,12 +1634,12 @@
 						<param name="vmlt" label="vmlt" optional="true" help="Lower threshold to compute the validity mask. This mask will be the 4th output band." type="float"/>
 						<param name="vmut" label="vmut" optional="true" help="Upper threshold to obtain a validity mask. This mask will be the 4th output band." type="float"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="out_out" label="out" help="The output image contains 3 bands, for X offset, Y offset and the metric value. It may contain a 4th one with the validity mask (if used).">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
 						</param>
-						<param type="select" name="wo_out" label="wo" help="The output warped image">
+						<param type="select" name="wo_outformat" label="wo_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -1660,15 +1660,15 @@
 						<param name="elev.dem" label="elev.dem" optional="true" help="This parameter allows selecting a directory containing Digital Elevation Model files. Note that this directory should contain only DEM files. Unexpected behaviour might occurs if other images are found in this directory." type="text"/>
 						<param name="elev.geoid" label="elev.geoid" optional="false" help="Use a geoid grid to get the height above the ellipsoid in case there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles. A version of the geoid can be found on the OTB website(https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/blob/master/Input/DEM/egm96.grd)." type="data" format="txt"/>
 						<param name="elev.default" label="elev.default" optional="false" value="0" help="This parameter allows setting the default height above ellipsoid when there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles, and no geoid file has been set. This is also used by some application as an average elevation value." type="float"/>
-						<param type="select" name="outgeom_out" label="outgeom" help="Geom file containing the generated RPC sensor model">
+						<param type="select" name="outgeom_outformat" label="outgeom_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="text/plain">text/plain</option>
 						</param>
-						<param type="select" name="outstat_out" label="outstat" help="Output file containing the following info: ref_lon ref_lat elevation predicted_lon predicted_lat x_error_ref(meters) y_error_ref(meters) global_error_ref(meters) x_error(meters) y_error(meters) overall_error(meters)">
+						<param type="select" name="outstat_outformat" label="outstat_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="text/plain">text/plain</option>
 						</param>
-						<param type="select" name="outvector_out" label="outvector" help="File containing segments representing residues">
+						<param type="select" name="outvector_outformat" label="outvector_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="text/plain">text/plain</option>
 						</param>
@@ -1706,7 +1706,7 @@
 							<option value="inverse">inverse</option>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="out_out" label="out" help="This parameter holds the output file name to which transformed image will be written. This has a slightly different behaviour depending on transform type.  For Wavelet, output is a single band image for both forward and inverse transform.  For FFT forward transform, output is two band image where first band represents real part and second band represents imaginary part of a complex image.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -1728,15 +1728,15 @@
 						<param name="elev.dem" label="elev.dem" optional="true" help="This parameter allows selecting a directory containing Digital Elevation Model files. Note that this directory should contain only DEM files. Unexpected behaviour might occurs if other images are found in this directory." type="text"/>
 						<param name="elev.geoid" label="elev.geoid" optional="false" help="Use a geoid grid to get the height above the ellipsoid in case there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles. A version of the geoid can be found on the OTB website(https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/blob/master/Input/DEM/egm96.grd)." type="data" format="txt"/>
 						<param name="elev.default" label="elev.default" optional="false" value="0" help="This parameter allows setting the default height above ellipsoid when there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles, and no geoid file has been set. This is also used by some application as an average elevation value." type="float"/>
-						<param type="select" name="outgeom_out" label="outgeom" help="Geom file containing the refined sensor model">
+						<param type="select" name="outgeom_outformat" label="outgeom_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="text/plain">text/plain</option>
 						</param>
-						<param type="select" name="outstat_out" label="outstat" help="Output file containing the following info: ref_lon ref_lat elevation predicted_lon predicted_lat x_error_ref(meters) y_error_ref(meters) global_error_ref(meters) x_error(meters) y_error(meters) overall_error(meters)">
+						<param type="select" name="outstat_outformat" label="outstat_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="text/plain">text/plain</option>
 						</param>
-						<param type="select" name="outvector_out" label="outvector" help="File containing segments representing residues">
+						<param type="select" name="outvector_outformat" label="outvector_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 							<option value="text/plain">text/plain</option>
 						</param>
@@ -1745,7 +1745,7 @@
 						<param name="il" label="il" optional="false" help="List of input image filenames." type="data" format="txt"/>
 						<param name="bv" label="bv" optional="true" help="Background value to ignore in computation of statistics." type="float"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="out_out" label="out" help="XML filename where the statistics are saved for future reuse.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
 						</param>
 					</when>
@@ -1776,7 +1776,7 @@
 						<param name="mode.binary.foreground" label="mode.binary.foreground" optional="false" value="255" help="Value for pixels inside a geometry" type="float"/>
 						<param name="mode.attribute.field" label="mode.attribute.field" optional="false" value="DN" help="Name of the attribute field to burn" type="text"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
-						<param type="select" name="out_out" label="out" help="An output image containing the rasterized vector dataset">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -1795,7 +1795,7 @@
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param name="exp" label="exp" optional="false" help="The muParser mathematical expression to apply on input images." type="text"/>
-						<param type="select" name="out_out" label="out" help="Output image which is the result of the mathematical expressions on input image-list operands.">
+						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
@@ -1837,6 +1837,7 @@
 		--server '$select_server' 
 		--process '$select_process'
 		--InputPoints '$InputPoints'
+		--Result_outformat '$Result_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "hellor":
 	Rscript '$__tool_directory__/generic.R'
@@ -1869,6 +1870,9 @@
 		--radius '$radius'
 		--step '$step'
 		--levels '$levels'
+		--outconvex_outformat '$outconvex_outformat'
+		--outconcave_outformat '$outconcave_outformat'
+		--outleveling_outformat '$outleveling_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.Convert":
 	Rscript '$__tool_directory__/generic.R'
@@ -1887,6 +1891,7 @@
 		--channels.rgb.green '$channels.rgb.green'
 		--channels.rgb.blue '$channels.rgb.blue'
 		--ram '$ram'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.PredictRegression":
 	Rscript '$__tool_directory__/generic.R'
@@ -1898,6 +1903,7 @@
 		--imstat '$imstat'
 		--out '$out'
 		--ram '$ram'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.SARPolarMatrixConvert":
 	Rscript '$__tool_directory__/generic.R'
@@ -1913,6 +1919,8 @@
 		--outf '$outf'
 		--conv '$conv'
 		--ram '$ram'
+		--outc_outformat '$outc_outformat'
+		--outf_outformat '$outf_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.ImageClassifier":
 	Rscript '$__tool_directory__/generic.R'
@@ -1926,6 +1934,8 @@
 		--out '$out'
 		--confmap '$confmap'
 		--ram '$ram'
+		--out_outformat '$out_outformat'
+		--confmap_outformat '$confmap_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.ManageNoData":
 	Rscript '$__tool_directory__/generic.R'
@@ -1941,6 +1951,7 @@
 		--mode.apply.mask '$mode.apply.mask'
 		--mode.apply.ndval '$mode.apply.ndval'
 		--ram '$ram'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.SFSTextureExtraction":
 	Rscript '$__tool_directory__/generic.R'
@@ -1955,6 +1966,7 @@
 		--parameters.alpha '$parameters.alpha'
 		--parameters.maxcons '$parameters.maxcons'
 		--out '$out'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.VectorDataExtractROI":
 	Rscript '$__tool_directory__/generic.R'
@@ -1965,6 +1977,7 @@
 		--elev.dem '$elev.dem'
 		--elev.geoid '$elev.geoid'
 		--elev.default '$elev.default'
+		--io.out_outformat '$io.out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.HyperspectralUnmixing":
 	Rscript '$__tool_directory__/generic.R'
@@ -1974,6 +1987,7 @@
 		--out '$out'
 		--ie '$ie'
 		--ua '$ua'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.HooverCompareSegmentation":
 	Rscript '$__tool_directory__/generic.R'
@@ -1985,6 +1999,8 @@
 		--th '$th'
 		--outgt '$outgt'
 		--outms '$outms'
+		--outgt_outformat '$outgt_outformat'
+		--outms_outformat '$outms_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.ComputeConfusionMatrix":
 	Rscript '$__tool_directory__/generic.R'
@@ -2000,6 +2016,7 @@
 		--ref.vector.nodata '$ref.vector.nodata'
 		--nodatalabel '$nodatalabel'
 		--ram '$ram'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.ConcatenateImages":
 	Rscript '$__tool_directory__/generic.R'
@@ -2008,6 +2025,7 @@
 		--il '$il'
 		--out '$out'
 		--ram '$ram'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.SampleAugmentation":
 	Rscript '$__tool_directory__/generic.R'
@@ -2023,6 +2041,7 @@
 		--strategy.jitter.stdfactor '$strategy.jitter.stdfactor'
 		--strategy.smote.neighbors '$strategy.smote.neighbors'
 		--seed '$seed'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.HaralickTextureExtraction":
 	Rscript '$__tool_directory__/generic.R'
@@ -2041,6 +2060,7 @@
 		--parameters.nbbin '$parameters.nbbin'
 		--texture '$texture'
 		--out '$out'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.ConvertSensorToGeoPoint":
 	Rscript '$__tool_directory__/generic.R'
@@ -2073,6 +2093,8 @@
 		--elev.dem '$elev.dem'
 		--elev.geoid '$elev.geoid'
 		--elev.default '$elev.default'
+		--out_outformat '$out_outformat'
+		--outvector_outformat '$outvector_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.DSFuzzyModelEstimation":
 	Rscript '$__tool_directory__/generic.R'
@@ -2088,6 +2110,7 @@
 		--desclist '$desclist'
 		--maxnbit '$maxnbit'
 		--optobs '$optobs'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.OrthoRectification":
 	Rscript '$__tool_directory__/generic.R'
@@ -2118,6 +2141,7 @@
 		--interpolator.bco.radius '$interpolator.bco.radius'
 		--opt.ram '$opt.ram'
 		--opt.gridspacing '$opt.gridspacing'
+		--io.out_outformat '$io.out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.BinaryMorphologicalOperation":
 	Rscript '$__tool_directory__/generic.R'
@@ -2138,6 +2162,7 @@
 		--filter.opening.foreval '$filter.opening.foreval'
 		--filter.opening.backval '$filter.opening.backval'
 		--filter.closing.foreval '$filter.closing.foreval'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.BlockMatching":
 	Rscript '$__tool_directory__/generic.R'
@@ -2175,6 +2200,8 @@
 		--bm.initdisp.maps.hrad '$bm.initdisp.maps.hrad'
 		--bm.initdisp.maps.vrad '$bm.initdisp.maps.vrad'
 		--ram '$ram'
+		--io.out_outformat '$io.out_outformat'
+		--io.outmask_outformat '$io.outmask_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.KmzExport":
 	Rscript '$__tool_directory__/generic.R'
@@ -2187,6 +2214,7 @@
 		--elev.dem '$elev.dem'
 		--elev.geoid '$elev.geoid'
 		--elev.default '$elev.default'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.ConnectedComponentSegmentation":
 	Rscript '$__tool_directory__/generic.R'
@@ -2201,6 +2229,7 @@
 		--elev.geoid '$elev.geoid'
 		--elev.default '$elev.default'
 		--ram '$ram'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.TrainImagesClassifier":
 	Rscript '$__tool_directory__/generic.R'
@@ -2259,6 +2288,8 @@
 		--classifier.rf.acc '$classifier.rf.acc'
 		--classifier.knn.k '$classifier.knn.k'
 		--rand '$rand'
+		--io.out_outformat '$io.out_outformat'
+		--io.confmatout_outformat '$io.confmatout_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.MultivariateAlterationDetector":
 	Rscript '$__tool_directory__/generic.R'
@@ -2268,6 +2299,7 @@
 		--in2 '$in2'
 		--out '$out'
 		--ram '$ram'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.ComputePolylineFeatureFromImage":
 	Rscript '$__tool_directory__/generic.R'
@@ -2280,6 +2312,7 @@
 		--elev.default '$elev.default'
 		--expr '$expr'
 		--field '$field'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.MultiImageSamplingRate":
 	Rscript '$__tool_directory__/generic.R'
@@ -2290,6 +2323,7 @@
 		--strategy.percent.p '$strategy.percent.p'
 		--strategy.total.v '$strategy.total.v'
 		--mim '$mim'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.Segmentation":
 	Rscript '$__tool_directory__/generic.R'
@@ -2322,6 +2356,8 @@
 		--mode.vector.startlabel '$mode.vector.startlabel'
 		--mode.vector.ogroptions '$mode.vector.ogroptions'
 		--mode.raster.out '$mode.raster.out'
+		--mode.vector.out_outformat '$mode.vector.out_outformat'
+		--mode.raster.out_outformat '$mode.raster.out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.VectorDataDSValidation":
 	Rscript '$__tool_directory__/generic.R'
@@ -2333,6 +2369,7 @@
 		--plasup '$plasup'
 		--cri '$cri'
 		--thd '$thd'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.OGRLayerClassifier":
 	Rscript '$__tool_directory__/generic.R'
@@ -2342,6 +2379,7 @@
 		--instats '$instats'
 		--feat '$feat'
 		--cfield '$cfield'
+		--insvm_outformat '$insvm_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.OSMDownloader":
 	Rscript '$__tool_directory__/generic.R'
@@ -2354,6 +2392,7 @@
 		--elev.geoid '$elev.geoid'
 		--elev.default '$elev.default'
 		--printclasses '$printclasses'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.DisparityMapToElevationMap":
 	Rscript '$__tool_directory__/generic.R'
@@ -2373,6 +2412,7 @@
 		--elev.geoid '$elev.geoid'
 		--elev.default '$elev.default'
 		--ram '$ram'
+		--io.out_outformat '$io.out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.VectorClassifier":
 	Rscript '$__tool_directory__/generic.R'
@@ -2384,6 +2424,7 @@
 		--cfield '$cfield'
 		--feat '$feat'
 		--confmap '$confmap'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.ObtainUTMZoneFromGeoPoint":
 	Rscript '$__tool_directory__/generic.R'
@@ -2412,6 +2453,8 @@
 		--iv '$iv'
 		--ram '$ram'
 		--rand '$rand'
+		--out_outformat '$out_outformat'
+		--som_outformat '$som_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.GeneratePlyFile":
 	Rscript '$__tool_directory__/generic.R'
@@ -2424,6 +2467,7 @@
 		--map.utm.northhem '$map.utm.northhem'
 		--map.epsg.code '$map.epsg.code'
 		--incolor '$incolor'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.StereoRectificationGridGenerator":
 	Rscript '$__tool_directory__/generic.R'
@@ -2442,6 +2486,10 @@
 		--inverse.outleft '$inverse.outleft'
 		--inverse.outright '$inverse.outright'
 		--inverse.ssrate '$inverse.ssrate'
+		--io.outleft_outformat '$io.outleft_outformat'
+		--io.outright_outformat '$io.outright_outformat'
+		--inverse.outleft_outformat '$inverse.outleft_outformat'
+		--inverse.outright_outformat '$inverse.outright_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.SARDeburst":
 	Rscript '$__tool_directory__/generic.R'
@@ -2450,6 +2498,7 @@
 		--in '$in'
 		--out '$out'
 		--ram '$ram'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.SampleExtraction":
 	Rscript '$__tool_directory__/generic.R'
@@ -2463,6 +2512,7 @@
 		--field '$field'
 		--layer '$layer'
 		--ram '$ram'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.MorphologicalProfilesAnalysis":
 	Rscript '$__tool_directory__/generic.R'
@@ -2478,6 +2528,7 @@
 		--step '$step'
 		--profile '$profile'
 		--profile.classification.sigma '$profile.classification.sigma'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.MeanShiftSmoothing":
 	Rscript '$__tool_directory__/generic.R'
@@ -2493,6 +2544,8 @@
 		--maxiter '$maxiter'
 		--rangeramp '$rangeramp'
 		--modesearch '$modesearch'
+		--fout_outformat '$fout_outformat'
+		--foutpos_outformat '$foutpos_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.BundleToPerfectSensor":
 	Rscript '$__tool_directory__/generic.R'
@@ -2514,6 +2567,7 @@
 		--interpolator '$interpolator'
 		--interpolator.bco.radius '$interpolator.bco.radius'
 		--ram '$ram'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.ConvertCartoToGeoPoint":
 	Rscript '$__tool_directory__/generic.R'
@@ -2538,6 +2592,7 @@
 		--transform.centerx '$transform.centerx'
 		--transform.centery '$transform.centery'
 		--transform.scale '$transform.scale'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.FusionOfClassifications":
 	Rscript '$__tool_directory__/generic.R'
@@ -2549,6 +2604,7 @@
 		--nodatalabel '$nodatalabel'
 		--undecidedlabel '$undecidedlabel'
 		--out '$out'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.VectorDataSetField":
 	Rscript '$__tool_directory__/generic.R'
@@ -2557,6 +2613,7 @@
 		--in '$in'
 		--fn '$fn'
 		--fv '$fv'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.Pansharpening":
 	Rscript '$__tool_directory__/generic.R'
@@ -2571,12 +2628,14 @@
 		--method.bayes.lambda '$method.bayes.lambda'
 		--method.bayes.s '$method.bayes.s'
 		--ram '$ram'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.ConcatenateVectorData":
 	Rscript '$__tool_directory__/generic.R'
 		--server '$select_server' 
 		--process '$select_process'
 		--vd '$vd'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.GridBasedImageResampling":
 	Rscript '$__tool_directory__/generic.R'
@@ -2595,6 +2654,7 @@
 		--out.default '$out.default'
 		--interpolator '$interpolator'
 		--interpolator.bco.radius '$interpolator.bco.radius'
+		--io.out_outformat '$io.out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.SARPolarSynth":
 	Rscript '$__tool_directory__/generic.R'
@@ -2610,6 +2670,7 @@
 		--emissionv '$emissionv'
 		--mode '$mode'
 		--ram '$ram'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.GrayScaleMorphologicalOperation":
 	Rscript '$__tool_directory__/generic.R'
@@ -2623,6 +2684,7 @@
 		--structype.ball.xradius '$structype.ball.xradius'
 		--structype.ball.yradius '$structype.ball.yradius'
 		--filter '$filter'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.ReadImageInfo":
 	Rscript '$__tool_directory__/generic.R'
@@ -2630,6 +2692,7 @@
 		--process '$select_process'
 		--in '$in'
 		--keywordlist '$keywordlist'
+		--outkwl_outformat '$outkwl_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.ImageEnvelope":
 	Rscript '$__tool_directory__/generic.R'
@@ -2641,6 +2704,7 @@
 		--elev.geoid '$elev.geoid'
 		--elev.default '$elev.default'
 		--proj '$proj'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.LSMSVectorization":
 	Rscript '$__tool_directory__/generic.R'
@@ -2651,6 +2715,7 @@
 		--tilesizex '$tilesizex'
 		--tilesizey '$tilesizey'
 		--ram '$ram'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.FineRegistration":
 	Rscript '$__tool_directory__/generic.R'
@@ -2679,6 +2744,8 @@
 		--vmlt '$vmlt'
 		--vmut '$vmut'
 		--ram '$ram'
+		--out_outformat '$out_outformat'
+		--wo_outformat '$wo_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.GenerateRPCSensorModel":
 	Rscript '$__tool_directory__/generic.R'
@@ -2692,6 +2759,9 @@
 		--elev.dem '$elev.dem'
 		--elev.geoid '$elev.geoid'
 		--elev.default '$elev.default'
+		--outgeom_outformat '$outgeom_outformat'
+		--outstat_outformat '$outstat_outformat'
+		--outvector_outformat '$outvector_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.DomainTransform":
 	Rscript '$__tool_directory__/generic.R'
@@ -2705,6 +2775,7 @@
 		--mode.wavelet.nlevels '$mode.wavelet.nlevels'
 		--direction '$direction'
 		--ram '$ram'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.RefineSensorModel":
 	Rscript '$__tool_directory__/generic.R'
@@ -2719,6 +2790,9 @@
 		--elev.dem '$elev.dem'
 		--elev.geoid '$elev.geoid'
 		--elev.default '$elev.default'
+		--outgeom_outformat '$outgeom_outformat'
+		--outstat_outformat '$outstat_outformat'
+		--outvector_outformat '$outvector_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.ComputeImagesStatistics":
 	Rscript '$__tool_directory__/generic.R'
@@ -2727,6 +2801,7 @@
 		--il '$il'
 		--bv '$bv'
 		--ram '$ram'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.Rasterization":
 	Rscript '$__tool_directory__/generic.R'
@@ -2747,6 +2822,7 @@
 		--mode.binary.foreground '$mode.binary.foreground'
 		--mode.attribute.field '$mode.attribute.field'
 		--ram '$ram'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "OTB.BandMath":
 	Rscript '$__tool_directory__/generic.R'
@@ -2756,6 +2832,7 @@
 		--out '$out'
 		--ram '$ram'
 		--exp '$exp'
+		--out_outformat '$out_outformat'
 		--outputData '$output_data'
 #end if
 ]]></command>

@@ -262,7 +262,8 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                         
                         #add inputs to command information for process
                         processCommand["inputs"] = inputCommand
-                        commands.append(processCommand)
+                        
+                        outputFormatCommands = []
 
                         for output in process["outputs"]:
                             outputName = output
@@ -270,16 +271,18 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                             if "extended-schema" in process["outputs"][output]:
                                 process_output = ET.Element("param")
                                 process_output.set("type", "select")
-                                process_output.set("name", outputName + "_out") #_out needed to avoid duplicates
-                                process_output.set("label", outputName)
-                                process_output.set("help", outputLabel)
+                                process_output.set("name", outputName + "_outformat") #_out needed to avoid duplicates
+                                process_output.set("label", outputName + "_outformat")
+                                process_output.set("help", "Output format")
+                                outputFormatCommands.append(outputName + "_outformat")
                                 for enum in process["outputs"][output]["extended-schema"]["oneOf"][0]["allOf"][1]["properties"]["type"]["enum"]:
                                     output_option = ET.Element("option")
                                     output_option.set("value", enum)
                                     output_option.text=enum
                                     process_output.append(output_option)
                                 when_process.append(process_output)
-
+                        processCommand["outputs"] = outputFormatCommands
+                        commands.append(processCommand)
                         when_list_processes.append(when_process)
 
         conditional_process.append(select_process)
@@ -332,6 +335,8 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             commandText += "\t\t--process '$select_process'"
             for y in commands[i]["inputs"]:
                 commandText += "\n\t\t--"+ y + " \'$" + y + "\'"
+            for o in commands[i]["outputs"]:
+                commandText += "\n\t\t--"+ o + " \'$" + o + "\'"
             commandText += "\n\t\t--outputData '$output_data'"
         else:
             commandText += "\n#elif $conditional_server.select_process == \"" + commands[i]["process"] + "\":\n"
@@ -340,10 +345,13 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             commandText += "\t\t--process '$select_process'"
             for y in commands[i]["inputs"]:
                 commandText += "\n\t\t--"+ y + " \'$" + y + "\'"
+            for o in commands[i]["outputs"]:
+                commandText += "\n\t\t--"+ o + " \'$" + o + "\'"
             commandText += "\n\t\t--outputData '$output_data'"
     commandText += "\n#end if\n]]>"
     command.text = commandText
     tool.append(command)
+
     with open ("generic.xml", "wb") as toolFile: 
         toolString = ET.tostring(tool, encoding='unicode')
         toolString = toolString.replace("&lt;", "<")
