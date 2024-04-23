@@ -159,12 +159,12 @@ outputs <- getOutputs(inputs$server, inputs$process, outputLocation)
 
 # 
 for (key in names(inputParameters)) {
-  if (endsWith(inputParameters[[key]], ".txt")) {
+  if (endsWith(inputParameters[[key]], ".dat")) {
     con <- file(inputParameters[[key]], "r")
     url_list <- list()
     while (length(line <- readLines(con, n = 1)) > 0) {
       if (is_url(line)) {
-        url_list <- c(url_list, list(list(href = line)))
+        url_list <- c(url_list, list(list(href = trimws(line))))
       }
     }
     close(con)
@@ -176,6 +176,8 @@ jsonData <- list(
   "inputs" = inputParameters,
   "outputs" = outputs
 )
+
+print(toJSON(jsonData))
 
 jobID <- executeProcess(inputs$server, inputs$process, jsonData, outputLocation)
 
