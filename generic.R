@@ -36,10 +36,6 @@ getOutputs <- function(inputs, output) {
     responseBody <- parseResponseBody(response$body)
     outputs <- list()
 
-    #sink(paste0(output, "processDescription.json"))
-    #print(toJSON(responseBody, pretty = TRUE))
-    #sink()
-
     for (x in 1:length(responseBody$outputs)) {
         outputformatName <- paste(names(responseBody$outputs[x]), "_outformat", sep="")
         output_item <- list()
@@ -74,10 +70,6 @@ executeProcess <- function(url, process, requestBodyData, output) {
     cat("\n jobID: ", parseResponseBody(response$body)$jobID, "\n")
 
     jobID <- parseResponseBody(response$body)$jobID
-
-    #sink(paste0(output, "jobID.dat"))
-    #  print(jobID)
-    #sink()
 
     return(jobID)
 }
@@ -130,9 +122,6 @@ retrieveResults <- function(server, jobID, outputData) {
                   sink(paste0(outputData, "_result_urls.txt"))
                     cat(urls_with_newline, "\n")
                   sink()
-                  #sink(paste0(outputData, "_result_full.dat"))
-                  #  print(resultBody)
-                  #sink()
                 }
             } else if (jobStatus == "failed") {
               status <- jobStatus
@@ -164,7 +153,7 @@ outputLocation <- inputParameters$outputData
 outputs <- getOutputs(inputs, outputLocation)
 
 for (key in names(inputParameters)) {
-  if (endsWith(inputParameters[[key]], ".txt")) { # replace by .dat if used in Galaxy, .txt if used locally
+  if (endsWith(inputParameters[[key]], ".dat")) { 
     con <- file(inputParameters[[key]], "r")
     url_list <- list()
     while (length(line <- readLines(con, n = 1)) > 0) {
@@ -182,16 +171,6 @@ jsonData <- list(
   "outputs" = outputs
 )
 
-print(toJSON(jsonData))
-
 jobID <- executeProcess(inputs$server, inputs$process, jsonData, outputLocation)
 
 retrieveResults(inputs$server, jobID, outputLocation)
-
-# Example command: 
-# Rscript ./generic.R --server https://ospd.geolabs.fr:8300/ogc-api/ --process OTB.BandMath  
-# --il ./input.txt --out float --ram 128 --exp im1b3,im1b2,im1b1 --outputData bandMathOutput --out_outformat image/tiff
-# Example command: 
-# Rscript ./generic.R --server https://ospd.geolabs.fr:8300/ogc-api/ --process OTB.MeanShiftSmoothing 
-# --in ./input.txt --fout float --foutpos float --ram 128 --spatialr 5 --ranger 15.0 --thres 0.1 --maxiter 100 
-# --rangeramp 0.0 --modesearch true --outputData meanShiftSmoothingOutput --fout_outformat image/tiff foutpos_outformat image/tiff
