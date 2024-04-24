@@ -36,9 +36,9 @@ getOutputs <- function(inputs, output) {
     responseBody <- parseResponseBody(response$body)
     outputs <- list()
 
-    sink(paste0(output, "processDescription.json"))
-    print(toJSON(responseBody, pretty = TRUE))
-    sink()
+    #sink(paste0(output, "processDescription.json"))
+    #print(toJSON(responseBody, pretty = TRUE))
+    #sink()
 
     for (x in 1:length(responseBody$outputs)) {
         outputformatName <- paste(names(responseBody$outputs[x]), "_outformat", sep="")
@@ -75,9 +75,9 @@ executeProcess <- function(url, process, requestBodyData, output) {
 
     jobID <- parseResponseBody(response$body)$jobID
 
-    sink(paste0(output, "jobID.txt"))
-      print(jobID)
-    sink()
+    #sink(paste0(output, "jobID.dat"))
+    #  print(jobID)
+    #sink()
 
     return(jobID)
 }
@@ -130,9 +130,9 @@ retrieveResults <- function(server, jobID, outputData) {
                   sink(paste0(outputData, "_result_urls.txt"))
                     cat(urls_with_newline, "\n")
                   sink()
-                  sink(paste0(outputData, "_result_full.txt"))
-                    print(resultBody)
-                  sink()
+                  #sink(paste0(outputData, "_result_full.dat"))
+                  #  print(resultBody)
+                  #sink()
                 }
             } else if (jobStatus == "failed") {
               status <- jobStatus
