@@ -37,19 +37,21 @@ getOutputs <- function(inputs, output) {
     outputs <- list()
 
     sink(paste0(output, "processDescription.json"))
-      print(toJSON(responseBody, pretty = TRUE))
+    print(toJSON(responseBody, pretty = TRUE))
     sink()
 
-    transmissionMode <- list("transmissionMode" = "reference")
     for (x in 1:length(responseBody$outputs)) {
         outputformatName <- paste(names(responseBody$outputs[x]), "_outformat", sep="")
+        output_item <- list()
+
         for (p in names(inputs)) {
-          if(p == outputformatName){
-            format <- list("mediaType" = inputs[[outputformatName]])
-            outputs[[x]] <- format
-          }
+            if(p == outputformatName){
+                format <- list("mediaType" = inputs[[outputformatName]])
+                output_item$format <- format
+            }
         }
-        outputs[[x]] <- transmissionMode
+        output_item$transmissionMode <- "reference"
+        outputs[[x]] <- output_item
     }
 
     names(outputs) <- names(responseBody$outputs)
@@ -162,7 +164,7 @@ outputLocation <- inputParameters$outputData
 outputs <- getOutputs(inputs, outputLocation)
 
 for (key in names(inputParameters)) {
-  if (endsWith(inputParameters[[key]], ".dat")) {
+  if (endsWith(inputParameters[[key]], ".txt")) { # replace by .dat if used in Galaxy, .txt if used locally
     con <- file(inputParameters[[key]], "r")
     url_list <- list()
     while (length(line <- readLines(con, n = 1)) > 0) {
@@ -180,17 +182,16 @@ jsonData <- list(
   "outputs" = outputs
 )
 
+print(toJSON(jsonData))
+
 jobID <- executeProcess(inputs$server, inputs$process, jsonData, outputLocation)
 
 retrieveResults(inputs$server, jobID, outputLocation)
 
 # Example command: 
-# Rscript ./generic.R --server https://ospd.geolabs.fr:8300/ogc-api/ --process OTB.BandMath 
-# --il https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/31/U/ET/2019/4/S2B_31UET_20190421_0_L2A/TCI.tif 
-# --out float --ram 128 --exp im1b3,im1b2,im1b1 --outputData bandMathOutput
+# Rscript ./generic.R --server https://ospd.geolabs.fr:8300/ogc-api/ --process OTB.BandMath  
+# --il ./input.txt --out float --ram 128 --exp im1b3,im1b2,im1b1 --outputData bandMathOutput --out_outformat image/tiff
 # Example command: 
-# Rscript ./generic.R --server https://ospd.geolabs.fr:8300/ogc-api/ 
-# --process OTB.MeanShiftSmoothing 
-# --in https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/31/U/ET/2019/4/S2B_31UET_20190421_0_L2A/TCI.tif 
-# --fout float --foutpos float --ram 128 --spatialr 5 --ranger 15.0 --thres 0.1 --maxiter 100 
-# --rangeramp 0.0 --modesearch true --outputData meanShiftSmoothingOutput
+# Rscript ./generic.R --server https://ospd.geolabs.fr:8300/ogc-api/ --process OTB.MeanShiftSmoothing 
+# --in ./input.txt --fout float --foutpos float --ram 128 --spatialr 5 --ranger 15.0 --thres 0.1 --maxiter 100 
+# --rangeramp 0.0 --modesearch true --outputData meanShiftSmoothingOutput --fout_outformat image/tiff foutpos_outformat image/tiff
