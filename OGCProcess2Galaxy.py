@@ -58,20 +58,13 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     #add tool
     tool = ET.Element("tool") 
     tool.set('id', "generic_ogc_processes_wrapper")
-    tool.set('name', "Generic OGC Processes Wrapper")
+    tool.set('name', "OGC API Process Wrapper")
     tool.set('version', "0.1.0")
 
     #add description
     description = ET.Element("description") 
-    description.text = "executes OGC API Processes"
+    description.text = "executes remote processes"
     tool.append(description) 
-
-    #add exit code
-    stdio = ET.Element("stdio") 
-    exitCode = ET.Element("exit_code")
-    exitCode.set("range", "1:") 
-    stdio.append(exitCode) 
-    tool.append(stdio)
 
     #add requriements
     requirements = ET.Element("requirements")
@@ -291,7 +284,35 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
         when_server.append(conditional_process)
     conditional_server.append(when_server)
 
-    #export tool 
+    #add command
+    commandText = "<![CDATA["
+
+    for i in range(0, len(commands)):
+        if i == 0:
+            commandText += "\n#if $conditional_server.select_process == \"" + commands[i]["process"] + "\":\n"
+            commandText += "\tRscript '$__tool_directory__/generic.R'\n"
+            commandText += "\t\t--server '$select_server' \n"
+            commandText += "\t\t--process '$select_process'"
+            for y in commands[i]["inputs"]:
+                commandText += "\n\t\t--"+ y + " \'$" + y + "\'"
+            for o in commands[i]["outputs"]:
+                commandText += "\n\t\t--"+ o + " \'$" + o + "\'"
+            commandText += "\n\t\t--outputData '$output_data'"
+        else:
+            commandText += "\n#elif $conditional_server.select_process == \"" + commands[i]["process"] + "\":\n"
+            commandText += "\tRscript '$__tool_directory__/generic.R'\n"
+            commandText += "\t\t--server '$select_server' \n"
+            commandText += "\t\t--process '$select_process'"
+            for y in commands[i]["inputs"]:
+                commandText += "\n\t\t--"+ y + " \'$" + y + "\'"
+            for o in commands[i]["outputs"]:
+                commandText += "\n\t\t--"+ o + " \'$" + o + "\'"
+            commandText += "\n\t\t--outputData '$output_data'"
+    commandText += "\n#end if\n]]>"
+    command.text = commandText
+    tool.append(command)
+
+    #add inputs 
     inputs.append(conditional_server)
     tool.append(inputs)
 
@@ -323,34 +344,6 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     citations.append(citation1)
     citations.append(citation2)
     tool.append(citations)
-
-    #add command
-    commandText = "<![CDATA["
-
-    for i in range(0, len(commands)):
-        if i == 0:
-            commandText += "\n#if $conditional_server.select_process == \"" + commands[i]["process"] + "\":\n"
-            commandText += "\tRscript '$__tool_directory__/generic.R'\n"
-            commandText += "\t\t--server '$select_server' \n"
-            commandText += "\t\t--process '$select_process'"
-            for y in commands[i]["inputs"]:
-                commandText += "\n\t\t--"+ y + " \'$" + y + "\'"
-            for o in commands[i]["outputs"]:
-                commandText += "\n\t\t--"+ o + " \'$" + o + "\'"
-            commandText += "\n\t\t--outputData '$output_data'"
-        else:
-            commandText += "\n#elif $conditional_server.select_process == \"" + commands[i]["process"] + "\":\n"
-            commandText += "\tRscript '$__tool_directory__/generic.R'\n"
-            commandText += "\t\t--server '$select_server' \n"
-            commandText += "\t\t--process '$select_process'"
-            for y in commands[i]["inputs"]:
-                commandText += "\n\t\t--"+ y + " \'$" + y + "\'"
-            for o in commands[i]["outputs"]:
-                commandText += "\n\t\t--"+ o + " \'$" + o + "\'"
-            commandText += "\n\t\t--outputData '$output_data'"
-    commandText += "\n#end if\n]]>"
-    command.text = commandText
-    tool.append(command)
 
     with open ("generic.xml", "wb") as toolFile: 
         toolString = ET.tostring(tool, encoding='unicode')
