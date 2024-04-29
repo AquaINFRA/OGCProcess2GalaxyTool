@@ -35,6 +35,15 @@ def contains_ref(json_obj):
                 return True
     return False
 
+def distinct_subarray(arr):
+    subarray = []
+    seen = set()
+    for item in arr:
+        if item not in seen:
+            subarray.append(item)
+            seen.add(item)
+    return subarray
+
 def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     """
     Function to convert processes form a given list of 
@@ -150,7 +159,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             processesData = json.load(processesURL)
             
             when_list_processes = []
-            for process in processesData["processes"][0:70]: #only get 50 processes!
+            for process in processesData["processes"]:#[0:70]: #only get 50 processes!
                 
                 #command information for process
                 processCommand = {"server": api["server_url"], "process": process["id"]}
@@ -221,15 +230,17 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                                 process_input.set("help", "No description provided!")
 
                             #set param type
-                            if 'type' in process["inputs"][param]["schema"].keys(): #simple schema
-                                if process["inputs"][param]["schema"]["type"] in typeMapping.keys():
+                            schema = process["inputs"][param]["schema"]
+                            if 'type' in schema.keys(): #simple schema
+                                if schema["type"] in typeMapping.keys():
                                     process_input.set("type", typeMapping[process["inputs"][param]["schema"]["type"]])
-                                    if process["inputs"][param]["schema"]["type"] == "boolean":
+                                    if schema["type"] == "boolean":
                                         process_input.set("truevalue", "True") # Galaxy uses this for bools
                                         process_input.set("falsevalue", "False")
-                                    if "enum" in process["inputs"][param]["schema"]: #create dropdown if enum exists
+                                    if "enum" in schema: #create dropdown if enum exists
+                                        enums = distinct_subarray(schema["enum"])
                                         process_input.set("type", "select")
-                                        for enum in process["inputs"][param]["schema"]["enum"]:
+                                        for enum in enums:
                                             option = ET.Element("option")
                                             option.set("value", enum)
                                             option.text = enum
@@ -260,15 +271,17 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
 
                         for output in process["outputs"]:
                             outputName = output
-                            outputLabel = process["outputs"][output]["title"]
-                            if "extended-schema" in process["outputs"][output]:
+                            processOutput = process["outputs"][output]
+                            outputLabel = processOutput["title"]
+                            if "extended-schema" in processOutput:
                                 process_output = ET.Element("param")
                                 process_output.set("type", "select")
                                 process_output.set("name", outputName + "_outformat") #_out needed to avoid duplicates
                                 process_output.set("label", outputName + "_outformat")
                                 process_output.set("help", "Output format")
                                 outputFormatCommands.append(outputName + "_outformat")
-                                for enum in process["outputs"][output]["extended-schema"]["oneOf"][0]["allOf"][1]["properties"]["type"]["enum"]:
+                                enums = distinct_subarray(processOutput["extended-schema"]["oneOf"][0]["allOf"][1]["properties"]["type"]["enum"])
+                                for enum in enums:
                                     output_option = ET.Element("option")
                                     output_option.set("value", enum)
                                     output_option.text=enum
@@ -328,9 +341,135 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     outputs.append(collection)
     tool.append(outputs)
 
+    #add tests
+    tests = ET.Element("tests")
+
+    test1 = ET.Element("test")
+
+    param1 = ET.Element("param")
+    param1.set("name", "server")
+    param1.set("value", "https://ospd.geolabs.fr:8300/ogc-api/")
+
+    param2 = ET.Element("param")
+    param2.set("name", "process")
+    param2.set("value", "OTB.BandMath")
+
+    param3 = ET.Element("param")
+    param3.set("name", "il")
+    param3.set("value", "otb_band_math_test_input.txt")
+
+    param4 = ET.Element("param")
+    param4.set("name", "out")
+    param4.set("value", "float")
+
+    param5 = ET.Element("param")
+    param5.set("name", "ram")
+    param5.set("value", "256")
+
+    param6 = ET.Element("param")
+    param6.set("name", "exp")
+    param6.set("value", "im1b3,im1b2,im1b1")
+
+    param7 = ET.Element("param")
+    param7.set("name", "out_outformat")
+    param7.set("value", "image/png")
+
+    output_param = ET.Element("output_collection")
+    output_param.set("name", "output_data")
+    output_param.set("type", "list")
+    output_param.set("count", "2")
+
+    test1.append(param1)
+    test1.append(param2)
+    test1.append(param3)
+    test1.append(param4)
+    test1.append(param5)
+    test1.append(param6)
+    test1.append(param7)
+    test1.append(output_param)
+
+    test2 = ET.Element("test")
+
+    param21 = ET.Element("param")
+    param21.set("name", "server")
+    param21.set("value", "https://ospd.geolabs.fr:8300/ogc-api/")
+
+    param22 = ET.Element("param")
+    param22.set("name", "process")
+    param22.set("value", "OTB.MeanShiftSmoothing")
+
+    param23 = ET.Element("param")
+    param23.set("name", "in")
+    param23.set("value", "otb_mean_shift_smoothing_test_input.txt")
+
+    param24 = ET.Element("param")
+    param24.set("name", "fout")
+    param24.set("value", "float")
+
+    param25 = ET.Element("param")
+    param25.set("name", "foutpos")
+    param25.set("value", "float")
+
+    param26 = ET.Element("param")
+    param26.set("name", "spatialr")
+    param26.set("value", "5")
+
+    param27 = ET.Element("param")
+    param27.set("name", "ranger")
+    param27.set("value", "15")
+
+    param28 = ET.Element("param")
+    param28.set("name", "thres")
+    param28.set("value", "0.1")
+
+    param29 = ET.Element("param")
+    param29.set("name", "maxiter")
+    param29.set("value", "100")
+
+    param230 = ET.Element("param")
+    param230.set("name", "rangeramp")
+    param230.set("value", "0")
+
+    param231 = ET.Element("param")
+    param231.set("name", "modesearch")
+    param231.set("value", "False")
+
+    param232 = ET.Element("param")
+    param232.set("name", "fout_outformat")
+    param232.set("value", "image/png")
+
+    param233 = ET.Element("param")
+    param233.set("name", "foutpos_outformat")
+    param233.set("value", "image/png")
+
+    output_param2 = ET.Element("output_collection")
+    output_param2.set("name", "output_data")
+    output_param2.set("type", "list")
+    output_param2.set("count", "2")
+
+    test2.append(param21)
+    test2.append(param22)
+    test2.append(param23)
+    test2.append(param24)
+    test2.append(param25)
+    test2.append(param26)
+    test2.append(param27)
+    test2.append(param28)
+    test2.append(param29)
+    test2.append(param230)
+    test2.append(param231)
+    test2.append(param232)
+    test2.append(param233)
+    test2.append(output_param2)
+
+    tests.append(test1)
+    tests.append(test2)
+
+    tool.append(tests)
+
     #add help
     helpElement = ET.Element("help")
-    helpElement.text= "Please help"
+    helpElement.text= "This tool is a wrapper for OGC API Processes and was created using the OGC-API-Process2Galaxy tool (https://github.com/AquaINFRA/OGC-API-Process2Galaxy). Check the README in the repository for more information."
     tool.append(helpElement)
 
     #add citation

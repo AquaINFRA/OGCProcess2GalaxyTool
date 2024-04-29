@@ -2,6 +2,8 @@ library("httr2")
 library("jsonlite")
 library("getopt")
 
+cat("start generic wrapper service")
+
 getParameters <- function(){
     args <- commandArgs(trailingOnly = TRUE)
 
@@ -153,7 +155,7 @@ outputLocation <- inputParameters$outputData
 outputs <- getOutputs(inputs, outputLocation)
 
 for (key in names(inputParameters)) {
-  if (endsWith(inputParameters[[key]], ".dat")) { 
+  if (endsWith(inputParameters[[key]], ".dat") || endsWith(inputParameters[[key]], ".txt")) { 
     con <- file(inputParameters[[key]], "r")
     url_list <- list()
     while (length(line <- readLines(con, n = 1)) > 0) {
