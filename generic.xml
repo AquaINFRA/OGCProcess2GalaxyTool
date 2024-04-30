@@ -7737,27 +7737,6 @@
 		--DISPARITY_outformat '${DISPARITY_outformat}'
 		--POINTS_outformat '${POINTS_outformat}'
 		--outputData '$output_data'
-#elif $conditional_server.select_process == "SAGA.imagery_opencv.10":
-	Rscript '$__tool_directory__/generic.R'
-		--server '$select_server' 
-		--process '$select_process'
-		--FEATURES '${FEATURES}'
-		--NORMALIZE '${NORMALIZE}'
-		--RGB_COLORS '${RGB_COLORS}'
-		--MODEL_LOAD '${MODEL_LOAD}'
-		--TRAIN_AREAS '${TRAIN_AREAS}'
-		--TRAIN_CLASS '${TRAIN_CLASS}'
-		--TRAIN_BUFFER '${TRAIN_BUFFER}'
-		--MODEL_SAVE '${MODEL_SAVE}'
-		--MAX_DEPTH '${MAX_DEPTH}'
-		--MIN_SAMPLES '${MIN_SAMPLES}'
-		--MAX_CATEGRS '${MAX_CATEGRS}'
-		--1SE_RULE '${1SE_RULE}'
-		--TRUNC_PRUNED '${TRUNC_PRUNED}'
-		--REG_ACCURACY '${REG_ACCURACY}'
-		--ACTIVE_VARS '${ACTIVE_VARS}'
-		--CLASSES_outformat '${CLASSES_outformat}'
-		--outputData '$output_data'
 #elif $conditional_server.select_process == "SAGA.imagery_opencv.2":
 	Rscript '$__tool_directory__/generic.R'
 		--server '$select_server' 
@@ -7766,49 +7745,6 @@
 		--RANGE_MIN '${RANGE_MIN}'
 		--RANGE_MAX '${RANGE_MAX}'
 		--OUTPUT_outformat '${OUTPUT_outformat}'
-		--outputData '$output_data'
-#elif $conditional_server.select_process == "SAGA.imagery_opencv.9":
-	Rscript '$__tool_directory__/generic.R'
-		--server '$select_server' 
-		--process '$select_process'
-		--FEATURES '${FEATURES}'
-		--NORMALIZE '${NORMALIZE}'
-		--RGB_COLORS '${RGB_COLORS}'
-		--MODEL_LOAD '${MODEL_LOAD}'
-		--TRAIN_AREAS '${TRAIN_AREAS}'
-		--TRAIN_CLASS '${TRAIN_CLASS}'
-		--TRAIN_BUFFER '${TRAIN_BUFFER}'
-		--MODEL_SAVE '${MODEL_SAVE}'
-		--MAX_DEPTH '${MAX_DEPTH}'
-		--MIN_SAMPLES '${MIN_SAMPLES}'
-		--MAX_CATEGRS '${MAX_CATEGRS}'
-		--1SE_RULE '${1SE_RULE}'
-		--TRUNC_PRUNED '${TRUNC_PRUNED}'
-		--REG_ACCURACY '${REG_ACCURACY}'
-		--WEAK_COUNT '${WEAK_COUNT}'
-		--WGT_TRIM_RATE '${WGT_TRIM_RATE}'
-		--BOOST_TYPE '${BOOST_TYPE}'
-		--CLASSES_outformat '${CLASSES_outformat}'
-		--outputData '$output_data'
-#elif $conditional_server.select_process == "SAGA.imagery_opencv.8":
-	Rscript '$__tool_directory__/generic.R'
-		--server '$select_server' 
-		--process '$select_process'
-		--FEATURES '${FEATURES}'
-		--NORMALIZE '${NORMALIZE}'
-		--RGB_COLORS '${RGB_COLORS}'
-		--MODEL_LOAD '${MODEL_LOAD}'
-		--TRAIN_AREAS '${TRAIN_AREAS}'
-		--TRAIN_CLASS '${TRAIN_CLASS}'
-		--TRAIN_BUFFER '${TRAIN_BUFFER}'
-		--MODEL_SAVE '${MODEL_SAVE}'
-		--MAX_DEPTH '${MAX_DEPTH}'
-		--MIN_SAMPLES '${MIN_SAMPLES}'
-		--MAX_CATEGRS '${MAX_CATEGRS}'
-		--1SE_RULE '${1SE_RULE}'
-		--TRUNC_PRUNED '${TRUNC_PRUNED}'
-		--REG_ACCURACY '${REG_ACCURACY}'
-		--CLASSES_outformat '${CLASSES_outformat}'
 		--outputData '$output_data'
 #elif $conditional_server.select_process == "SAGA.imagery_opencv.7":
 	Rscript '$__tool_directory__/generic.R'
@@ -10385,10 +10321,7 @@
 						<option value="SAGA.imagery_opencv.0">SAGA.imagery_opencv.0: Morphological Filter (OpenCV)</option>
 						<option value="SAGA.imagery_opencv.1">SAGA.imagery_opencv.1: Fourier Transformation (OpenCV)</option>
 						<option value="SAGA.imagery_opencv.4">SAGA.imagery_opencv.4: Stereo Match (OpenCV)</option>
-						<option value="SAGA.imagery_opencv.10">SAGA.imagery_opencv.10: Random Forest Classification (OpenCV)</option>
 						<option value="SAGA.imagery_opencv.2">SAGA.imagery_opencv.2: Single Value Decomposition (OpenCV)</option>
-						<option value="SAGA.imagery_opencv.9">SAGA.imagery_opencv.9: Boosting Classification (OpenCV)</option>
-						<option value="SAGA.imagery_opencv.8">SAGA.imagery_opencv.8: Decision Tree Classification (OpenCV)</option>
 						<option value="SAGA.imagery_opencv.7">SAGA.imagery_opencv.7: Support Vector Machine Classification (OpenCV)</option>
 						<option value="SAGA.imagery_opencv.6">SAGA.imagery_opencv.6: K-Nearest Neighbours Classification (OpenCV)</option>
 						<option value="SAGA.statistics_points.0">SAGA.statistics_points.0: Variogram</option>
@@ -25056,122 +24989,11 @@
 							<option value="application/x-ogc-lasf">application/x-ogc-lasf</option>
 						</param>
 					</when>
-					<when value="SAGA.imagery_opencv.10">
-						<param name="FEATURES" label="FEATURES" optional="false" help="Features" type="data" format="txt"/>
-						<param name="NORMALIZE" label="NORMALIZE" optional="true" value="False" help="Normalize" type="select" truevalue="True" falsevalue="False">
-							<option value="true">true</option>
-							<option value="false">false</option>
-						</param>
-						<param name="RGB_COLORS" label="RGB_COLORS" optional="true" value="False" help="Use the first three features in list to obtain blue, green, red components for class colour in look-up table." type="select" truevalue="True" falsevalue="False">
-							<option value="true">true</option>
-							<option value="false">false</option>
-						</param>
-						<param name="MODEL_LOAD" label="MODEL_LOAD" optional="false" help="Use a model previously stored to file." type="data" format="txt"/>
-						<param name="TRAIN_AREAS" label="TRAIN_AREAS" optional="false" help="Training Areas" type="data" format="txt"/>
-						<param name="TRAIN_CLASS" label="TRAIN_CLASS" optional="false" help="Class Identifier" type="data" format="txt"/>
-						<param name="TRAIN_BUFFER" label="TRAIN_BUFFER" optional="true" value="1" help="For non-polygon type training areas, creates a buffer with a diameter of specified size." type="float"/>
-						<param name="MODEL_SAVE" label="MODEL_SAVE" optional="false" help="Stores model to file to be used for subsequent classifications instead of training areas." type="data" format="txt"/>
-						<param name="MAX_DEPTH" label="MAX_DEPTH" optional="true" value="10" help="The maximum possible depth of the tree. That is the training algorithms attempts to split a node while its depth is less than maxDepth. The root node has zero depth." type="integer"/>
-						<param name="MIN_SAMPLES" label="MIN_SAMPLES" optional="true" value="2" help="If the number of samples in a node is less than this parameter then the node will not be split." type="integer"/>
-						<param name="MAX_CATEGRS" label="MAX_CATEGRS" optional="true" value="10" help="Cluster possible values of a categorical variable into K&amp;lt;=maxCategories clusters to find a suboptimal split." type="integer"/>
-						<param name="1SE_RULE" label="1SE_RULE" optional="true" value="False" help="If true then a pruning will be harsher. This will make a tree more compact and more resistant to the training data noise but a bit less accurate." type="select" truevalue="True" falsevalue="False">
-							<option value="true">true</option>
-							<option value="false">false</option>
-						</param>
-						<param name="TRUNC_PRUNED" label="TRUNC_PRUNED" optional="true" value="False" help="If true then pruned branches are physically removed from the tree. Otherwise they are retained and it is possible to get results from the original unpruned (or pruned less aggressively) tree." type="select" truevalue="True" falsevalue="False">
-							<option value="true">true</option>
-							<option value="false">false</option>
-						</param>
-						<param name="REG_ACCURACY" label="REG_ACCURACY" optional="true" value="0.01" help="Termination criteria for regression trees. If all absolute differences between an estimated value in a node and values of train samples in this node are less than this parameter then the node will not be split further." type="float"/>
-						<param name="ACTIVE_VARS" label="ACTIVE_VARS" optional="true" value="0" help="The size of the randomly selected subset of features at each tree node and that are used to find the best split(s). If you set it to 0 then the size will be set to the square root of the total number of features." type="integer"/>
-						<param type="select" name="CLASSES_outformat" label="CLASSES_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="application/x-ogc-envi">application/x-ogc-envi</option>
-							<option value="application/x-ogc-aaigrid">application/x-ogc-aaigrid</option>
-							<option value="image/png">image/png</option>
-						</param>
-					</when>
 					<when value="SAGA.imagery_opencv.2">
 						<param name="INPUT" label="INPUT" optional="false" help="Input" type="data" format="txt"/>
 						<param name="RANGE_MIN" label="RANGE_MIN" optional="true" help="Range" type="float"/>
 						<param name="RANGE_MAX" label="RANGE_MAX" optional="true" help="Range" type="float"/>
 						<param type="select" name="OUTPUT_outformat" label="OUTPUT_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="application/x-ogc-envi">application/x-ogc-envi</option>
-							<option value="application/x-ogc-aaigrid">application/x-ogc-aaigrid</option>
-							<option value="image/png">image/png</option>
-						</param>
-					</when>
-					<when value="SAGA.imagery_opencv.9">
-						<param name="FEATURES" label="FEATURES" optional="false" help="Features" type="data" format="txt"/>
-						<param name="NORMALIZE" label="NORMALIZE" optional="true" value="False" help="Normalize" type="select" truevalue="True" falsevalue="False">
-							<option value="true">true</option>
-							<option value="false">false</option>
-						</param>
-						<param name="RGB_COLORS" label="RGB_COLORS" optional="true" value="False" help="Use the first three features in list to obtain blue, green, red components for class colour in look-up table." type="select" truevalue="True" falsevalue="False">
-							<option value="true">true</option>
-							<option value="false">false</option>
-						</param>
-						<param name="MODEL_LOAD" label="MODEL_LOAD" optional="false" help="Use a model previously stored to file." type="data" format="txt"/>
-						<param name="TRAIN_AREAS" label="TRAIN_AREAS" optional="false" help="Training Areas" type="data" format="txt"/>
-						<param name="TRAIN_CLASS" label="TRAIN_CLASS" optional="false" help="Class Identifier" type="data" format="txt"/>
-						<param name="TRAIN_BUFFER" label="TRAIN_BUFFER" optional="true" value="1" help="For non-polygon type training areas, creates a buffer with a diameter of specified size." type="float"/>
-						<param name="MODEL_SAVE" label="MODEL_SAVE" optional="false" help="Stores model to file to be used for subsequent classifications instead of training areas." type="data" format="txt"/>
-						<param name="MAX_DEPTH" label="MAX_DEPTH" optional="true" value="10" help="The maximum possible depth of the tree. That is the training algorithms attempts to split a node while its depth is less than maxDepth. The root node has zero depth." type="integer"/>
-						<param name="MIN_SAMPLES" label="MIN_SAMPLES" optional="true" value="2" help="If the number of samples in a node is less than this parameter then the node will not be split." type="integer"/>
-						<param name="MAX_CATEGRS" label="MAX_CATEGRS" optional="true" value="10" help="Cluster possible values of a categorical variable into K&amp;lt;=maxCategories clusters to find a suboptimal split." type="integer"/>
-						<param name="1SE_RULE" label="1SE_RULE" optional="true" value="False" help="If true then a pruning will be harsher. This will make a tree more compact and more resistant to the training data noise but a bit less accurate." type="select" truevalue="True" falsevalue="False">
-							<option value="true">true</option>
-							<option value="false">false</option>
-						</param>
-						<param name="TRUNC_PRUNED" label="TRUNC_PRUNED" optional="true" value="False" help="If true then pruned branches are physically removed from the tree. Otherwise they are retained and it is possible to get results from the original unpruned (or pruned less aggressively) tree." type="select" truevalue="True" falsevalue="False">
-							<option value="true">true</option>
-							<option value="false">false</option>
-						</param>
-						<param name="REG_ACCURACY" label="REG_ACCURACY" optional="true" value="0.01" help="Termination criteria for regression trees. If all absolute differences between an estimated value in a node and values of train samples in this node are less than this parameter then the node will not be split further." type="float"/>
-						<param name="WEAK_COUNT" label="WEAK_COUNT" optional="true" value="100" help="The number of weak classifiers." type="integer"/>
-						<param name="WGT_TRIM_RATE" label="WGT_TRIM_RATE" optional="true" value="0.95" help="A threshold between 0 and 1 used to save computational time. Set this parameter to 0 to turn off this functionality." type="float"/>
-						<param name="BOOST_TYPE" label="BOOST_TYPE" optional="true" value="Real AdaBoost" help="Boost Type" type="select">
-							<option value="Discrete AdaBoost">Discrete AdaBoost</option>
-							<option value="Real AdaBoost">Real AdaBoost</option>
-							<option value="LogitBoost">LogitBoost</option>
-							<option value="Gentle AdaBoost">Gentle AdaBoost</option>
-						</param>
-						<param type="select" name="CLASSES_outformat" label="CLASSES_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="application/x-ogc-envi">application/x-ogc-envi</option>
-							<option value="application/x-ogc-aaigrid">application/x-ogc-aaigrid</option>
-							<option value="image/png">image/png</option>
-						</param>
-					</when>
-					<when value="SAGA.imagery_opencv.8">
-						<param name="FEATURES" label="FEATURES" optional="false" help="Features" type="data" format="txt"/>
-						<param name="NORMALIZE" label="NORMALIZE" optional="true" value="False" help="Normalize" type="select" truevalue="True" falsevalue="False">
-							<option value="true">true</option>
-							<option value="false">false</option>
-						</param>
-						<param name="RGB_COLORS" label="RGB_COLORS" optional="true" value="False" help="Use the first three features in list to obtain blue, green, red components for class colour in look-up table." type="select" truevalue="True" falsevalue="False">
-							<option value="true">true</option>
-							<option value="false">false</option>
-						</param>
-						<param name="MODEL_LOAD" label="MODEL_LOAD" optional="false" help="Use a model previously stored to file." type="data" format="txt"/>
-						<param name="TRAIN_AREAS" label="TRAIN_AREAS" optional="false" help="Training Areas" type="data" format="txt"/>
-						<param name="TRAIN_CLASS" label="TRAIN_CLASS" optional="false" help="Class Identifier" type="data" format="txt"/>
-						<param name="TRAIN_BUFFER" label="TRAIN_BUFFER" optional="true" value="1" help="For non-polygon type training areas, creates a buffer with a diameter of specified size." type="float"/>
-						<param name="MODEL_SAVE" label="MODEL_SAVE" optional="false" help="Stores model to file to be used for subsequent classifications instead of training areas." type="data" format="txt"/>
-						<param name="MAX_DEPTH" label="MAX_DEPTH" optional="true" value="10" help="The maximum possible depth of the tree. That is the training algorithms attempts to split a node while its depth is less than maxDepth. The root node has zero depth." type="integer"/>
-						<param name="MIN_SAMPLES" label="MIN_SAMPLES" optional="true" value="2" help="If the number of samples in a node is less than this parameter then the node will not be split." type="integer"/>
-						<param name="MAX_CATEGRS" label="MAX_CATEGRS" optional="true" value="10" help="Cluster possible values of a categorical variable into K&amp;lt;=maxCategories clusters to find a suboptimal split." type="integer"/>
-						<param name="1SE_RULE" label="1SE_RULE" optional="true" value="False" help="If true then a pruning will be harsher. This will make a tree more compact and more resistant to the training data noise but a bit less accurate." type="select" truevalue="True" falsevalue="False">
-							<option value="true">true</option>
-							<option value="false">false</option>
-						</param>
-						<param name="TRUNC_PRUNED" label="TRUNC_PRUNED" optional="true" value="False" help="If true then pruned branches are physically removed from the tree. Otherwise they are retained and it is possible to get results from the original unpruned (or pruned less aggressively) tree." type="select" truevalue="True" falsevalue="False">
-							<option value="true">true</option>
-							<option value="false">false</option>
-						</param>
-						<param name="REG_ACCURACY" label="REG_ACCURACY" optional="true" value="0.01" help="Termination criteria for regression trees. If all absolute differences between an estimated value in a node and values of train samples in this node are less than this parameter then the node will not be split further." type="float"/>
-						<param type="select" name="CLASSES_outformat" label="CLASSES_outformat" help="Output format">
 							<option value="image/tiff">image/tiff</option>
 							<option value="application/x-ogc-envi">application/x-ogc-envi</option>
 							<option value="application/x-ogc-aaigrid">application/x-ogc-aaigrid</option>
