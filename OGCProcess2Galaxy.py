@@ -70,39 +70,21 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     tool.set('name', "OGC API Process Wrapper")
     tool.set('version', "0.1.0")
 
+    #add macro
+    macros = ET.Element("macros")
+    importMacro = ET.Element("import")
+    importMacro.text = "macros.xml"
+    macros.append(importMacro)
+    tool.append(macros)
+
     #add description
-    description = ET.Element("description") 
-    description.text = "executes remote processes"
-    tool.append(description) 
+    description = ET.Element("expand")
+    description.set("macro", "description")
+    tool.append(description)
 
-    #add requriements
-    requirements = ET.Element("requirements")
-    
-    requirement1 = ET.Element("requirement")
-    requirement1.set("type", "package")
-    requirement1.set("version", "4.1.2")
-    requirement1.text = "R"
-
-    requirement2 = ET.Element("requirement")
-    requirement2.set("type", "package")
-    requirement2.set("version", "0.2.3")
-    requirement2.text = "httr2"
-
-    requirement3 = ET.Element("requirement")
-    requirement3.set("type", "package")
-    requirement3.set("version", "1.2.0")
-    requirement3.text = "getopt"
-
-    requirement4 = ET.Element("requirement")
-    requirement4.set("type", "package")
-    requirement4.set("version", "1.8.7")
-    requirement4.text = "jsonlite"
-
-    requirements.append(requirement1)
-    requirements.append(requirement2)
-    requirements.append(requirement3)
-    requirements.append(requirement4)
-
+    #add requirements
+    requirements = ET.Element("expand")
+    requirements.set("macro", "requirements")
     tool.append(requirements)
 
     #add command
@@ -342,146 +324,18 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     tool.append(outputs)
 
     #add tests
-    tests = ET.Element("tests")
-
-    test1 = ET.Element("test")
-
-    param1 = ET.Element("param")
-    param1.set("name", "server")
-    param1.set("value", "https://ospd.geolabs.fr:8300/ogc-api/")
-
-    param2 = ET.Element("param")
-    param2.set("name", "process")
-    param2.set("value", "OTB.BandMath")
-
-    param3 = ET.Element("param")
-    param3.set("name", "il")
-    param3.set("value", "otb_band_math_test_input.txt")
-
-    param4 = ET.Element("param")
-    param4.set("name", "out")
-    param4.set("value", "float")
-
-    param5 = ET.Element("param")
-    param5.set("name", "ram")
-    param5.set("value", "256")
-
-    param6 = ET.Element("param")
-    param6.set("name", "exp")
-    param6.set("value", "im1b3,im1b2,im1b1")
-
-    param7 = ET.Element("param")
-    param7.set("name", "out_outformat")
-    param7.set("value", "image/png")
-
-    output_param = ET.Element("output_collection")
-    output_param.set("name", "output_data")
-    output_param.set("type", "list")
-    output_param.set("count", "2")
-
-    test1.append(param1)
-    test1.append(param2)
-    test1.append(param3)
-    test1.append(param4)
-    test1.append(param5)
-    test1.append(param6)
-    test1.append(param7)
-    test1.append(output_param)
-
-    test2 = ET.Element("test")
-
-    param21 = ET.Element("param")
-    param21.set("name", "server")
-    param21.set("value", "https://ospd.geolabs.fr:8300/ogc-api/")
-
-    param22 = ET.Element("param")
-    param22.set("name", "process")
-    param22.set("value", "OTB.MeanShiftSmoothing")
-
-    param23 = ET.Element("param")
-    param23.set("name", "in")
-    param23.set("value", "otb_mean_shift_smoothing_test_input.txt")
-
-    param24 = ET.Element("param")
-    param24.set("name", "fout")
-    param24.set("value", "float")
-
-    param25 = ET.Element("param")
-    param25.set("name", "foutpos")
-    param25.set("value", "float")
-
-    param26 = ET.Element("param")
-    param26.set("name", "spatialr")
-    param26.set("value", "5")
-
-    param27 = ET.Element("param")
-    param27.set("name", "ranger")
-    param27.set("value", "15")
-
-    param28 = ET.Element("param")
-    param28.set("name", "thres")
-    param28.set("value", "0.1")
-
-    param29 = ET.Element("param")
-    param29.set("name", "maxiter")
-    param29.set("value", "100")
-
-    param230 = ET.Element("param")
-    param230.set("name", "rangeramp")
-    param230.set("value", "0")
-
-    param231 = ET.Element("param")
-    param231.set("name", "modesearch")
-    param231.set("value", "False")
-
-    param232 = ET.Element("param")
-    param232.set("name", "fout_outformat")
-    param232.set("value", "image/png")
-
-    param233 = ET.Element("param")
-    param233.set("name", "foutpos_outformat")
-    param233.set("value", "image/png")
-
-    output_param2 = ET.Element("output_collection")
-    output_param2.set("name", "output_data")
-    output_param2.set("type", "list")
-    output_param2.set("count", "2")
-
-    test2.append(param21)
-    test2.append(param22)
-    test2.append(param23)
-    test2.append(param24)
-    test2.append(param25)
-    test2.append(param26)
-    test2.append(param27)
-    test2.append(param28)
-    test2.append(param29)
-    test2.append(param230)
-    test2.append(param231)
-    test2.append(param232)
-    test2.append(param233)
-    test2.append(output_param2)
-
-    tests.append(test1)
-    tests.append(test2)
-
+    tests = ET.Element("expand")
+    tests.set("macro", "tests")
     tool.append(tests)
 
     #add help
-    helpElement = ET.Element("help")
-    helpElement.text= "This tool is a wrapper for OGC API Processes and was created using the OGC-API-Process2Galaxy tool (https://github.com/AquaINFRA/OGC-API-Process2Galaxy). Check the README in the repository for more information."
-    tool.append(helpElement)
+    help = ET.Element("expand")
+    help.set("macro", "help")
+    tool.append(help)
 
     #add citation
-    citations = ET.Element("citations")
-    citation1 = ET.Element("citation")
-    citation1.set("type", "bibtex")
-    citation1.text = "@Manual{httr2, title = {httr2: Perform HTTP Requests and Process the Responses}, author = {Hadley Wickham}, year = {2023}, note = {R package version 1.0.0, https://github.com/r-lib/httr2}, url = {https://httr2.r-lib.org},}"
-    citation2 = ET.Element("citation")
-    citation2.set("type", "doi")
-    citation2.text = "10.48550/arXiv.1403.2805"
-    citations.append(citation1)
-    citations.append(citation2)
+    citations = ET.Element("expand")
+    citations.set("macro", "citations")
     tool.append(citations)
 
     with open ("generic.xml", "wb") as toolFile: 

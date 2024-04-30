@@ -1,12 +1,10 @@
 <?xml version="1.0" ?>
-<tool id="generic_ogc_processes_wrapper" name="OGC API Process Wrapper" version="0.1.0" ><!--add profile="22.05"-->
-	<description>executes remote processes</description>
-	<requirements>
-		<requirement type="package" version="4.1.2">R</requirement>
-		<requirement type="package" version="0.2.3">httr2</requirement>
-		<requirement type="package" version="1.2.0">getopt</requirement>
-		<requirement type="package" version="1.8.7">jsonlite</requirement>
-	</requirements>
+<tool id="generic_ogc_processes_wrapper" name="OGC API Process Wrapper" version="0.1.0">
+	<macros>
+		<import>macros.xml</import>
+	</macros>
+	<expand macro="description"/>
+	<expand macro="requirements"/>
 	<command detect_errors="exit_code"><![CDATA[
 #if $conditional_server.select_process == "securityIn":
 	Rscript '$__tool_directory__/generic.R'
@@ -10600,28 +10598,13 @@
 					<when value="OTB.MorphologicalMultiScaleDecomposition">
 						<param name="in" label="in" optional="false" help="The input image to be classified." type="data" format="txt"/>
 						<param name="outconvex" label="outconvex" optional="false" value="float" help="The output convex image with N bands" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="outconcave" label="outconcave" optional="false" value="float" help="The output concave concave with N bands" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="outleveling" label="outleveling" optional="false" value="float" help="The output leveling image with N bands" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="channel" label="channel" optional="false" value="1" help="The selected channel index for input image" type="integer"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
@@ -10633,19 +10616,13 @@
 						<param name="step" label="step" optional="false" value="1" help="Radius step along the profile (in pixels)" type="integer"/>
 						<param name="levels" label="levels" optional="false" value="1" help="Number of levels use for multi scale" type="integer"/>
 						<param type="select" name="outconvex_outformat" label="outconvex_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 						<param type="select" name="outconcave_outformat" label="outconcave_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 						<param type="select" name="outleveling_outformat" label="outleveling_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.Convert">
@@ -10660,12 +10637,7 @@
 						<param name="hcp.high" label="hcp.high" optional="true" value="2" help="Quantiles to cut from histogram high values before computing min/max rescaling (in percent, 2 by default)" type="float"/>
 						<param name="hcp.low" label="hcp.low" optional="true" value="2" help="Quantiles to cut from histogram low values before computing min/max rescaling (in percent, 2 by default)" type="float"/>
 						<param name="out" label="out" optional="false" value="uint8" help="Output image" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="channels" label="channels" optional="false" value="all" help="It's possible to select the channels of the output image. There are 3 modes, the available choices are:" type="select">
 							<option value="all">all</option>
@@ -10678,9 +10650,7 @@
 						<param name="channels.rgb.blue" label="channels.rgb.blue" optional="false" help="Blue channel index." type="integer"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.PredictRegression">
@@ -10689,18 +10659,11 @@
 						<param name="model" label="model" optional="false" help="A regression model file (produced by TrainRegression application)." type="data" format="txt"/>
 						<param name="imstat" label="imstat" optional="false" help="A XML file containing mean and standard deviation to center and reduce samples before prediction (produced by ComputeImagesStatistics application). If this file containsone more band than the sample size, the last stat of last band will beapplied to expand the output predicted value" type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="Output image containing predicted values" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.SARPolarMatrixConvert">
@@ -10711,20 +10674,10 @@
 						<param name="invh" label="invh" optional="false" help="Input : one-band complex image (VH)" type="data" format="txt"/>
 						<param name="invv" label="invv" optional="false" help="Input : one-band complex image (VV)" type="data" format="txt"/>
 						<param name="outc" label="outc" optional="true" value="float" help="Output Complex image." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="outf" label="outf" optional="true" value="float" help="Output Real image." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="conv" label="conv" optional="false" value="msinclairtocoherency" help="conv" type="select">
 							<option value="msinclairtocoherency">msinclairtocoherency</option>
@@ -10743,14 +10696,10 @@
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="outc_outformat" label="outc_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 						<param type="select" name="outf_outformat" label="outf_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.ImageClassifier">
@@ -10760,42 +10709,23 @@
 						<param name="imstat" label="imstat" optional="false" help="A XML file containing mean and standard deviation to center and reduce samples before classification (produced by ComputeImagesStatistics application)." type="data" format="txt"/>
 						<param name="nodatalabel" label="nodatalabel" optional="true" value="0" help="By default, hidden pixels will have the assigned label 0 in the output image. It's possible to define the label mask by another value, but be careful to not take a label from another class (max. 65535)." type="integer"/>
 						<param name="out" label="out" optional="false" value="uint8" help="Output image containing class labels" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="confmap" label="confmap" optional="true" value="uint8" help="Confidence map of the produced classification. The confidence index depends on the model :   - LibSVM : difference between the two highest probabilities (needs a model with probability estimates, so that classes probabilities can be computed for each sample)  - OpenCV    * Boost : sum of votes    * DecisionTree : (not supported)    * GradientBoostedTree : (not supported)    * KNearestNeighbors : number of neighbors with the same label    * NeuralNetwork : difference between the two highest responses    * NormalBayes : (not supported)    * RandomForest : Confidence (proportion of votes for the majority class). Margin (normalized difference of the votes of the 2 majority classes) is not available for now.    * SVM : distance to margin (only works for 2-class models)" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 						<param type="select" name="confmap_outformat" label="confmap_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.ManageNoData">
 						<param name="in" label="in" optional="false" help="Input image" type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="Output image" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="usenan" label="usenan" optional="false" value="False" help="If active, the application will consider NaN as no-data values as well" type="boolean" truevalue="True" falsevalue="False"/>
 						<param name="mode" label="mode" optional="false" value="buildmask" help="Allows choosing between different no-data handling options" type="select">
@@ -10810,9 +10740,7 @@
 						<param name="mode.apply.ndval" label="mode.apply.ndval" optional="false" value="0" help="No Data value used according to the mask image" type="float"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.SFSTextureExtraction">
@@ -10825,17 +10753,10 @@
 						<param name="parameters.alpha" label="parameters.alpha" optional="false" value="1" help="Alpha" type="float"/>
 						<param name="parameters.maxcons" label="parameters.maxcons" optional="false" value="5" help="Ratio Maximum Consideration Number" type="integer"/>
 						<param name="out" label="out" optional="false" value="float" help="Output image containing the SFS texture features." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.VectorDataExtractROI">
@@ -10854,12 +10775,7 @@
 					<when value="OTB.HyperspectralUnmixing">
 						<param name="in" label="in" optional="false" help="The hyperspectral data cube input" type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="The output abundance map. The abundance fraction are stored in a multispectral image where band N corresponds to the fraction of endmembers N in each pixel." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="ie" label="ie" optional="false" help="The endmembers (estimated pure pixels) to use for unmixing. Must be stored as a multispectral image, where each pixel is interpreted as an endmember." type="data" format="txt"/>
 						<param name="ua" label="ua" optional="true" value="ucls" help="The algorithm to use for unmixing" type="select">
@@ -10869,9 +10785,7 @@
 							<option value="mdmdnmf">mdmdnmf</option>
 						</param>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.HooverCompareSegmentation">
@@ -10880,30 +10794,16 @@
 						<param name="bg" label="bg" optional="false" value="0" help="Label value of the background in the input segmentations" type="integer"/>
 						<param name="th" label="th" optional="false" value="0.75" help="Overlapping threshold used to find Hoover instances." type="float"/>
 						<param name="outgt" label="outgt" optional="true" value="uint8" help="The colored ground truth output image." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="outms" label="outms" optional="true" value="uint8" help="The colored machine segmentation output image." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param type="select" name="outgt_outformat" label="outgt_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 						<param type="select" name="outms_outformat" label="outms_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.ComputeConfusionMatrix">
@@ -10930,18 +10830,11 @@
 					<when value="OTB.ConcatenateImages">
 						<param name="il" label="il" optional="false" help="The list of images to concatenate, must have the same size." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="The concatenated output image." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.SampleAugmentation">
@@ -10984,17 +10877,10 @@
 							<option value="higher">higher</option>
 						</param>
 						<param name="out" label="out" optional="true" value="float" help="Output image containing the selected texture features." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.ConvertSensorToGeoPoint">
@@ -11055,12 +10941,7 @@
 					<when value="OTB.OrthoRectification">
 						<param name="io.in" label="io.in" optional="false" help="The input image to ortho-rectify" type="data" format="txt"/>
 						<param name="io.out" label="io.out" optional="false" value="float" help="The ortho-rectified output image" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="map" label="map" optional="false" value="utm" help="Defines the map projection to be used." type="select">
 							<option value="utm">utm</option>
@@ -11102,20 +10983,13 @@
 						<param name="opt.ram" label="opt.ram" optional="true" value="128" help="This allows setting the maximum amount of RAM available for processing. As the writing task is time consuming, it is better to write large pieces of data, which can be achieved by increasing this parameter (pay attention to your system capabilities)" type="integer"/>
 						<param name="opt.gridspacing" label="opt.gridspacing" optional="true" value="4" help="Resampling is done according to a coordinate mapping deformation grid, whose pixel size is set by this parameter, and expressed in the coordinate system of the output image The closer to the output spacing this parameter is, the more precise will be the ortho-rectified image,but increasing this parameter will reduce processing time." type="float"/>
 						<param type="select" name="io.out_outformat" label="io.out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.BinaryMorphologicalOperation">
 						<param name="in" label="in" optional="false" help="The input image to be filtered." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="Output image" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="channel" label="channel" optional="false" value="1" help="The selected channel index" type="integer"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
@@ -11139,29 +11013,17 @@
 						<param name="filter.opening.backval" label="filter.opening.backval" optional="false" value="0" help="Set the background value, default is 0.0." type="float"/>
 						<param name="filter.closing.foreval" label="filter.closing.foreval" optional="false" value="1" help="Set the foreground value, default is 1.0." type="float"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.BlockMatching">
 						<param name="io.inleft" label="io.inleft" optional="false" help="The left input image (reference).It should have the same size and same physical space as the right input. This image can be generated by GridBasedImageResampling" type="data" format="txt"/>
 						<param name="io.inright" label="io.inright" optional="false" help="The right input (secondary).It should have the same size and same physical space as the left input. This image can be generated by GridBasedImageResampling" type="data" format="txt"/>
 						<param name="io.out" label="io.out" optional="false" value="float" help="An image containing the estimated disparities as well as the metric values if the option is used. If no metric is output and no sub-pixel interpolation is done, pixel type canbe a signed integer. In the other cases, floating point pixel is advised." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="io.outmask" label="io.outmask" optional="true" value="uint8" help="An output mask image corresponding to all citerions (see masking parameters). Only required if variance threshold or nodata criterions are set. Output pixel type is unsigned 8bit by default." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="io.outmetric" label="io.outmetric" optional="false" value="False" help="If enabled, the output image will have a third component with metric optimal values" type="boolean" truevalue="True" falsevalue="False"/>
 						<param name="mask.inleft" label="mask.inleft" optional="false" help="This parameter allows providing a custom mask for the left image. Block matching will be only perform on pixels inside the mask (non-zero values)." type="data" format="txt"/>
@@ -11205,14 +11067,10 @@
 						<param name="bm.initdisp.maps.vrad" label="bm.initdisp.maps.vrad" optional="false" value="0" help="Vertical exploration radius around the initial disparity estimate (in pixels)" type="integer"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="io.out_outformat" label="io.out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 						<param type="select" name="io.outmask_outformat" label="io.outmask_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.KmzExport">
@@ -11343,18 +11201,11 @@
 						<param name="in1" label="in1" optional="false" help="Multiband image of the scene before perturbations" type="data" format="txt"/>
 						<param name="in2" label="in2" optional="false" help="Mutliband image of the scene after perturbations." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="Multiband image containing change maps. Each map will be in the range [-1,1], so a floating point output type is advised." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.ComputePolylineFeatureFromImage">
@@ -11434,12 +11285,7 @@
 						<param name="mode.vector.startlabel" label="mode.vector.startlabel" optional="false" value="1" help="Starting value of the geometry index field" type="integer"/>
 						<param name="mode.vector.ogroptions" label="mode.vector.ogroptions" optional="true" help="A list of layer creation options in the form KEY=VALUE that will be passed directly to OGR without any validity checking. Options may depend on the file format, and can be found in OGR documentation." type="text"/>
 						<param name="mode.raster.out" label="mode.raster.out" optional="false" value="uint8" help="The output labeled image." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param type="select" name="mode.vector.out_outformat" label="mode.vector.out_outformat" help="Output format">
 							<option value="text/xml">text/xml</option>
@@ -11448,9 +11294,7 @@
 							<option value="application/zip">application/zip</option>
 						</param>
 						<param type="select" name="mode.raster.out_outformat" label="mode.raster.out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.VectorDataDSValidation">
@@ -11499,12 +11343,7 @@
 						<param name="io.lgrid" label="io.lgrid" optional="false" help="Left epipolar grid (deformation grid between left sensor et disparity spaces)" type="data" format="txt"/>
 						<param name="io.rgrid" label="io.rgrid" optional="false" help="Right epipolar grid (deformation grid between right sensor et disparity spaces)" type="data" format="txt"/>
 						<param name="io.out" label="io.out" optional="false" value="float" help="Output elevation map in ground projection. Elevation values are in meters. Floating point pixel type are expected." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="io.mask" label="io.mask" optional="false" help="Masked disparity pixels won't be projected (mask values equal to zero)" type="data" format="txt"/>
 						<param name="step" label="step" optional="false" value="5" help="Spacing of the output elevation map (in meters)" type="float"/>
@@ -11515,9 +11354,7 @@
 						<param name="elev.default" label="elev.default" optional="false" value="0" help="This parameter allows setting the default height above ellipsoid when there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles, and no geoid file has been set. This is also used by some application as an average elevation value." type="float"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="io.out_outformat" label="io.out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.VectorClassifier">
@@ -11541,23 +11378,13 @@
 					<when value="OTB.SOMClassification">
 						<param name="in" label="in" optional="false" help="Input image to classify." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="uint8" help="Output classified image (each pixel contains the index of its corresponding vector in the SOM)." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="vm" label="vm" optional="false" help="Validity mask (only pixels corresponding to a mask value greater than 0 will be used for learning)" type="data" format="txt"/>
 						<param name="tp" label="tp" optional="true" value="1" help="Probability for a sample to be selected in the training set" type="float"/>
 						<param name="ts" label="ts" optional="true" help="Maximum training set size (in pixels)" type="integer"/>
 						<param name="som" label="som" optional="true" value="float" help="Output image containing the Self-Organizing Map" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="sx" label="sx" optional="true" value="32" help="X size of the SOM map" type="integer"/>
 						<param name="sy" label="sy" optional="true" value="32" help="Y size of the SOM map" type="integer"/>
@@ -11570,14 +11397,10 @@
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param name="rand" label="rand" optional="true" help="Set specific seed. with integer value." type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 						<param type="select" name="som_outformat" label="som_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.GeneratePlyFile">
@@ -11606,20 +11429,10 @@
 						<param name="io.inleft" label="io.inleft" optional="false" help="The left image from the stereo pair, in sensor geometry." type="data" format="txt"/>
 						<param name="io.inright" label="io.inright" optional="false" help="The right image from the stereo pair, in sensor geometry." type="data" format="txt"/>
 						<param name="io.outleft" label="io.outleft" optional="false" value="float" help="The deformation grid to resample the left image from sensor geometry to epipolar geometry." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="io.outright" label="io.outright" optional="false" value="float" help="The deformation grid to resample the right image from sensor geometry to epipolar geometry." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="epi.elevation.dem" label="epi.elevation.dem" optional="true" help="This parameter allows selecting a directory containing Digital Elevation Model files. Note that this directory should contain only DEM files. Unexpected behaviour might occurs if other images are found in this directory." type="text"/>
 						<param name="epi.elevation.geoid" label="epi.elevation.geoid" optional="false" help="Use a geoid grid to get the height above the ellipsoid in case there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles. A version of the geoid can be found on the OTB website(https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/blob/master/Input/DEM/egm96.grd)." type="data" format="txt"/>
@@ -11628,58 +11441,33 @@
 						<param name="epi.scale" label="epi.scale" optional="false" value="1" help="The scale parameter allows generating zoomed-in (scale &amp;lt; 1) or zoomed-out (scale &gt; 1) epipolar images." type="float"/>
 						<param name="epi.step" label="epi.step" optional="false" value="1" help="Stereo-rectification deformation grid only varies slowly. Therefore, it is recommended to use a coarser grid (higher step value) in case of large images" type="integer"/>
 						<param name="inverse.outleft" label="inverse.outleft" optional="true" value="float" help="The deformation grid to resample the left image from the epipolar geometry back into its original sensor geometry." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="inverse.outright" label="inverse.outright" optional="true" value="float" help="The output deformation grid to resample the right image from the epipolar geometry back into its original sensor geometry." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="inverse.ssrate" label="inverse.ssrate" optional="false" value="16" help="Grid inversion is an heavy process that implies spline regression on control points. To avoid eating to much memory, this parameter allows one to first sub-sample the field to invert." type="integer"/>
 						<param type="select" name="io.outleft_outformat" label="io.outleft_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 						<param type="select" name="io.outright_outformat" label="io.outright_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 						<param type="select" name="inverse.outleft_outformat" label="inverse.outleft_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 						<param type="select" name="inverse.outright_outformat" label="inverse.outright_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.SARDeburst">
 						<param name="in" label="in" optional="false" help="Raw Sentinel1 IW SLC image, or any extract of such made by OTB (geom file needed)" type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="Deburst image, with updated geom file that can be further used by Orthorectification application. If the input image is a raw Sentinel1 product, uint16 output type should be used (encoding of S1 product). Otherwise, output type should match type of input image." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.SampleExtraction">
@@ -11704,12 +11492,7 @@
 					<when value="OTB.MorphologicalProfilesAnalysis">
 						<param name="in" label="in" optional="false" help="The input image." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="The output image." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="channel" label="channel" optional="false" value="1" help="The selected channel index for input image" type="integer"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
@@ -11731,28 +11514,16 @@
 						</param>
 						<param name="profile.classification.sigma" label="profile.classification.sigma" optional="false" value="1" help="Sigma value for leveling tolerance" type="float"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.MeanShiftSmoothing">
 						<param name="in" label="in" optional="false" help="The input image can be any single or multiband image. Beware of pontential imbalance between bands ranges as it may alter euclidean distance." type="data" format="txt"/>
 						<param name="fout" label="fout" optional="false" value="float" help="This output image contains the final average spectral signatures of each pixel. The output type should be at least as wide as the input image type. Floating point encoding is advised. This output can be used as input image (in) of the LSMSSegmentation application [4,5]." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="foutpos" label="foutpos" optional="true" value="float" help="This output image contains the 2D displacement between the input pixel spatial position and the final position after convergence. Floating point encoding is mandatory. This output can be used as input image (in) of the LSMSSegmentation application [4,5]." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param name="spatialr" label="spatialr" optional="true" value="5" help="Radius of the spatial neighborhood for averaging. Higher values will result in more smoothing and higher processing time." type="integer"/>
@@ -11762,26 +11533,17 @@
 						<param name="rangeramp" label="rangeramp" optional="true" value="0" help="Vary the range radius linearly with the central pixel intensity (experimental)." type="float"/>
 						<param name="modesearch" label="modesearch" optional="false" value="False" help="If activated pixel iterative convergence is stopped if the path crosses an already converged pixel. Be careful, with this option, the result will slightly depend on thread number and the results will not be stable (see [4] for more details)." type="boolean" truevalue="True" falsevalue="False"/>
 						<param type="select" name="fout_outformat" label="fout_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 						<param type="select" name="foutpos_outformat" label="foutpos_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.BundleToPerfectSensor">
 						<param name="inp" label="inp" optional="false" help="Input panchromatic image." type="data" format="txt"/>
 						<param name="inxs" label="inxs" optional="false" help="Input XS image." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="Output image." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="elev.dem" label="elev.dem" optional="true" help="This parameter allows selecting a directory containing Digital Elevation Model files. Note that this directory should contain only DEM files. Unexpected behaviour might occurs if other images are found in this directory." type="text"/>
 						<param name="elev.geoid" label="elev.geoid" optional="false" help="Use a geoid grid to get the height above the ellipsoid in case there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles. A version of the geoid can be found on the OTB website(https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/blob/master/Input/DEM/egm96.grd)." type="data" format="txt"/>
@@ -11808,9 +11570,7 @@
 						<param name="interpolator.bco.radius" label="interpolator.bco.radius" optional="true" value="0" help="Fill value for area outside the reprojected image" type="float"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.ConvertCartoToGeoPoint">
@@ -11858,17 +11618,10 @@
 						<param name="nodatalabel" label="nodatalabel" optional="false" value="0" help="Label for the NoData class. Such input pixels keep their NoData label in the output image and are not handled in the fusion process. By default, 'nodatalabel = 0'." type="integer"/>
 						<param name="undecidedlabel" label="undecidedlabel" optional="false" value="0" help="Label for the Undecided class. Pixels with more than 1 fused class are marked as Undecided. Please note that the Undecided value must be different from existing labels in the input classifications. By default, 'undecidedlabel = 0'." type="integer"/>
 						<param name="out" label="out" optional="false" value="uint8" help="The output classification image resulting from the fusion of the input classification images." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.VectorDataSetField">
@@ -11886,12 +11639,7 @@
 						<param name="inp" label="inp" optional="false" help="Input panchromatic image." type="data" format="txt"/>
 						<param name="inxs" label="inxs" optional="false" help="Input XS image." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="Output image." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="method" label="method" optional="false" value="rcs" help="Selection of the pan-sharpening method." type="select">
 							<option value="rcs">rcs</option>
@@ -11904,9 +11652,7 @@
 						<param name="method.bayes.s" label="method.bayes.s" optional="false" value="1" help="Set the S coefficient." type="float"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.ConcatenateVectorData">
@@ -11921,12 +11667,7 @@
 					<when value="OTB.GridBasedImageResampling">
 						<param name="io.in" label="io.in" optional="false" help="The input image to resample" type="data" format="txt"/>
 						<param name="io.out" label="io.out" optional="false" value="float" help="The resampled output image" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="grid.in" label="grid.in" optional="false" help="The resampling grid" type="data" format="txt"/>
 						<param name="grid.type" label="grid.type" optional="false" value="def" help="allows one to choose between two grid types" type="select">
@@ -11947,20 +11688,13 @@
 						</param>
 						<param name="interpolator.bco.radius" label="interpolator.bco.radius" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="io.out_outformat" label="io.out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.SARPolarSynth">
 						<param name="in" label="in" optional="false" help="Input image." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="Output image." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="psii" label="psii" optional="false" value="0" help="Orientation (transmitting antenna)" type="float"/>
 						<param name="khii" label="khii" optional="false" value="0" help="Ellipticity (transmitting antenna)" type="float"/>
@@ -11975,20 +11709,13 @@
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.GrayScaleMorphologicalOperation">
 						<param name="in" label="in" optional="false" help="The input image to be filtered." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="Output image containing the filtered output image." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="channel" label="channel" optional="false" value="1" help="The selected channel index" type="integer"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
@@ -12005,9 +11732,7 @@
 							<option value="closing">closing</option>
 						</param>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.ReadImageInfo">
@@ -12049,12 +11774,7 @@
 						<param name="ref" label="ref" optional="false" help="The reference image." type="data" format="txt"/>
 						<param name="sec" label="sec" optional="false" help="The secondary image." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="The output image contains 3 bands, for X offset, Y offset and the metric value. It may contain a 4th one with the validity mask (if used)." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="erx" label="erx" optional="false" help="The exploration radius along x (in pixels)" type="integer"/>
 						<param name="ery" label="ery" optional="false" help="The exploration radius along y (in pixels)" type="integer"/>
@@ -12062,12 +11782,7 @@
 						<param name="mry" label="mry" optional="false" help="Radius along y (in pixels) of the metric computation window" type="integer"/>
 						<param name="w" label="w" optional="false" help="The image to warp after disparity estimation is completed." type="data" format="txt"/>
 						<param name="wo" label="wo" optional="true" value="float" help="The output warped image" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="cox" label="cox" optional="true" value="0" help="Coarse offset along x (in physical space) between the two images, used as an initial offset for all pixels." type="float"/>
 						<param name="coy" label="coy" optional="true" value="0" help="Coarse offset along y (in physical space) between the two images, used as an initial offset for all pixels." type="float"/>
@@ -12084,14 +11799,10 @@
 						<param name="vmut" label="vmut" optional="true" help="Upper threshold to obtain a validity mask. This mask will be the 4th output band." type="float"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 						<param type="select" name="wo_outformat" label="wo_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.GenerateRPCSensorModel">
@@ -12125,12 +11836,7 @@
 					<when value="OTB.DomainTransform">
 						<param name="in" label="in" optional="false" help="This will take an input image to be transformed image. For FFT inverse transform, it expects a complex image as two-band image in which first band represent real part and second band represent imaginary part." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="This parameter holds the output file name to which transformed image will be written. This has a slightly different behaviour depending on transform type.  For Wavelet, output is a single band image for both forward and inverse transform.  For FFT forward transform, output is two band image where first band represents real part and second band represents imaginary part of a complex image." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="mode" label="mode" optional="false" value="wavelet" help="This parameter allows one to select between fft(fourier) and wavelet" type="select">
 							<option value="fft">fft</option>
@@ -12155,9 +11861,7 @@
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.RefineSensorModel">
@@ -12200,12 +11904,7 @@
 					<when value="OTB.Rasterization">
 						<param name="in" label="in" optional="false" help="The input vector dataset to be rasterized" type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="An output image containing the rasterized vector dataset" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="im" label="im" optional="false" help="A reference image from which to import output grid and projection reference system information." type="data" format="txt"/>
 						<param name="szx" label="szx" optional="true" help="Output size along x axis (useless if support image is given)" type="integer"/>
@@ -12224,38 +11923,24 @@
 						<param name="mode.attribute.field" label="mode.attribute.field" optional="false" value="DN" help="Name of the attribute field to burn" type="text"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.BandMath">
 						<param name="il" label="il" optional="false" help="Image-list of operands to the mathematical expression." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="Output image which is the result of the mathematical expressions on input image-list operands." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param name="exp" label="exp" optional="false" help="The muParser mathematical expression to apply on input images." type="text"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.RigidTransformResample">
 						<param name="in" label="in" optional="false" help="The input image to translate." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="The transformed output image." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="transform.type" label="transform.type" optional="false" value="id" help="Type of transformation. Available transformations are spatial scaling, translation and rotation with scaling factor" type="select">
 							<option value="id">id</option>
@@ -12278,20 +11963,13 @@
 						</param>
 						<param name="interpolator.bco.radius" label="interpolator.bco.radius" optional="true" value="128" help="This allows setting the maximum amount of RAM available for processing. As the writing task is time consuming, it is better to write large pieces of data, which can be achieved by increasing this parameter (pay attention to your system capabilities)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.SARCalibration">
 						<param name="in" label="in" optional="false" help="Input complex image" type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="Output calibrated image. This image contains the backscatter (sigmaNought) of the input image." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param name="noise" label="noise" optional="false" value="False" help="Flag to disable noise. For 5.2.0 release, the noise values are only read by TerraSARX product." type="boolean" truevalue="True" falsevalue="False"/>
@@ -12302,20 +11980,13 @@
 							<option value="dn">dn</option>
 						</param>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.Smoothing">
 						<param name="in" label="in" optional="false" help="Input image to smooth." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="Output smoothed image." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param name="type" label="type" optional="false" value="anidif" help="Smoothing kernel to apply" type="select">
@@ -12328,9 +11999,7 @@
 						<param name="type.anidif.nbiter" label="type.anidif.nbiter" optional="false" value="10" help="Number of iterations needed to get the result" type="integer"/>
 						<param name="type.anidif.conductance" label="type.anidif.conductance" optional="false" value="1" help="Controls the sensitivity of the conductance term in the diffusion equation. The lower it is the stronger the features will be preserved" type="float"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.TileFusion">
@@ -12338,28 +12007,16 @@
 						<param name="cols" label="cols" optional="false" help="Number of columns in the tile array" type="integer"/>
 						<param name="rows" label="rows" optional="false" help="Number of rows in the tile array" type="integer"/>
 						<param name="out" label="out" optional="false" value="float" help="Output entire image" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.ColorMapping">
 						<param name="in" label="in" optional="false" help="Input image filename" type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="uint8" help="Output image filename" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="op" label="op" optional="false" value="labeltocolor" help="Selection of the operation to execute (default is : label to color)." type="select">
 							<option value="labeltocolor">labeltocolor</option>
@@ -12399,9 +12056,7 @@
 						<param name="method.image.up" label="method.image.up" optional="true" value="2" help="upper quantile for image normalization" type="integer"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.Superimpose">
@@ -12413,12 +12068,7 @@
 						<param name="lms" label="lms" optional="true" value="4" help="Generate a coarser deformation field with the given spacing" type="float"/>
 						<param name="fv" label="fv" optional="true" value="0" help="Fill value for area outside the reprojected image" type="float"/>
 						<param name="out" label="out" optional="false" value="float" help="Output reprojected image." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="mode" label="mode" optional="false" value="default" help="Superimposition mode" type="select">
 							<option value="default">default</option>
@@ -12431,20 +12081,13 @@
 						</param>
 						<param name="interpolator.bco.radius" label="interpolator.bco.radius" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.ClassificationMapRegularization">
 						<param name="io.in" label="io.in" optional="false" help="The input labeled image to regularize." type="data" format="txt"/>
 						<param name="io.out" label="io.out" optional="false" value="uint8" help="The output regularized labeled image." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="ip.radius" label="ip.radius" optional="false" value="1" help="The radius of the ball shaped structuring element (expressed in pixels). By default, 'ip.radius = 1 pixel'." type="integer"/>
 						<param name="ip.suvbool" label="ip.suvbool" optional="false" value="False" help="Pixels with more than 1 majority class are marked as Undecided if this parameter is checked (true), or keep their Original labels otherwise (false). Please note that the Undecided value must be different from existing labels in the input labeled image. By default, 'ip.suvbool = false'." type="boolean" truevalue="True" falsevalue="False"/>
@@ -12454,20 +12097,13 @@
 						<param name="ip.isolatedthreshold" label="ip.isolatedthreshold" optional="false" value="1" help="Maximum number of neighbours with the same label as the center pixel to consider that it is an isolated pixel. By default, 'ip.isolatedthreshold = 1'." type="integer"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="io.out_outformat" label="io.out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.DynamicConvert">
 						<param name="in" label="in" optional="false" help="Input image" type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="uint8" help="Output image" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="type" label="type" optional="false" value="linear" help="Transfer function for the rescaling" type="select">
 							<option value="linear">linear</option>
@@ -12490,39 +12126,25 @@
 						<param name="outmax" label="outmax" optional="true" value="255" help="Maximum value of the output image." type="float"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.Rescale">
 						<param name="in" label="in" optional="false" help="The image to scale." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="The rescaled image filename." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param name="outmin" label="outmin" optional="true" value="0" help="Minimum value of the output image." type="float"/>
 						<param name="outmax" label="outmax" optional="true" value="255" help="Maximum value of the output image." type="float"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.Quicklook">
 						<param name="in" label="in" optional="false" help="The image to read" type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="The subsampled image" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="cl" label="cl" optional="true" help="Selected channels" type="text"/>
 						<param name="rox" label="rox" optional="true" value="0" help="first point of ROI in x-direction" type="integer"/>
@@ -12533,20 +12155,13 @@
 						<param name="sx" label="sx" optional="true" help="quicklook size in x-direction (used if no sampling ration is given)" type="integer"/>
 						<param name="sy" label="sy" optional="true" help="quicklook size in y-direction (used if no sampling ration is given)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.RadiometricIndices">
 						<param name="in" label="in" optional="false" help="Input image" type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="Radiometric indices output image" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param name="channels.blue" label="channels.blue" optional="false" value="1" help="Blue channel index" type="integer"/>
@@ -12578,20 +12193,13 @@
 							<option value="bi2">bi2</option>
 						</param>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.ExtractROI">
 						<param name="in" label="in" optional="false" help="Image to be processed." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="Region of interest from the input image" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="mode" label="mode" optional="false" value="standard" help="mode" type="select">
 							<option value="standard">standard</option>
@@ -12632,9 +12240,7 @@
 						<param name="elev.default" label="elev.default" optional="false" value="0" help="This parameter allows setting the default height above ellipsoid when there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles, and no geoid file has been set. This is also used by some application as an average elevation value." type="float"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.PolygonClassStatistics">
@@ -12661,12 +12267,7 @@
 					<when value="OTB.MultiResolutionPyramid">
 						<param name="in" label="in" optional="false" help="in" type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="will be used to get the prefix and the extension of the images to write" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param name="level" label="level" optional="false" value="1" help="Number of levels in the pyramid (default is 1)." type="integer"/>
@@ -12674,21 +12275,14 @@
 						<param name="vfactor" label="vfactor" optional="false" value="0.6" help="Variance factor use in smoothing. It is multiplied by the subsampling factor of each level in the  pyramid (default is 0.6)." type="float"/>
 						<param name="fast" label="fast" optional="false" value="False" help="If used, this option allows one to speed-up computation by iteratively subsampling previous level of pyramid instead of processing the full input." type="boolean" truevalue="True" falsevalue="False"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.LSMSSegmentation">
 						<param name="in" label="in" optional="false" help="The filtered image, corresponding to the fout output parameter of the MeanShiftSmoothing application." type="data" format="txt"/>
 						<param name="inpos" label="inpos" optional="false" help="The filtered position image, corresponding to the foutpos output parameter of the MeanShiftSmoothing application." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="uint8" help="This output contains the segmented image, where each pixel value is the unique integer label of the segment it belongs to. It is recommended to set the pixel type to uint32." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="spatialr" label="spatialr" optional="true" value="5" help="Threshold on Spatial distance to consider pixels in the same segment. A good value is half the spatial radius used in the MeanShiftSmoothing application (spatialr parameter)." type="float"/>
 						<param name="ranger" label="ranger" optional="true" value="15" help="Threshold on spectral signature euclidean distance (expressed in radiometry unit) to consider pixels in the same segment. A good value is half the range radius used in the MeanShiftSmoothing application (ranger parameter)." type="float"/>
@@ -12698,20 +12292,13 @@
 						<param name="tmpdir" label="tmpdir" optional="true" help="This applications need to write temporary files for each tile. This parameter allows choosing the path where to write those files. If disabled, the current path will be used." type="text"/>
 						<param name="cleanup" label="cleanup" optional="false" value="False" help="If activated, the application will try to remove all temporary files it created." type="boolean" truevalue="True" falsevalue="False"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.Despeckle">
 						<param name="in" label="in" optional="false" help="Input image." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="Output image." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param name="filter" label="filter" optional="false" value="lee" help="filter" type="select">
@@ -12729,9 +12316,7 @@
 						<param name="filter.kuan.rad" label="filter.kuan.rad" optional="false" help="Radius in pixel." type="integer"/>
 						<param name="filter.kuan.nblooks" label="filter.kuan.nblooks" optional="false" help="Number of looks in the input image." type="float"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.TrainVectorClassifier">
@@ -12875,35 +12460,21 @@
 						<param name="in" label="in" optional="false" help="Input hyperspectral data cube" type="data" format="txt"/>
 						<param name="ne" label="ne" optional="false" value="1" help="The number of endmembers to extract from the hyperspectral image." type="integer"/>
 						<param name="outendm" label="outendm" optional="false" value="float" help="Endmembers, stored in aone-line multi-spectral image.Each pixel corresponds to oneendmembers and each band values corresponds to the spectralsignature of the corresponding endmember." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="rand" label="rand" optional="true" help="Set specific seed. with integer value." type="integer"/>
 						<param type="select" name="outendm_outformat" label="outendm_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.SplitImage">
 						<param name="in" label="in" optional="false" help="Input multiband image filename." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="The output filename will be used to get the prefix an the extension of the output written's image. For example with outimage.tif as output filename, the generated images will had an indice (corresponding at each bands) between the prefix and the extension, such as: outimage_0.tif  and outimage_1.tif (if 2 bands)." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.DownloadSRTMTiles">
@@ -12927,21 +12498,14 @@
 						<param name="in" label="in" optional="false" help="The input image, containing initial spectral signatures corresponding to the segmented image (inseg)." type="data" format="txt"/>
 						<param name="inseg" label="inseg" optional="false" help="Segmented image where each pixel value is the unique integer label of the segment it belongs to." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="uint8" help="The output image. The output image is the segmented image where the minimal segments have been merged. An ecoding of uint32 is advised." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="minsize" label="minsize" optional="true" value="50" help="Minimum Segment Size. If, after the segmentation, a segment is of size lower than this criterion, the segment is merged with the segment that has the closest sepctral signature." type="integer"/>
 						<param name="tilesizex" label="tilesizex" optional="false" value="500" help="Size of tiles along the X-axis for tile-wise processing." type="integer"/>
 						<param name="tilesizey" label="tilesizey" optional="false" value="500" help="Size of tiles along the Y-axis for tile-wise processing." type="integer"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.PixelValue">
@@ -12959,12 +12523,7 @@
 					<when value="OTB.MorphologicalClassification">
 						<param name="in" label="in" optional="false" help="The input image to be classified." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="The output classified image with 3 different values (0 : Flat, 1 : Convex, 2 : Concave)" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="channel" label="channel" optional="false" value="1" help="The selected channel index for input image" type="integer"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
@@ -12975,9 +12534,7 @@
 						<param name="radius" label="radius" optional="false" value="5" help="Radius of the structuring element (in pixels), default value is 5." type="integer"/>
 						<param name="sigma" label="sigma" optional="false" value="0.5" help="Sigma value for leveling tolerance, default value is 0.5." type="float"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.LargeScaleMeanShift">
@@ -12993,12 +12550,7 @@
 						</param>
 						<param name="mode.vector.imfield" label="mode.vector.imfield" optional="false" help="This is an optional support image that can be used to compute field values in each region. Otherwise, the input image is used as support." type="data" format="txt"/>
 						<param name="mode.raster.out" label="mode.raster.out" optional="false" value="uint8" help="It corresponds to the output of the small region merging step." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="cleanup" label="cleanup" optional="false" value="False" help="If activated, the application will try to clean all temporary files it created" type="boolean" truevalue="True" falsevalue="False"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
@@ -13009,9 +12561,7 @@
 							<option value="application/zip">application/zip</option>
 						</param>
 						<param type="select" name="mode.raster.out_outformat" label="mode.raster.out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.TrainRegression">
@@ -13094,12 +12644,7 @@
 					<when value="OTB.ContrastEnhancement">
 						<param name="in" label="in" optional="false" help="Input image." type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="Output image." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="bins" label="bins" optional="false" value="256" help="Number of bins in the histogram" type="integer"/>
 						<param name="hfact" label="hfact" optional="true" help="This parameter will set the maximum height accepted in a bin on the input image histogram. The maximum height will be computed as hfact*eqHeight where eqHeight is the height of the theoretical flat histogram. The higher hfact, the higher the contrast.When using 'luminance mode', it is recommended to limit this factor to a small value (ex: 4)" type="float"/>
@@ -13129,9 +12674,7 @@
 						<param name="mode.lum.blue.coef" label="mode.lum.blue.coef" optional="false" value="0.08" help="mode.lum.blue.coef" type="float"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.SARDecompositions">
@@ -13140,12 +12683,7 @@
 						<param name="invh" label="invh" optional="false" help="Input image (VH)" type="data" format="txt"/>
 						<param name="invv" label="invv" optional="false" help="Input image (VV)" type="data" format="txt"/>
 						<param name="out" label="out" optional="false" value="float" help="Output image" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="decomp" label="decomp" optional="false" value="haa" help="decomp" type="select">
 							<option value="haa">haa</option>
@@ -13156,9 +12694,7 @@
 						<param name="inco.kernelsize" label="inco.kernelsize" optional="true" value="3" help="Minute (0-59)" type="integer"/>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.EdgeExtraction">
@@ -13173,17 +12709,10 @@
 						<param name="filter.touzi.xradius" label="filter.touzi.xradius" optional="false" value="1" help="filter.touzi.xradius" type="integer"/>
 						<param name="filter.touzi.yradius" label="filter.touzi.yradius" optional="false" value="1" help="filter.touzi.yradius" type="integer"/>
 						<param name="out" label="out" optional="false" value="float" help="Output image containing the edge features." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.VectorDataReprojection">
@@ -13217,31 +12746,17 @@
 					<when value="OTB.ComputeModulusAndPhase">
 						<param name="in" label="in" optional="false" help="Input image (complex single band)" type="data" format="txt"/>
 						<param name="modulus" label="modulus" optional="false" value="float" help="Modulus of the input image computes with thefollowing formula: :math:`\sqrt" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="phase" label="phase" optional="false" value="float" help="Phase of the input image computes with the following formula::math:`\tan^" type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param type="select" name="modulus_outformat" label="modulus_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 						<param type="select" name="phase_outformat" label="phase_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="OTB.LineSegmentDetection">
@@ -13264,17 +12779,10 @@
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer"/>
 						<param name="radius" label="radius" optional="false" value="3" help="The computational window radius." type="integer"/>
 						<param name="out" label="out" optional="false" value="float" help="Output image containing the local statistical moments." type="select">
-							<option value="uint8">uint8</option>
-							<option value="uint16">uint16</option>
-							<option value="int16">int16</option>
-							<option value="int32">int32</option>
-							<option value="float">float</option>
-							<option value="double">double</option>
+							<expand macro="out_options"/>
 						</param>
 						<param type="select" name="out_outformat" label="out_outformat" help="Output format">
-							<option value="image/tiff">image/tiff</option>
-							<option value="image/jpeg">image/jpeg</option>
-							<option value="image/png">image/png</option>
+							<expand macro="format_options"/>
 						</param>
 					</when>
 					<when value="SAGA.shapes_polygons.14">
@@ -28719,37 +28227,7 @@
 			<discover_datasets pattern="__name_and_ext__"/>
 		</collection>
 	</outputs>
-	<tests>
-		<test>
-			<param name="server" value="https://ospd.geolabs.fr:8300/ogc-api/"/>
-			<param name="process" value="OTB.BandMath"/>
-			<param name="il" value="otb_band_math_test_input.txt"/>
-			<param name="out" value="float"/>
-			<param name="ram" value="256"/>
-			<param name="exp" value="im1b3,im1b2,im1b1"/>
-			<param name="out_outformat" value="image/png"/>
-			<output_collection name="output_data" type="list" count="2"/>
-		</test>
-		<test>
-			<param name="server" value="https://ospd.geolabs.fr:8300/ogc-api/"/>
-			<param name="process" value="OTB.MeanShiftSmoothing"/>
-			<param name="in" value="otb_mean_shift_smoothing_test_input.txt"/>
-			<param name="fout" value="float"/>
-			<param name="foutpos" value="float"/>
-			<param name="spatialr" value="5"/>
-			<param name="ranger" value="15"/>
-			<param name="thres" value="0.1"/>
-			<param name="maxiter" value="100"/>
-			<param name="rangeramp" value="0"/>
-			<param name="modesearch" value="False"/>
-			<param name="fout_outformat" value="image/png"/>
-			<param name="foutpos_outformat" value="image/png"/>
-			<output_collection name="output_data" type="list" count="2"/>
-		</test>
-	</tests>
-	<help>This tool is a wrapper for OGC API Processes and was created using the OGC-API-Process2Galaxy tool (https://github.com/AquaINFRA/OGC-API-Process2Galaxy). Check the README in the repository for more information.</help>
-	<citations>
-		<citation type="bibtex">@Manual{httr2, title = {httr2: Perform HTTP Requests and Process the Responses}, author = {Hadley Wickham}, year = {2023}, note = {R package version 1.0.0, https://github.com/r-lib/httr2}, url = {https://httr2.r-lib.org},}</citation>
-		<citation type="doi">10.48550/arXiv.1403.2805</citation>
-	</citations>
+	<expand macro="tests"/>
+	<expand macro="help"/>
+	<expand macro="citations"/>
 </tool>
