@@ -99,12 +99,12 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     with open(configFile) as configFile:
         configJSON = json.load(configFile)
 
-    conditional_server = ET.Element("conditional")
-    conditional_server.set("name", "conditional_server")
-    select_server = ET.Element("param")
-    select_server.set("name", "select_server")
-    select_server.set("type", "select")
-    select_server.set("label", "Select server")
+    #conditional_server = ET.Element("conditional")
+    #conditional_server.set("name", "conditional_server")
+    #select_server = ET.Element("param")
+    #select_server.set("name", "select_server")
+    #select_server.set("type", "select")
+    #select_server.set("label", "Select server")
 
     index_i = 0
     for api in configJSON: 
@@ -118,17 +118,17 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                     msg = "Specified API available via:" + baseURL + " does not conform to " + confClass + "." + "This may lead to issues when converting its processes to Galaxy tools."
                     warnings.warn(msg, Warning)
 
-        server = ET.Element("option")
-        server.text = api["server_url"]
-        server.set("value", api["server_url"])
-        select_server.append(server)
+        #server = ET.Element("option")
+        #server.text = api["server_url"]
+        #server.set("value", api["server_url"])
+        #select_server.append(server)
 
         #make sure select-server dropdown is at the beginning
-        if index_i == len(configJSON):
-            conditional_server.append(select_server)
+        #if index_i == len(configJSON):
+        #    conditional_server.append(select_server)
 
-        when_server = ET.Element("when")
-        when_server.set("value", api["server_url"])
+        #when_server = ET.Element("when")
+        #when_server.set("value", api["server_url"])
 
         conditional_process = ET.Element("conditional")
         conditional_process.set("name", "conditional_process")
@@ -276,17 +276,19 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
         conditional_process.append(select_process)
         for when_process in when_list_processes:
             conditional_process.append(when_process)    
-        when_server.append(conditional_process)
-    conditional_server.append(when_server)
+        #when_server.append(conditional_process)
+    #conditional_server.append(when_server)
 
     #add command
     commandText = "<![CDATA["
-
+    
     for i in range(0, len(commands)):
         if i == 0:
-            commandText += "\n#if $conditional_server.select_process == \"" + commands[i]["process"] + "\":\n"
+            #commandText += "\n#if $conditional_server.select_process == \"" + commands[i]["process"] + "\":\n"
+            commandText += "\n#if $select_process == \"" + commands[i]["process"] + "\":\n"
             commandText += "\tRscript '$__tool_directory__/generic.R'\n"
-            commandText += "\t\t--server '$select_server' \n"
+            #commandText += "\t\t--server '$select_server' \n"
+            commandText += "\t\t--server " + api["server_url"] + "\n"
             commandText += "\t\t--process '$select_process'"
             for y in commands[i]["inputs"]:
                 commandText += "\n\t\t--"+ y + " \'${" + y + "}\'"
@@ -294,9 +296,11 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                 commandText += "\n\t\t--"+ o + " \'${" + o + "}\'"
             commandText += "\n\t\t--outputData '$output_data'"
         else:
-            commandText += "\n#elif $conditional_server.select_process == \"" + commands[i]["process"] + "\":\n"
+            #commandText += "\n#elif $conditional_server.select_process == \"" + commands[i]["process"] + "\":\n"
+            commandText += "\n#elif $select_process == \"" + commands[i]["process"] + "\":\n"
             commandText += "\tRscript '$__tool_directory__/generic.R'\n"
-            commandText += "\t\t--server '$select_server' \n"
+            #commandText += "\t\t--server '$select_server' \n"
+            commandText += "\t\t--server " + api["server_url"] + "\n"
             commandText += "\t\t--process '$select_process'"
             for y in commands[i]["inputs"]:
                 commandText += "\n\t\t--"+ y + " \'${" + y + "}\'"
@@ -308,7 +312,8 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     tool.append(command)
 
     #add inputs 
-    inputs.append(conditional_server)
+    #inputs.append(conditional_server)
+    inputs.append(conditional_process)
     tool.append(inputs)
 
     #add outputs
@@ -316,7 +321,8 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     collection = ET.Element("collection")
     collection.set("name", "output_data")
     collection.set("type", "list")
-    collection.set("label", "$conditional_server.select_process")
+    #collection.set("label", "$conditional_server.select_process")
+    collection.set("label", "$select_process")
     discover_datasets = ET.Element("discover_datasets")
     discover_datasets.set("pattern", "__name_and_ext__")
     collection.append(discover_datasets)
