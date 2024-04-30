@@ -289,9 +289,9 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             commandText += "\t\t--server '$select_server' \n"
             commandText += "\t\t--process '$select_process'"
             for y in commands[i]["inputs"]:
-                commandText += "\n\t\t--"+ y + " \'$" + y + "\'"
+                commandText += "\n\t\t--"+ y + " \'${" + y + "}\'"
             for o in commands[i]["outputs"]:
-                commandText += "\n\t\t--"+ o + " \'$" + o + "\'"
+                commandText += "\n\t\t--"+ o + " \'${" + o + "}\'"
             commandText += "\n\t\t--outputData '$output_data'"
         else:
             commandText += "\n#elif $conditional_server.select_process == \"" + commands[i]["process"] + "\":\n"
@@ -299,9 +299,9 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             commandText += "\t\t--server '$select_server' \n"
             commandText += "\t\t--process '$select_process'"
             for y in commands[i]["inputs"]:
-                commandText += "\n\t\t--"+ y + " \'$" + y + "\'"
+                commandText += "\n\t\t--"+ y + " \'${" + y + "}\'"
             for o in commands[i]["outputs"]:
-                commandText += "\n\t\t--"+ o + " \'$" + o + "\'"
+                commandText += "\n\t\t--"+ o + " \'${" + o + "}\'"
             commandText += "\n\t\t--outputData '$output_data'"
     commandText += "\n#end if\n]]>"
     command.text = commandText
