@@ -5,7 +5,7 @@
         "excluded_services": ["hellojs", "display", "hellojs1", 
             "OTB.HomologousPointsExtraction", "SAGA.imagery_opencv.10", 
             "SAGA.imagery_opencv.9", "SAGA.imagery_opencv.8", "securityIn", "securityInFailed",
-            "HelloPy", "hellor", "failR"
+            "HelloPy", "hellor", "failR", "org.n52.javaps.test.EchoProcess", "echo", "EchoProcess"
         ]
     }
 ]
