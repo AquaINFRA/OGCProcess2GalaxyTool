@@ -70,17 +70,17 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     tool.set('name', "OGC API Process Wrapper")
     tool.set('version', "0.1.0")
 
+    #add description
+    description = ET.Element("description")
+    description.text = "executes remote processes"
+    tool.append(description)
+
     #add macro
     macros = ET.Element("macros")
     importMacro = ET.Element("import")
     importMacro.text = "macros.xml"
     macros.append(importMacro)
     tool.append(macros)
-
-    #add description
-    description = ET.Element("expand")
-    description.set("macro", "description")
-    tool.append(description)
 
     #add requirements
     requirements = ET.Element("expand")

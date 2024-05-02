@@ -1,9 +1,9 @@
 <?xml version="1.0" ?>
 <tool id="generic_ogc_processes_wrapper" name="OGC API Process Wrapper" version="0.1.0">
+	<description>executes remote processes</description>
 	<macros>
 		<import>macros.xml</import>
 	</macros>
-	<expand macro="description"/>
 	<expand macro="requirements"/>
 	<command detect_errors="exit_code"><![CDATA[
 #if $select_process == "RVoronoi":
