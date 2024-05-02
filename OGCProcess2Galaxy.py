@@ -288,7 +288,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             commandText += "\n#if $select_process == \"" + commands[i]["process"] + "\":\n"
             commandText += "\tRscript '$__tool_directory__/generic.R'\n"
             #commandText += "\t\t--server '$select_server' \n"
-            commandText += "\t\t--server " + api["server_url"] + "\n"
+            #commandText += "\t\t--server " + api["server_url"] + "\n"
             commandText += "\t\t--process '$select_process'"
             for y in commands[i]["inputs"]:
                 commandText += "\n\t\t--"+ y + " \'${" + y + "}\'"
@@ -300,7 +300,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             commandText += "\n#elif $select_process == \"" + commands[i]["process"] + "\":\n"
             commandText += "\tRscript '$__tool_directory__/generic.R'\n"
             #commandText += "\t\t--server '$select_server' \n"
-            commandText += "\t\t--server " + api["server_url"] + "\n"
+            #commandText += "\t\t--server " + api["server_url"] + "\n"
             commandText += "\t\t--process '$select_process'"
             for y in commands[i]["inputs"]:
                 commandText += "\n\t\t--"+ y + " \'${" + y + "}\'"

@@ -2,6 +2,10 @@
     {
         "server_url": "https://ospd.geolabs.fr:8300/ogc-api/",
         "included_services": ["*"],
-        "excluded_services": ["hellojs", "display", "hellojs1", "OTB.HomologousPointsExtraction", "SAGA.imagery_opencv.10", "SAGA.imagery_opencv.9", "SAGA.imagery_opencv.8"]
+        "excluded_services": ["hellojs", "display", "hellojs1", 
+            "OTB.HomologousPointsExtraction", "SAGA.imagery_opencv.10", 
+            "SAGA.imagery_opencv.9", "SAGA.imagery_opencv.8", "securityIn", "securityInFailed",
+            "HelloPy", "hellor", "failR"
+        ]
     }
 ]
