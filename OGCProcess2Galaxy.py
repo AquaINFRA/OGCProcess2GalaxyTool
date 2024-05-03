@@ -282,11 +282,11 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     #add command
     commandText = "<![CDATA["
     
-    for i in range(0, len(commands)):
-        if i == 0:
+    #for i in range(0, len(commands)):
+        #if i == 0:
             #commandText += "\n#if $conditional_server.select_process == \"" + commands[i]["process"] + "\":\n"
-            commandText += "\n#if $select_process == \"" + commands[i]["process"] + "\":\n"
-            commandText += "\tRscript '$__tool_directory__/generic.R'\n"
+            #commandText += "\n#if $select_process == \"" + commands[i]["process"] + "\":\n"
+    commandText += "\n\tRscript '$__tool_directory__/generic.R'\n"
             #commandText += "\t\t--server '$select_server' \n"
             #commandText += "\t\t--server " + api["server_url"] + "\n"
             #commandText += "\t\t--process '$select_process'"
@@ -294,12 +294,12 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             #    commandText += "\n\t\t--"+ y + " \'${" + y.replace(".", "_") + "}\'"
             #for o in commands[i]["outputs"]:
             #    commandText += "\n\t\t--"+ o + " \'${" + o.replace(".", "_") + "}\'"
-            commandText += "\t\t--inputs '$inputs'"
-            commandText += "\n\t\t--outputData '$output_data'"
-        else:
+            #commandText += "\t\t--inputs '$inputs'"
+    commandText += "\t\t--outputData '$output_data'"
+        #else:
             #commandText += "\n#elif $conditional_server.select_process == \"" + commands[i]["process"] + "\":\n"
-            commandText += "\n#elif $select_process == \"" + commands[i]["process"] + "\":\n"
-            commandText += "\tRscript '$__tool_directory__/generic.R'\n"
+            #commandText += "\n#elif $select_process == \"" + commands[i]["process"] + "\":\n"
+            #commandText += "\tRscript '$__tool_directory__/generic.R'\n"
             #commandText += "\t\t--server '$select_server' \n"
             #commandText += "\t\t--server " + api["server_url"] + "\n"
             #commandText += "\t\t--process '$select_process'"
@@ -307,9 +307,9 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             #    commandText += "\n\t\t--"+ y + " \'${" + y.replace(".", "_") + "}\'"
             #for o in commands[i]["outputs"]:
             #    commandText += "\n\t\t--"+ o + " \'${" + o.replace(".", "_") + "}\'"
-            commandText += "\t\t--inputs '$inputs'"
-            commandText += "\n\t\t--outputData '$output_data'"
-    commandText += "\n#end if\n]]>"
+            #commandText += "\t\t--inputs '$inputs'"
+            #commandText += "\n\t\t--outputData '$output_data'"
+    commandText += "\n]]>"
     command.text = commandText
     tool.append(command)
 
@@ -317,6 +317,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     configfiles = ET.Element("configfiles")
     configfiles_inputs = ET.Element("inputs")
     configfiles_inputs.set("name", "inputs")
+    configfiles_inputs.set("filename", "inputs.json")
     configfiles_inputs.set("data_style", "paths")
     configfiles.append(configfiles_inputs)
     tool.append(configfiles)
