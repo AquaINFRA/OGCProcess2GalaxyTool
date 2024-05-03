@@ -141,7 +141,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             processesData = json.load(processesURL)
             
             when_list_processes = []
-            for process in processesData["processes"]:#[0:70]: #only get 50 processes!
+            for process in processesData["processes"]: #only get 50 processes!
                 
                 #command information for process
                 processCommand = {"server": api["server_url"], "process": process["id"]}
@@ -289,11 +289,12 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             commandText += "\tRscript '$__tool_directory__/generic.R'\n"
             #commandText += "\t\t--server '$select_server' \n"
             #commandText += "\t\t--server " + api["server_url"] + "\n"
-            commandText += "\t\t--process '$select_process'"
-            for y in commands[i]["inputs"]:
-                commandText += "\n\t\t--"+ y + " \'${" + y.replace(".", "_") + "}\'"
-            for o in commands[i]["outputs"]:
-                commandText += "\n\t\t--"+ o + " \'${" + o.replace(".", "_") + "}\'"
+            #commandText += "\t\t--process '$select_process'"
+            #for y in commands[i]["inputs"]:
+            #    commandText += "\n\t\t--"+ y + " \'${" + y.replace(".", "_") + "}\'"
+            #for o in commands[i]["outputs"]:
+            #    commandText += "\n\t\t--"+ o + " \'${" + o.replace(".", "_") + "}\'"
+            commandText += "\t\t--inputs '$inputs'"
             commandText += "\n\t\t--outputData '$output_data'"
         else:
             #commandText += "\n#elif $conditional_server.select_process == \"" + commands[i]["process"] + "\":\n"
@@ -301,15 +302,24 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             commandText += "\tRscript '$__tool_directory__/generic.R'\n"
             #commandText += "\t\t--server '$select_server' \n"
             #commandText += "\t\t--server " + api["server_url"] + "\n"
-            commandText += "\t\t--process '$select_process'"
-            for y in commands[i]["inputs"]:
-                commandText += "\n\t\t--"+ y + " \'${" + y.replace(".", "_") + "}\'"
-            for o in commands[i]["outputs"]:
-                commandText += "\n\t\t--"+ o + " \'${" + o.replace(".", "_") + "}\'"
+            #commandText += "\t\t--process '$select_process'"
+            #for y in commands[i]["inputs"]:
+            #    commandText += "\n\t\t--"+ y + " \'${" + y.replace(".", "_") + "}\'"
+            #for o in commands[i]["outputs"]:
+            #    commandText += "\n\t\t--"+ o + " \'${" + o.replace(".", "_") + "}\'"
+            commandText += "\t\t--inputs '$inputs'"
             commandText += "\n\t\t--outputData '$output_data'"
     commandText += "\n#end if\n]]>"
     command.text = commandText
     tool.append(command)
+
+    #add configfiles
+    configfiles = ET.Element("configfiles")
+    configfiles_inputs = ET.Element("inputs")
+    configfiles_inputs.set("name", "inputs")
+    configfiles_inputs.set("data_style", "paths")
+    configfiles.append(configfiles_inputs)
+    tool.append(configfiles)
 
     #add inputs 
     #inputs.append(conditional_server)
