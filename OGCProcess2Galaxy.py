@@ -66,8 +66,8 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
 
     #add tool
     tool = ET.Element("tool") 
-    tool.set('id', "generic_ogc_processes_wrapper")
-    tool.set('name', "OGC API Process Wrapper")
+    tool.set('id', "zoo_project_ogc_api_processes")
+    tool.set('name', "Zoo Project OGC API Processes")
     tool.set('version', "0.1.0")
 
     #add description
@@ -191,8 +191,12 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                                     process_input.set("optional", "true")
                                 else:
                                     process_input.set("optional", "false")
+                                    if ("type" in process["inputs"][param]["schema"].keys()):
+                                        process_input.set("value", "")
                             else:
                                 process_input.set("optional", "false")
+                                if ("type" in process["inputs"][param]["schema"].keys()):
+                                    process_input.set("value", "")
                                 msg = "Parameter " + param + " of process " + process["id"] + " has no nullable information."
                                 #warnings.warn(msg, Warning)
 

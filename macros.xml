@@ -1,10 +1,10 @@
 <macros>
     <xml name="requirements">
         <requirements>
-            <requirement type="package" version="4.1.2">R</requirement>
-            <requirement type="package" version="0.2.3">httr2</requirement>
-            <requirement type="package" version="1.2.0">getopt</requirement>
-            <requirement type="package" version="1.8.7">jsonlite</requirement>
+            <requirement type="package" version="4.3.1">r-base</requirement>
+            <requirement type="package" version="1.20.4">r-getopt</requirement>
+            <requirement type="package" version="0.2.3">r-httr2</requirement>
+            <requirement type="package" version="1.8.7">r-jsonlite</requirement>
         </requirements>
     </xml>
     <xml name="out_options">
@@ -27,7 +27,7 @@
         </citations>
     </xml>
     <xml name="help">
-        <help>This tool is a wrapper for OGC API Processes and was created using the OGC-API-Process2Galaxy tool (https://github.com/AquaINFRA/OGC-API-Process2Galaxy). Check the README in the repository for more information.</help>
+        <help>This tool is a wrapper for OGC API Processes coming from the Zoo Project (https://zoo-project.github.io/docs/intro.html) and was created using the OGC-API-Process2Galaxy tool (https://github.com/AquaINFRA/OGC-API-Process2Galaxy). Check the README in the repository for more information.</help>
     </xml>
     <xml name="tests">
         <tests>
