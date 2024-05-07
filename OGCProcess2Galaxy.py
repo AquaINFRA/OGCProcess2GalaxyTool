@@ -141,7 +141,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             processesData = json.load(processesURL)
             
             when_list_processes = []
-            for process in processesData["processes"]: #only get 50 processes!
+            for process in processesData["processes"][0:70]: #only get 50 processes!
                 
                 #command information for process
                 processCommand = {"server": api["server_url"], "process": process["id"]}
