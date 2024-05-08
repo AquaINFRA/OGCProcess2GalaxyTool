@@ -137,7 +137,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
         select_process.set("type", "select")
         select_process.set("label", "Select process")
 
-        with urllib.request.urlopen(api["server_url"] + "processes") as processesURL:
+        with urllib.request.urlopen(api["server_url"] + "processes" + api["filter"]) as processesURL:
             processesData = json.load(processesURL)
             
             when_list_processes = []
