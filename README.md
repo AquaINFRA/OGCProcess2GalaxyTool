@@ -8,6 +8,10 @@ Galaxy is a tool for creating readily sharable workflows composed of a tool chai
 
 First, we tried to wrap a process in a Galaxy tool. To achieve that, we wrote an R script that took over the communication with the remote process and XML file to define the Galaxy tool. While this approach has proven to work (see, e.g., https://toolshed.g2.bx.psu.edu/repository?repository_id=767530b6e7057080) and highly customizable, it is not efficient for servers storing a high number of processes. Every process would require an own tool and deployment process. For this reason, we developed the OGC-API-Process2Galaxy tool. It generates a Galaxy tool that wraps OGC API Processes hosted on a server. The tool requests all processes hosted on the server defined in the config.json. Then, for each process, the tool requests the process description and generates the input parameters, output parameters, and commands. Single processes can be excluded or picked individually by specifying the process names in the corresponding fields in the config.json. The final result is a tool on Galaxy which provides users with a dropdown menu where users can select the process they want to use. Based on the selection, the corresponding UI is shown and users can just start filling the input parameters.
 
+## Example
+
+This [tool](https://toolshed.g2.bx.psu.edu/repository?repository_id=8e2fce20ecfc093f) was created using the OGC-API-Process2Galaxy software. Check this [history](https://usegalaxy.eu/u/markus.konkol/h/open-science-persistent-demonstrator-example) and this [workflow](https://usegalaxy.eu/u/markus.konkol/w/workflow-constructed-from-history-open-science-persistent-demonstrator-example) for an example. 
+
 ## How to run
 
 Step 1: `git clone https://github.com/AquaINFRA/OGC-API-Process2Galaxy.git` 
