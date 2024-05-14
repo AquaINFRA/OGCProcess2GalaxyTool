@@ -1,0 +1,8 @@
+[
+    {
+        "server_url": "https://hirondelle.crim.ca/weaver/",
+        "included_services": ["*"],
+        "filter": "",
+        "excluded_services": []
+    }
+]

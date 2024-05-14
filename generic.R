@@ -136,15 +136,21 @@ is_url <- function(x) {
   grepl("^https?://", x)
 }
 
-server <- "https://ospd.geolabs.fr:8300/ogc-api/"
+#server <- "https://hirondelle.crim.ca/weaver/" #ogc-tb-16
+server <- "https://ospd.geolabs.fr:8300/ogc-api/" #aqua-infra
 
+print("--> Retrieve parameters")
 inputParameters <- getParameters()
+print("--> Parameters retrieved")
 
 args <- commandArgs(trailingOnly = TRUE)
 outputLocation <- args[2]
 
+print("--> Retrieve outputs")
 outputs <- getOutputs(inputParameters, outputLocation, server)
+print("--> Outputs retrieved")
 
+print("--> Parse inputs")
 for (key in names(inputParameters)) {
   print(inputParameters[[key]])
   if (is.character(inputParameters[[key]]) && (endsWith(inputParameters[[key]], ".dat") || endsWith(inputParameters[[key]], ".txt"))) { 
@@ -158,13 +164,24 @@ for (key in names(inputParameters)) {
     close(con)
     inputParameters[[key]] <- url_list
   }
+  else if (grepl(inputParameters[[key]], "Array", fixed=TRUE)) {
+    values <- inputParameters[[key]]
+    value_list <- strsplit(values, split = ",")
+    inputParameters[[key]] <- value_list
+  }
 }
+print("--> Inputs parsed")
 
+print("--> Prepare process execution")
 jsonData <- list(
   "inputs" = inputParameters,
   "outputs" = outputs
 )
 
+print("--> Execute process")
 jobID <- executeProcess(server, inputParameters$select_process, jsonData, outputLocation)
+print("--> Process executed")
 
+print("--> Retrieve results")
 retrieveResults(server, jobID, outputLocation)
+print("--> Results retrieved")

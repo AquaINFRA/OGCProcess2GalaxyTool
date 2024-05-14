@@ -7,13 +7,15 @@ import xml.dom.minidom as md
 
 #OGC Process Description types to Galaxy Parameter types
 typeMapping = {
-  "array": "?",
+  "array": "array",
   "boolean": "boolean",
   "integer": "integer",
   "number": "float",
   "object": "data",
   "string": "text"
 }
+
+mediaTypes = ["image/tiff", "image/jpeg", "image/png"]
 
 #conformance classes 
 confClasses = [
@@ -23,17 +25,20 @@ confClasses = [
 ]
 
 def contains_ref(json_obj):
-    if isinstance(json_obj, dict):
-        if "$ref" in json_obj:
-            return True
-        for value in json_obj.values():
-            if contains_ref(value):
+    try:
+        if isinstance(json_obj, dict):
+            if "$ref" in json_obj:
                 return True
-    elif isinstance(json_obj, list):
-        for item in json_obj:
-            if contains_ref(item):
-                return True
-    return False
+            for value in json_obj.values():
+                if contains_ref(value):
+                    return True
+        elif isinstance(json_obj, list):
+            for item in json_obj:
+                if contains_ref(item):
+                    return True
+        return False
+    except:
+        return False
 
 def distinct_subarray(arr):
     subarray = []
@@ -153,7 +158,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                 #check if process is included
                 if(process["id"] in api["included_services"] or ("*" in api["included_services"] and len(api["included_services"]) == 1)):
                     if len(processesData["processes"]) == 0:
-                        msg = "Specified API available via:" + baseURL + " does not provide any processes."
+                        msg = "Specified API does not provide any processes."
                         #warnings.warn(msg, Warning)
 
                     with urllib.request.urlopen(api["server_url"] + "processes/" + process["id"]) as processURL:
@@ -183,7 +188,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                             else:
                                 msg = "Parameter " + param + " of process " + process["id"] + " has not title attribute."
                                 #warnings.warn(msg, Warning)
-                                process_input.set("name", "?")
+                                process_input.set("name", param)
 
                             #set optional/required title
                             if "nullable" in process["inputs"][param]["schema"].keys():
@@ -192,7 +197,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                                 else:
                                     process_input.set("optional", "false")
                                     if ("type" in process["inputs"][param]["schema"].keys()):
-                                        process_input.set("value", "")
+                                        process_input.set("value", "data")
                             else:
                                 process_input.set("optional", "false")
                                 if ("type" in process["inputs"][param]["schema"].keys()):
@@ -217,9 +222,18 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
 
                             #set param type
                             schema = process["inputs"][param]["schema"]
+                            if 'oneOf' in schema.keys(): 
+                                schema = process["inputs"][param]["schema"]["oneOf"][0]
+
                             if 'type' in schema.keys(): #simple schema
                                 if schema["type"] in typeMapping.keys():
-                                    process_input.set("type", typeMapping[process["inputs"][param]["schema"]["type"]])
+                                    process_input.set("type", typeMapping[schema["type"]])
+                                    if "format" in schema.keys():
+                                        if schema["format"] == "binary":
+                                            process_input.set("type", "data")
+                                    if "contentMediaType" in schema.keys():
+                                        if schema["contentMediaType"] in mediaTypes:
+                                            process_input.set("type", "data")
                                     if schema["type"] == "boolean":
                                         process_input.set("truevalue", "True") # Galaxy uses this for bools
                                         process_input.set("falsevalue", "False")
@@ -231,19 +245,12 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                                             option.set("value", enum)
                                             option.text = enum
                                             process_input.append(option)
-                            elif contains_ref(process["inputs"][param]["extended-schema"]):
-                                #process_input.set("type", typeMapping["string"])
-                                # text input should be replace with data input to allow building workflows
-                                process_input.set("type", typeMapping["object"])
-                                process_input.set("format", "txt")
-                            #elif 'oneOf' in process["inputs"][param]["schema"].keys(): #simple schema
-                            #    isComplex = True
-                            #    paramFormats = ""
-                            #    for format in process["inputs"][param]["schema"]["oneOf"]:
-                            #        if format["type"] == "string":
-                            #            process_input.set("type", typeMapping["string"])
-                            #        if format["type"] == "object":
-                            #            process_input.set("type", typeMapping["object"])
+                                    if schema["type"] == "array":
+                                        process_input.set("name", param.replace(".", "_") +  "Array") 
+                                        if 'items' in schema.keys():
+                                            if 'type' in schema["items"].keys():
+                                                #process_input.set("type", typeMapping[schema["items"]["type"]])
+                                                process_input.set("type", "text")
                             else:
                                 msg = "Parameter " + param + " of process " + process["id"] + " has no simple shema."
                                 #warnings.warn(msg, Warning)
@@ -258,7 +265,6 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                         for output in process["outputs"]:
                             outputName = output
                             processOutput = process["outputs"][output]
-                            outputLabel = processOutput["title"]
                             if "extended-schema" in processOutput:
                                 process_output = ET.Element("param")
                                 process_output.set("type", "select")
