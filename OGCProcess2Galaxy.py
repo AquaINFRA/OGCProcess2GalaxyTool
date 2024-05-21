@@ -240,6 +240,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                                                 #process_input.set("type", typeMapping[schema["items"]["type"]])
                                                 process_input.set("name", param +  "_Array_" + typeMapping[schema["items"]["type"]])
                                                 process_input.set("type", "text")
+                                                process_input.set("help", "Please provide comma-seperated values of type " + typeMapping[schema["items"]["type"]] + " here.")
 
                             when_process.append(process_input)
                         
