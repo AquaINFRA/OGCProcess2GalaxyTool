@@ -7,7 +7,7 @@ import xml.dom.minidom as md
 
 #OGC Process Description types to Galaxy Parameter types
 typeMapping = {
-  "array": "array",
+  "array": "text",
   "boolean": "boolean",
   "integer": "integer",
   "number": "float",
@@ -69,11 +69,15 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     None: Function has no return value. Converted processes are stores as .xml-files.
     """
 
+    #load config
+    with open(configFile) as configFile:
+        configJSON = json.load(configFile)
+
     #add tool
     tool = ET.Element("tool") 
-    tool.set('id', "zoo_project_ogc_api_processes")
-    tool.set('name', "Zoo Project OGC API Processes")
-    tool.set('version', "0.1.0")
+    tool.set('id', configJSON["id"])
+    tool.set('name', configJSON["title"])
+    tool.set('version', configJSON["version"])
 
     #add description
     description = ET.Element("description")
@@ -100,10 +104,6 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     #add inputs
     inputs = ET.Element("inputs")
 
-    #load config
-    with open(configFile) as configFile:
-        configJSON = json.load(configFile)
-
     #conditional_server = ET.Element("conditional")
     #conditional_server.set("name", "conditional_server")
     #select_server = ET.Element("param")
@@ -112,7 +112,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     #select_server.set("label", "Select server")
 
     index_i = 0
-    for api in configJSON: 
+    for api in configJSON["servers"]: 
         index_i += 1
         #check conformance
         with urllib.request.urlopen(api["server_url"] + "conformance") as conformanceURL:
@@ -120,7 +120,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             
             for confClass in confClasses:
                 if confClass not in confClasses:
-                    msg = "Specified API available via:" + baseURL + " does not conform to " + confClass + "." + "This may lead to issues when converting its processes to Galaxy tools."
+                    msg = "Specified API available via:" + api + " does not conform to " + confClass + "." + "This may lead to issues when converting its processes to Galaxy tools."
                     warnings.warn(msg, Warning)
 
         #server = ET.Element("option")
@@ -157,14 +157,15 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
 
                 #check if process is included
                 if(process["id"] in api["included_services"] or ("*" in api["included_services"] and len(api["included_services"]) == 1)):
-                    if len(processesData["processes"]) == 0:
-                        msg = "Specified API does not provide any processes."
-                        #warnings.warn(msg, Warning)
-
                     with urllib.request.urlopen(api["server_url"] + "processes/" + process["id"]) as processURL:
                         process = json.load(processURL)
                         processElement = ET.Element("option")
-                        processElement.text = process["id"] + ": " + process["title"]
+
+                        if("title" in process.keys()):
+                            processElement.text = process["id"] + ": " + process["title"]
+                        else:
+                            processElement.text = process["id"]  
+
                         processElement.set("value", process["id"])
                         select_process.append(processElement)
 
@@ -180,48 +181,36 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                             process_input = ET.Element("param")
 
                             #set param name
-                            process_input.set("name", param.replace(".", "_")) 
+                            process_input.set("name", param) 
                             
                             #set param title
                             if "title" in process["inputs"][param].keys():
-                                    process_input.set("label", param)
+                                    process_input.set("label", process["inputs"][param]["title"])
                             else:
-                                msg = "Parameter " + param + " of process " + process["id"] + " has not title attribute."
-                                #warnings.warn(msg, Warning)
-                                process_input.set("name", param)
+                                process_input.set("label", param)
 
-                            #set optional/required title
                             if "nullable" in process["inputs"][param]["schema"].keys():
                                 if process["inputs"][param]["schema"]["nullable"]:
                                     process_input.set("optional", "true")
                                 else:
                                     process_input.set("optional", "false")
-                                    if ("type" in process["inputs"][param]["schema"].keys()):
-                                        process_input.set("value", "data")
-                            else:
-                                process_input.set("optional", "false")
-                                if ("type" in process["inputs"][param]["schema"].keys()):
-                                    process_input.set("value", "")
-                                msg = "Parameter " + param + " of process " + process["id"] + " has no nullable information."
-                                #warnings.warn(msg, Warning)
 
                             #set default
                             if "default" in process["inputs"][param]["schema"].keys():
                                 process_input.set("value", str(process["inputs"][param]["schema"]["default"]))
-                            else:
-                                msg = "Parameter " + param + " of process " + process["id"] + " has no default value."
-                                #warnings.warn(msg, Warning)
                             
                             #set param description
                             if "description" in process["inputs"][param].keys():
                                 process_input.set("help", process["inputs"][param]["description"])
                             else:
-                                msg = "Parameter " + param + " of process " + process["id"] + " has not description attribute."
-                                #warnings.warn(msg, Warning)
                                 process_input.set("help", "No description provided!")
 
                             #set param type
-                            schema = process["inputs"][param]["schema"]
+                            if("extended-schema" in process["inputs"][param].keys()):
+                                schema = process["inputs"][param]["extended-schema"]
+                            else: 
+                                schema = process["inputs"][param]["schema"]
+                            
                             if 'oneOf' in schema.keys(): 
                                 schema = process["inputs"][param]["schema"]["oneOf"][0]
 
@@ -246,14 +235,11 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                                             option.text = enum
                                             process_input.append(option)
                                     if schema["type"] == "array":
-                                        process_input.set("name", param.replace(".", "_") +  "Array") 
                                         if 'items' in schema.keys():
                                             if 'type' in schema["items"].keys():
                                                 #process_input.set("type", typeMapping[schema["items"]["type"]])
+                                                process_input.set("name", param +  "_Array_" + typeMapping[schema["items"]["type"]])
                                                 process_input.set("type", "text")
-                            else:
-                                msg = "Parameter " + param + " of process " + process["id"] + " has no simple shema."
-                                #warnings.warn(msg, Warning)
 
                             when_process.append(process_input)
                         

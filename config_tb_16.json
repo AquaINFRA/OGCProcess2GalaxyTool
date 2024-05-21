@@ -1,8 +1,13 @@
-[
-    {
-        "server_url": "https://hirondelle.crim.ca/weaver/",
-        "included_services": ["*"],
-        "filter": "",
-        "excluded_services": []
-    }
-]
+{
+    "servers":[
+        {
+            "server_url": "https://hirondelle.crim.ca/weaver/",
+            "included_services": ["*"],
+            "filter": "",
+            "excluded_services": []
+        }
+    ],
+    "id":"zoo_project_ogc_api_processes",
+    "title":"Zoo Project OGC API Processes",
+    "version":"0.1.0"
+}
