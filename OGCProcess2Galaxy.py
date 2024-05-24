@@ -78,11 +78,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     tool.set('id', configJSON["id"])
     tool.set('name', configJSON["title"])
     tool.set('version', configJSON["version"])
-
-    #add description
-    description = ET.Element("description")
-    description.text = "executes remote processes"
-    tool.append(description)
+    tool.set('description', configJSON["description"])
 
     #add macro
     macros = ET.Element("macros")
@@ -118,10 +114,19 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
         with urllib.request.urlopen(api["server_url"] + "conformance") as conformanceURL:
             conformanceData = json.load(conformanceURL)
             
+            conformance = True
+
             for confClass in confClasses:
-                if confClass not in confClasses:
-                    msg = "Specified API available via:" + api + " does not conform to " + confClass + "." + "This may lead to issues when converting its processes to Galaxy tools."
+                if confClass not in conformanceData["conformsTo"]:
+                    msg = "Specified API available via:" + api["server_url"] + " does not conform to " + confClass + ". This may lead to issues when converting its processes to Galaxy tools."
                     warnings.warn(msg, Warning)
+                    conformance = False               
+
+            if conformance:
+                tool.set('description', configJSON["help"])
+            else:
+                tool.set('description', configJSON["help"] + " Take note that the service provided by this does not implement all nesseracy OGC API Processes conformance classes and might thus not behave as expected!")
+
 
         #server = ET.Element("option")
         #server.text = api["server_url"]
@@ -181,11 +186,12 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                             process_input = ET.Element("param")
 
                             #set param name
-                            process_input.set("name", param) 
+                            process_input.set("name", param.replace(".", "_")) 
                             
                             #set param title
                             if "title" in process["inputs"][param].keys():
-                                    process_input.set("label", process["inputs"][param]["title"])
+                                process_input.set("label", param)
+                                #process_input.set("label", process["inputs"][param]["title"])
                             else:
                                 process_input.set("label", param)
 

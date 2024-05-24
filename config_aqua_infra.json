@@ -14,5 +14,7 @@
     ],
     "id":"geolabs_ogc_api_processes",
     "title":"GEOLABS OGC API Processes",
-    "version":"0.1.0"
+    "version":"0.1.0",
+    "description": "Some description",
+    "help": "Some help"
 }

@@ -136,8 +136,8 @@ is_url <- function(x) {
   grepl("^https?://", x)
 }
 
-server <- "https://hirondelle.crim.ca/weaver/" #ogc-tb-16
-#server <- "https://ospd.geolabs.fr:8300/ogc-api/" #aqua-infra
+#server <- "https://hirondelle.crim.ca/weaver/" #ogc-tb-16
+server <- "https://ospd.geolabs.fr:8300/ogc-api/" #aqua-infra
 
 print("--> Retrieve parameters")
 inputParameters <- getParameters()
