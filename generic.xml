@@ -1,6 +1,5 @@
 <?xml version="1.0" ?>
-<tool id="zoo_project_ogc_api_processes" name="Zoo Project OGC API Processes" version="0.1.0">
-	<description>executes remote processes</description>
+<tool id="zoo_project_ogc_api_processes" name="Zoo Project OGC API Processes" version="0.1.0" description="Some help text.">
 	<macros>
 		<import>macros.xml</import>
 	</macros>
@@ -27,40 +26,40 @@
 				<option value="select-products-sentinel2">select-products-sentinel2: Searches the specified catalog for Sentinel-2 products matching filtering criteria.</option>
 			</param>
 			<when value="calculate-band">
-				<param name="name" label="name" help="No description provided!" type="text"/>
-				<param name="calc" label="Calculation to perform with band references." help="No description provided!" type="text"/>
-				<param name="band_a_Array_text" label="band_a" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_b_Array_text" label="band_b" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_c_Array_text" label="band_c" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_d_Array_text" label="band_d" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_e_Array_text" label="band_e" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_f_Array_text" label="band_f" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_g_Array_text" label="band_g" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_h_Array_text" label="band_h" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_i_Array_text" label="band_i" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_j_Array_text" label="band_j" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_k_Array_text" label="band_k" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_l_Array_text" label="band_l" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_m_Array_text" label="band_m" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_n_Array_text" label="band_n" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_o_Array_text" label="band_o" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_p_Array_text" label="band_p" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_q_Array_text" label="band_q" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_r_Array_text" label="band_r" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_s_Array_text" label="band_s" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_t_Array_text" label="band_t" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_u_Array_text" label="band_u" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_v_Array_text" label="band_v" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_w_Array_text" label="band_w" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_x_Array_text" label="band_x" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_y_Array_text" label="band_y" help="Please provide comma-seperated values of type texthere." type="text"/>
-				<param name="band_z_Array_text" label="band_z" help="Please provide comma-seperated values of type texthere." type="text"/>
+				<param name="name" label="name" help="Name to apply for the output GeoTiff file." type="text"/>
+				<param name="calc" label="calc" help="Calculation to perform with band references." type="text"/>
+				<param name="band_a" label="band_a" help="No description provided!" type="text"/>
+				<param name="band_b" label="band_b" help="No description provided!" type="text"/>
+				<param name="band_c" label="band_c" help="No description provided!" type="text"/>
+				<param name="band_d" label="band_d" help="No description provided!" type="text"/>
+				<param name="band_e" label="band_e" help="No description provided!" type="text"/>
+				<param name="band_f" label="band_f" help="No description provided!" type="text"/>
+				<param name="band_g" label="band_g" help="No description provided!" type="text"/>
+				<param name="band_h" label="band_h" help="No description provided!" type="text"/>
+				<param name="band_i" label="band_i" help="No description provided!" type="text"/>
+				<param name="band_j" label="band_j" help="No description provided!" type="text"/>
+				<param name="band_k" label="band_k" help="No description provided!" type="text"/>
+				<param name="band_l" label="band_l" help="No description provided!" type="text"/>
+				<param name="band_m" label="band_m" help="No description provided!" type="text"/>
+				<param name="band_n" label="band_n" help="No description provided!" type="text"/>
+				<param name="band_o" label="band_o" help="No description provided!" type="text"/>
+				<param name="band_p" label="band_p" help="No description provided!" type="text"/>
+				<param name="band_q" label="band_q" help="No description provided!" type="text"/>
+				<param name="band_r" label="band_r" help="No description provided!" type="text"/>
+				<param name="band_s" label="band_s" help="No description provided!" type="text"/>
+				<param name="band_t" label="band_t" help="No description provided!" type="text"/>
+				<param name="band_u" label="band_u" help="No description provided!" type="text"/>
+				<param name="band_v" label="band_v" help="No description provided!" type="text"/>
+				<param name="band_w" label="band_w" help="No description provided!" type="text"/>
+				<param name="band_x" label="band_x" help="No description provided!" type="text"/>
+				<param name="band_y" label="band_y" help="No description provided!" type="text"/>
+				<param name="band_z" label="band_z" help="No description provided!" type="text"/>
 			</when>
 			<when value="download-band-sentinel2-product-safe">
-				<param name="product_url" label="S3 URL to a Sentinel-2 product in SAFE format." help="No description provided!" type="text"/>
+				<param name="product_url" label="product_url" help="No description provided!" type="text"/>
 				<param name="s3_access_key" label="s3_access_key" help="No description provided!" type="text"/>
 				<param name="s3_secret_key" label="s3_secret_key" help="No description provided!" type="text"/>
-				<param name="resolution_Array_text" label="resolution" help="Please provide comma-seperated values of type texthere." type="text"/>
+				<param name="resolution_Array_text" label="resolution" help="Please provide comma-seperated values of type text here." type="text"/>
 				<param name="band" label="band" help="No description provided!" type="select">
 					<option value="B01">B01</option>
 					<option value="B02">B02</option>
@@ -79,10 +78,10 @@
 					<option value="TCI">TCI</option>
 					<option value="WVP">WVP</option>
 				</param>
-				<param name="debug_Array_boolean" label="debug" help="Please provide comma-seperated values of type booleanhere." type="text"/>
+				<param name="debug_Array_boolean" label="debug" help="Please provide comma-seperated values of type boolean here." type="text"/>
 			</when>
 			<when value="download-band-sentinel2-stac-item">
-				<param name="product-url" label="HTTPS URL to a Sentinel-2 product in STAC Item format." help="No description provided!" type="text"/>
+				<param name="product-url" label="product-url" help="No description provided!" type="text"/>
 				<param name="band" label="band" help="No description provided!" type="select">
 					<option value="B01">B01</option>
 					<option value="B02">B02</option>
@@ -108,17 +107,17 @@
 					<option value="Value2">Value2</option>
 					<option value="Value3">Value3</option>
 				</param>
-				<param name="measureInput" label="Numerical Value with UOM Example" help="This is an example of a NUMERIC literal with an associated unit of measure." type="data"/>
-				<param name="dateInput" label="Date Literal Input Example" help="This is an example of a DATE literal input." type="text"/>
-				<param name="doubleInput" label="Bounded Double Literal Input Example" help="This is an example of a DOUBLE literal input that is bounded between
+				<param name="measureInput" label="measureInput" help="This is an example of a NUMERIC literal with an associated unit of measure." type="data"/>
+				<param name="dateInput" label="dateInput" help="This is an example of a DATE literal input." type="text"/>
+				<param name="doubleInput" label="doubleInput" help="This is an example of a DOUBLE literal input that is bounded between
 a value greater than 0 and 10.  The default value is 5.
 " type="float"/>
-				<param name="arrayInput_Array_integer" label="Array Input Example" help="Please provide comma-seperated values of type integerhere." type="text"/>
-				<param name="complexObjectInput" label="Complex Object Input Example" help="This is an example of a complex object input." type="text"/>
-				<param name="geometryInput" label="Geometry input" help="This is an example of a geometry input.
+				<param name="arrayInput_Array_integer" label="arrayInput" help="Please provide comma-seperated values of type integer here." type="text"/>
+				<param name="complexObjectInput" label="complexObjectInput" help="This is an example of a complex object input." type="text"/>
+				<param name="geometryInput" label="geometryInput" help="This is an example of a geometry input.
 In this case the geometry can be expressed as a GML of GeoJSON geometry.
 " type="text"/>
-				<param name="boundingBoxInput" label="Bounding Box Input Example" help="This is an example of an image input.
+				<param name="boundingBoxInput" label="boundingBoxInput" help="This is an example of an image input.
 In this case, the input is an array of up to 150 images that might,
 for example, be a set of tiles.  The oneOf[] conditional is used to
 indicate the acceptable image content types; GeoTIFF and JPEG 2000 in
@@ -128,7 +127,7 @@ the link.yaml schema.  The use of a base64-encoded string is implied by
 the specification and does not need to be specified in the definition 
 of the input.
 " type="data"/>
-				<param name="imagesInput" label="Inline Images Value Input" help="This is an example of an image input.  In this case, the input is
+				<param name="imagesInput" label="imagesInput" help="This is an example of an image input.  In this case, the input is
 an array of up to 150 images that might, for example, be a set of tiles.  The
 oneOf[] conditional is used to indicate the acceptable image content types;
 GeoTIFF and JPEG 2000 in this case.  Each input image in the input array can
@@ -136,8 +135,8 @@ be included inline in the execute request as a base64-encoded string or referenc
 using the link.yaml schema.  The use of a base64-encoded string is implied by
 the specification and does not need to be specified in the definition of the
 input.
-" type="data"/>
-				<param name="featureCollectionInput" label="Feature Collection Input Example" help="This is an example of an input that is a feature collection that
+" type="data" format="txt"/>
+				<param name="featureCollectionInput" label="featureCollectionInput" help="This is an example of an input that is a feature collection that
 can be encoded in one of three ways. As a GeoJSON feature collection, 
 as a GML feature collection retrieved from a WFS or as a KML document.
 " type="text"/>
@@ -157,25 +156,25 @@ as a GML feature collection retrieved from a WFS or as a KML document.
 				<param name="index" label="index" help="Index of the MetaLink file to extract. This index is 1-based." type="integer"/>
 			</when>
 			<when value="ogc-tb16-land-cover-mapping">
-				<param name="raster_file" label="Raster file" help="Input raster onto which to run object classification. Either a Sentinel-2 SAFE ZIP or a RBG-NIR GeoTiff." type="data"/>
-				<param name="raster_bands_Array_integer" label="raster_bands" help="Please provide comma-seperated values of type integerhere." type="text"/>
-				<param name="raster_mean_Array_float" label="raster_mean" help="Please provide comma-seperated values of type floathere." type="text"/>
-				<param name="raster_std_Array_float" label="raster_std" help="Please provide comma-seperated values of type floathere." type="text"/>
-				<param name="patch_size_Array_integer" label="patch_size" help="Please provide comma-seperated values of type integerhere." type="text"/>
-				<param name="batch_size_Array_integer" label="batch_size" help="Please provide comma-seperated values of type integerhere." type="text"/>
-				<param name="device_Array_text" label="device" help="Please provide comma-seperated values of type texthere." type="text"/>
+				<param name="raster_file" label="raster_file" help="Input raster onto which to run object classification. Either a Sentinel-2 SAFE ZIP or a RBG-NIR GeoTiff." type="data" format="txt"/>
+				<param name="raster_bands_Array_integer" label="raster_bands" help="Please provide comma-seperated values of type integer here." type="text"/>
+				<param name="raster_mean_Array_float" label="raster_mean" help="Please provide comma-seperated values of type float here." type="text"/>
+				<param name="raster_std_Array_float" label="raster_std" help="Please provide comma-seperated values of type float here." type="text"/>
+				<param name="patch_size_Array_integer" label="patch_size" help="Please provide comma-seperated values of type integer here." type="text"/>
+				<param name="batch_size_Array_integer" label="batch_size" help="Please provide comma-seperated values of type integer here." type="text"/>
+				<param name="device_Array_text" label="device" help="Please provide comma-seperated values of type text here." type="text"/>
 			</when>
 			<when value="select-products-sentinel2">
 				<param name="date" label="date" help="No description provided!" type="text"/>
-				<param name="delta_Array_integer" label="delta" help="Please provide comma-seperated values of type integerhere." type="text"/>
-				<param name="aoi" label="Polygon defining the area of interest." help="No description provided!" type="data"/>
+				<param name="delta_Array_integer" label="delta" help="Please provide comma-seperated values of type integer here." type="text"/>
+				<param name="aoi" label="aoi" help="No description provided!" type="data" format="txt"/>
 				<param name="collection" label="collection" help="No description provided!" type="text"/>
-				<param name="product_level_Array_text" label="product_level" help="Please provide comma-seperated values of type texthere." type="text"/>
+				<param name="product_level_Array_text" label="product_level" help="Please provide comma-seperated values of type text here." type="text"/>
 				<param name="catalog" label="catalog" help="No description provided!" type="select">
 					<option value="copernicus">copernicus</option>
 					<option value="earth-search">earth-search</option>
 				</param>
-				<param name="cloud_cover_Array_float" label="cloud_cover" help="Please provide comma-seperated values of type floathere." type="text"/>
+				<param name="cloud_cover_Array_float" label="cloud_cover" help="Please provide comma-seperated values of type float here." type="text"/>
 			</when>
 		</conditional>
 	</inputs>
