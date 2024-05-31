@@ -87,7 +87,15 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     tool.set('id', configJSON["id"])
     tool.set('name', configJSON["title"])
     tool.set('version', configJSON["version"])
-    tool.set('description', configJSON["description"])
+
+    #add description
+    description = ET.Element("description")
+    description.text = configJSON["description"]
+    tool.append(description)
+    
+    #add help
+    help = ET.Element("help")
+    help.text = configJSON["help"]
 
     #add macro
     macros = ET.Element("macros")
@@ -132,10 +140,10 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
 
             #Set help text for tool
             if conformance:
-                tool.set('description', configJSON["help"])
+                help.text = configJSON["help"]
             else:
                 #If API might not be complient with OGC processes API add notification to help text
-                tool.set('description', configJSON["help"] + " Take note that the service provided by this does not implement all nesseracy OGC API Processes conformance classes and might thus not behave as expected!")
+                help.text = configJSON["help"] + " Take note that the service provided by this does not implement all nesseracy OGC API Processes conformance classes and might thus not behave as expected!"
 
         #Create process selectors
         conditional_process = ET.Element("conditional")
@@ -322,10 +330,12 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
     tests.set("macro", "tests")
     tool.append(tests)
 
-    #add help
-    help = ET.Element("expand")
-    help.set("macro", "help")
     tool.append(help)
+
+    #add help
+    #help = ET.Element("expand")
+    #help.set("macro", "help")
+    #tool.append(help)
 
     #add citation
     citations = ET.Element("expand")

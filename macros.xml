@@ -26,9 +26,6 @@
             <citation type="doi">10.48550/arXiv.1403.2805</citation>
         </citations>
     </xml>
-    <xml name="help">
-        <help>This tool is a wrapper for OGC API Processes coming from the Zoo Project (https://zoo-project.github.io/docs/intro.html) and was created using the OGC-API-Process2Galaxy tool (https://github.com/AquaINFRA/OGC-API-Process2Galaxy). Check the README in the repository for more information.</help>
-    </xml>
     <xml name="tests">
         <tests>
             <test>
