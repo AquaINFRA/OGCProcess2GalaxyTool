@@ -16,7 +16,7 @@ typeMapping = {
 }
 
 #Recognized media types
-mediaTypes = ["image/tiff", "image/jpeg", "image/png"]
+mediaTypes = ["image/tiff", "image/jpeg", "image/png", "text/xml", "text/plain", "application/octet-stream"]
 
 #Conformance classes 
 confClasses = [
@@ -206,11 +206,13 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                                 process_input.set("label", param)
 
                             #check if param is optional
-                            if "nullable" in process["inputs"][param]["schema"].keys():
+                            if "nullable" in process["inputs"][param]["schema"].keys():    
                                 if process["inputs"][param]["schema"]["nullable"]:
                                     process_input.set("optional", "true")
-                                else:
-                                    process_input.set("optional", "false")
+                            else:
+                                process_input.set("optional", "false")
+                                if "type" in process["inputs"][param]["schema"]:
+                                    process_input.set("value", "")
 
                             #set default
                             if "default" in process["inputs"][param]["schema"].keys():
