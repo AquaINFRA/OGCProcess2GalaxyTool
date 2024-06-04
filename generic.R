@@ -27,6 +27,7 @@ getOutputs <- function(inputs, output, server) {
     response <- req_perform(request)
     responseBody <- parseResponseBody(response$body)
     outputs <- list()
+
     for (x in 1:length(responseBody$outputs)) {
         outputformatName <- paste(names(responseBody$outputs[x]), "_outformat", sep="")
         output_item <- list()

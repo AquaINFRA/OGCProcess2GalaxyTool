@@ -264,7 +264,12 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                                                 process_input.set("name", param +  "_Array_" + typeMapping[schema["items"]["type"]])
                                                 process_input.set("type", "text")
                                                 process_input.set("help", "Please provide comma-seperated values of type " + typeMapping[schema["items"]["type"]] + " here.")
-
+                                            elif 'oneOf' in schema["items"].keys():
+                                                for i in schema["items"]["oneOf"]:
+                                                    if 'type' in i.keys():
+                                                        if i["type"] == "object":
+                                                            process_input.set("type", "data")
+                                                            process_input.set("format", "txt")
                             when_process.append(process_input)
                         
                         #Add inputs to command information for process
