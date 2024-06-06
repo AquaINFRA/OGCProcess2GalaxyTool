@@ -1,4 +1,3 @@
-library("httr")
 library("httr2")
 library("jsonlite")
 library("getopt")
@@ -12,8 +11,7 @@ getParameters <- function(){
 
     json_string <- paste(lines, collapse = "\n")
     json_data <- fromJSON(json_string)
-    formatted_json_string <- toJSON(json_data$conditional_process, pretty = TRUE, auto_unbox = TRUE)
-    return(formatted_json_string)
+    return(json_data$conditional_process)
 }
 
 parseResponseBody <- function(body) {
@@ -50,108 +48,106 @@ getOutputs <- function(inputs, output, server) {
     return(outputs)
 }
 
-executeProcess <- function(url, process, requestBodyData) {
-    headers <- c(
-      'Content-Type' = 'application/json',
-      'Accept' = 'application/json',
-      'Cookie' = 'auth_tkt=d0de6b097d97e29afbff7cf76d0d80abc14775e35802fe0d7d725fb70b1e140a7647627d76548f90f459740568c44377e3aada77801cde806b59a94b7005d0446660526823!userid_type:int'
-    )
-    #cat("reqBody coming \n")
-    #print(requestBodyData)
-    body <- toString(requestBodyData$inputs)
-    print(fromJSON(requestBodyData$inputs))
+executeProcess <- function(url, process, requestBodyData, cookie) {
+    url <- paste(paste(paste(url, "processes/", sep = ""), process, sep = ""), "/execution", sep = "")
+    requestBodyData$inputs$cookie <- NULL
+    requestBodyData$inputs$select_process <- NULL
 
-    #print(body)
-    res <- VERB("POST", url = "https://hirondelle.crim.ca/weaver/processes/download-band-sentinel2-product-safe/execution", body = body, add_headers(headers))
-
-    #cat(content(res, 'text'))
-    parsed_response <- fromJSON(content(res, 'text'))
-    #print(parsed_response$jobID)
+    body <- list()
+    body$inputs <- requestBodyData$inputs
+    body$mode <- "async"
+    body$response <- "document"
     
+    response <- request(url) %>%
+      req_headers(
+        "Accept" = "application/json",
+        "Content-Type" = "application/json",
+        "Cookie" = cookie
+      ) %>%
+      req_body_json(body) %>%
+      req_perform()
+
     cat("\n Process executed")
-    #print(res)
-    #cat("\n status: ", response$status_code)
-    #cat("\n jobID: ", parseResponseBody(response$body)$jobID, "\n")
+    cat("\n status: ", response$status_code)
+    cat("\n jobID: ", parseResponseBody(response$body)$jobID, "\n")
 
-    #jobID <- parseResponseBody(response$body)$jobID
+    jobID <- parseResponseBody(response$body)$jobID
 
-    return(parsed_response$jobID)
+    return(jobID)
 }
 
-checkJobStatus <- function(server, jobID) {
-  response <- request(paste0(server, "jobs/", jobID)) %>%
+checkJobStatus <- function(server, process, jobID, cookie) {
+  url <- paste0(server, "processes/", process, "/jobs/", jobID)
+  response <- request(url) %>%
     req_headers(
-        'accept' = 'application/json'
+      "Cookie" = cookie
     ) %>%
     req_perform()
   jobStatus <- parseResponseBody(response$body)$status
   jobProgress <- parseResponseBody(response$body)$progress
-  cat(paste0("\n status: ", jobStatus, ", progress: ", jobProgress))
   return(jobStatus)
 }
 
-getStatusCode <- function(server, jobID) {
-  url <- paste0(server, "jobs/", jobID)
-  headers = c(
-    'Cookie' = 'auth_tkt=d0de6b097d97e29afbff7cf76d0d80abc14775e35802fe0d7d725fb70b1e140a7647627d76548f90f459740568c44377e3aada77801cde806b59a94b7005d0446660526823!userid_type:int'
-  )
-
-  res <- VERB("GET", url = "https://hirondelle.crim.ca/weaver/processes/download-band-sentinel2-product-safe/jobs/dfc7b790-d9e4-48a8-9cfe-aacb2d0799e6", add_headers(headers))
-  cat(res$status_code)
-  parsed_response <- fromJSON(content(res, 'text'))
-  #print(parsed_response)
-  #der status code ist in der res aber nicht in der parsed response
-  return(parsed_response$status)
+getStatusCode <- function(server, process, jobID, cookie) {
+  url <- paste0(server, "processes/", process, "/jobs/", jobID)
+  response <- request(url) %>%
+    req_headers(
+      "Cookie" = cookie
+    ) %>%
+    req_perform()
+  status_code <- response$status_code
+  return(status_code)
 }
 
-getResult <- function (server, jobID) {
-  headers = c(
-    'Cookie' = 'auth_tkt=d0de6b097d97e29afbff7cf76d0d80abc14775e35802fe0d7d725fb70b1e140a7647627d76548f90f459740568c44377e3aada77801cde806b59a94b7005d0446660526823!userid_type:int'
-  )
-
-  res <- VERB("GET", url = "https://hirondelle.crim.ca/weaver/processes/download-band-sentinel2-product-safe/jobs/dfc7b790-d9e4-48a8-9cfe-aacb2d0799e6/results", add_headers(headers))
-
-  parsed_response <- fromJSON(content(res, 'text'))
-  #print(parsed_response)
-  return(parsed_response)
+getResult <- function (server, process, jobID, cookie) {
+  response <- request(paste0(server, "processes/", process, "/jobs/", jobID, "/results")) %>%
+    req_headers(
+      "Cookie" = cookie
+    ) %>%
+    req_perform()
+  return(response)
 }
 
-retrieveResults <- function(server, jobID, outputData) {
-    status <- getStatusCode(server, jobID)
-    cat("tstauscode start")
-    cat(status)
-    status <- "running"
-    #cat(status)
-    while(status == "running"){
-        jobStatus <- getStatusCode(server, jobID)
-        cat("jobstatus start")
-        cat(jobStatus)
-        cat("jobstatus end")
-        if (jobStatus == "succeeded") {
-            status <- jobStatus
-            result <- getResult(server, jobID)
-            #if (result$status_code == 200) {
-            resultBody <- result
-            urls <- unname(unlist(lapply(resultBody, function(x) x$href)))
-            urls_with_newline <- paste(urls, collapse = "\n")
-            con <- file(outputData, "w")
-            writeLines(urls_with_newline, con = con)
-            close(con)
-            #}
-        } else if (jobStatus == "failed") {
-          status <- jobStatus
+retrieveResults <- function(server, process, jobID, outputData, cookie) {
+    status_code <- getStatusCode(server, process, jobID, cookie)
+    if(status_code == 200){
+        status <- "running"
+        while(status == "running"){
+            jobStatus <- checkJobStatus(server, process, jobID, cookie)
+            print(jobStatus)
+            if (jobStatus == "succeeded") {
+                status <- jobStatus
+                result <- getResult(server, process, jobID, cookie)
+                if (result$status_code == 200) {
+                  resultBody <- parseResponseBody(result$body)
+                  urls <- unname(unlist(lapply(resultBody, function(x) x$href)))
+                  urls_with_newline <- paste(urls, collapse = "\n")
+                  con <- file(outputData, "w")
+                  writeLines(urls_with_newline, con = con)
+                  close(con)
+                }
+            } else if (jobStatus == "failed") {
+              status <- jobStatus
+            }
+        Sys.sleep(3)
         }
-    Sys.sleep(3)
+        cat("\n done \n")
+    } else if (status_code1 == 400) {
+      print("A query parameter has an invalid value.")
+    } else if (status_code1 == 404) {
+      print("The requested URI was not found.")
+    } else if (status_code1 == 500) {
+      print("The requested URI was not found.")
+    } else {
+      print(paste("HTTP", status_code1, "Error:", resp1$status_message))
     }
-    cat("\n done \n")
 }
 
 is_url <- function(x) {
   grepl("^https?://", x)
 }
 
-server <- "https://hirondelle.crim.ca/weaver/" #ogc-tb-16
-#server <- "https://ospd.geolabs.fr:8300/ogc-api/" #aqua-infra
+server <- "https://hirondelle.crim.ca/weaver/"
 
 print("--> Retrieve parameters")
 inputParameters <- getParameters()
@@ -161,13 +157,12 @@ args <- commandArgs(trailingOnly = TRUE)
 outputLocation <- args[2]
 
 print("--> Retrieve outputs")
-#outputs <- getOutputs(inputParameters, outputLocation, server)
+outputs <- getOutputs(inputParameters, outputLocation, server)
 print("--> Outputs retrieved")
 
 print("--> Parse inputs")
 convertedKeys <- c()
 for (key in names(inputParameters)) {
-  #print(inputParameters[[key]])
   if (is.character(inputParameters[[key]]) && (endsWith(inputParameters[[key]], ".dat") || endsWith(inputParameters[[key]], ".txt"))) { 
     con <- file(inputParameters[[key]], "r")
     url_list <- list()
@@ -206,7 +201,6 @@ for (key in names(inputParameters)) {
       convertedKey <- paste(convertedKey, paste(part, "_", sep=""), sep="")
     }
     convertedKey <- substr(convertedKey, 1, nchar(convertedKey)-1)
-    #print(paste("--> converted key:", convertedKey))
 }
 
     inputParameters[[key]] <- convertedValues
@@ -215,22 +209,22 @@ for (key in names(inputParameters)) {
     convertedKeys <- append(convertedKeys, key)
   }
 }
-print(convertedKeys)
+
 names(inputParameters) <- convertedKeys
 print("--> Inputs parsed")
 
 print("--> Prepare process execution")
 jsonData <- list(
-  "inputs" = getParameters()
-#  "outputs" = outputs
+  "inputs" = inputParameters,
+  "outputs" = outputs
 )
 
-#print(jsonData$inputs$inputs)
+cookie <- inputParameters$cookie
 
 print("--> Execute process")
-jobID <- executeProcess(server, inputParameters$select_process, jsonData)
+jobID <- executeProcess(server, inputParameters$select_process, jsonData, cookie)
 print("--> Process executed")
 
 print("--> Retrieve results")
-retrieveResults(server, jobID, outputLocation)
+retrieveResults(server, inputParameters$select_process, jobID, outputLocation, cookie)
 print("--> Results retrieved")
