@@ -189,9 +189,26 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                         
                         #inputs for commands 
                         inputCommand = []
+                        
+                        #check login
+                        if "login" in api.keys():
+                            if "type" in api["login"].keys():
+                                if api["login"]["type"] == "cookie":
+                                    inputCommand.append("cookie")
+                                    process_input = ET.Element("param")
+                                    process_input.set("name", "cookie") 
+                                    process_input.set("label", "Cookie")
+                                    process_input.set("optional", "false")
+                                    process_input.set("help", "Provider login information")
+                                    process_input.set("type", "text")
+                                    when_process.append(process_input)
 
                         #iterate over process params
                         for param in process["inputs"]:
+                            #check if param is excluded
+                            if param in api["excluded_inputs"]:
+                                continue
+
                             inputCommand.append(param)
                             process_input = ET.Element("param")
 

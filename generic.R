@@ -219,7 +219,11 @@ jsonData <- list(
   "outputs" = outputs
 )
 
-cookie <- inputParameters$cookie
+if ("cookie" %in% names(inputParameters) {
+  cookie <- inputParameters$cookie
+} else {
+  cookie <- ""
+}
 
 print("--> Execute process")
 jobID <- executeProcess(server, inputParameters$select_process, jsonData, cookie)

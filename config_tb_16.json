@@ -4,7 +4,11 @@
             "server_url": "https://hirondelle.crim.ca/weaver/",
             "included_services": ["*"],
             "filter": "",
-            "excluded_services": []
+            "excluded_services": [],
+            "excluded_inputs": ["s3_access_key", "s3_secret_key"],
+            "login": {
+                "type": "cookie"
+            }
         }
     ],
     "id":"hirondelle_crim",
