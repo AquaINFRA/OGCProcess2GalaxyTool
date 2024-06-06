@@ -1,0 +1,11 @@
+{
+    "mode": "async",
+    "response": "document",
+    "inputs": {
+        "band": "B04",
+        "product_url": "s3:///eodata/Sentinel-2/MSI/L2A/2019/07/01/S2A_MSIL2A_20190701T110621_N0212_R137_T29SPC_20190701T120906.SAFE",
+        "resolution": "10m",
+        "s3_access_key": "6SV9N3GPQOO2YBSOXPNV",
+        "s3_secret_key": "teLdv3hHLK8o2cqs6ZaBK8QPiIKxfMY0l39snkcS"
+    }
+}

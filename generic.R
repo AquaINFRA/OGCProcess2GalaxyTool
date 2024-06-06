@@ -1,3 +1,4 @@
+library("httr")
 library("httr2")
 library("jsonlite")
 library("getopt")
@@ -6,10 +7,13 @@ cat("start generic wrapper service \n")
 
 getParameters <- function(){
     con <- file("inputs.json", "r")
-    line <- readLines(con, n = 1)
-    json <- fromJSON(line)
+    lines <- readLines(con)
     close(con)
-    return(json$conditional_process)
+
+    json_string <- paste(lines, collapse = "\n")
+    json_data <- fromJSON(json_string)
+    formatted_json_string <- toJSON(json_data$conditional_process, pretty = TRUE, auto_unbox = TRUE)
+    return(formatted_json_string)
 }
 
 parseResponseBody <- function(body) {
@@ -46,24 +50,32 @@ getOutputs <- function(inputs, output, server) {
     return(outputs)
 }
 
-executeProcess <- function(url, process, requestBodyData, output) {
-    url <- paste(paste(paste(url, "processes/", sep = ""), process, sep = ""), "/execution", sep = "")
-    response <- request(url) %>%
-    req_headers(
-      "accept" = "/*",
-      "Prefer" = "respond-async;return=representation",
-      "Content-Type" = "application/json"
-    ) %>%
-    req_body_json(requestBodyData) %>%
-    req_perform()
+executeProcess <- function(url, process, requestBodyData) {
+    headers <- c(
+      'Content-Type' = 'application/json',
+      'Accept' = 'application/json',
+      'Cookie' = 'auth_tkt=d0de6b097d97e29afbff7cf76d0d80abc14775e35802fe0d7d725fb70b1e140a7647627d76548f90f459740568c44377e3aada77801cde806b59a94b7005d0446660526823!userid_type:int'
+    )
+    #cat("reqBody coming \n")
+    #print(requestBodyData)
+    body <- toString(requestBodyData$inputs)
+    print(fromJSON(requestBodyData$inputs))
 
+    #print(body)
+    res <- VERB("POST", url = "https://hirondelle.crim.ca/weaver/processes/download-band-sentinel2-product-safe/execution", body = body, add_headers(headers))
+
+    #cat(content(res, 'text'))
+    parsed_response <- fromJSON(content(res, 'text'))
+    #print(parsed_response$jobID)
+    
     cat("\n Process executed")
-    cat("\n status: ", response$status_code)
-    cat("\n jobID: ", parseResponseBody(response$body)$jobID, "\n")
+    #print(res)
+    #cat("\n status: ", response$status_code)
+    #cat("\n jobID: ", parseResponseBody(response$body)$jobID, "\n")
 
-    jobID <- parseResponseBody(response$body)$jobID
+    #jobID <- parseResponseBody(response$body)$jobID
 
-    return(jobID)
+    return(parsed_response$jobID)
 }
 
 checkJobStatus <- function(server, jobID) {
@@ -80,56 +92,58 @@ checkJobStatus <- function(server, jobID) {
 
 getStatusCode <- function(server, jobID) {
   url <- paste0(server, "jobs/", jobID)
-  response <- request(url) %>%
-      req_headers(
-        'accept' = 'application/json'
-      ) %>%
-      req_perform()
-  return(response$status_code)
+  headers = c(
+    'Cookie' = 'auth_tkt=d0de6b097d97e29afbff7cf76d0d80abc14775e35802fe0d7d725fb70b1e140a7647627d76548f90f459740568c44377e3aada77801cde806b59a94b7005d0446660526823!userid_type:int'
+  )
+
+  res <- VERB("GET", url = "https://hirondelle.crim.ca/weaver/processes/download-band-sentinel2-product-safe/jobs/dfc7b790-d9e4-48a8-9cfe-aacb2d0799e6", add_headers(headers))
+  cat(res$status_code)
+  parsed_response <- fromJSON(content(res, 'text'))
+  #print(parsed_response)
+  #der status code ist in der res aber nicht in der parsed response
+  return(parsed_response$status)
 }
 
 getResult <- function (server, jobID) {
-  response <- request(paste0(server, "jobs/", jobID, "/results")) %>%
-    req_headers(
-      'accept' = 'application/json'
-    ) %>%
-    req_perform()
-  return(response)
+  headers = c(
+    'Cookie' = 'auth_tkt=d0de6b097d97e29afbff7cf76d0d80abc14775e35802fe0d7d725fb70b1e140a7647627d76548f90f459740568c44377e3aada77801cde806b59a94b7005d0446660526823!userid_type:int'
+  )
+
+  res <- VERB("GET", url = "https://hirondelle.crim.ca/weaver/processes/download-band-sentinel2-product-safe/jobs/dfc7b790-d9e4-48a8-9cfe-aacb2d0799e6/results", add_headers(headers))
+
+  parsed_response <- fromJSON(content(res, 'text'))
+  #print(parsed_response)
+  return(parsed_response)
 }
 
 retrieveResults <- function(server, jobID, outputData) {
-    status_code <- getStatusCode(server, jobID)
-    if(status_code == 200){
-        status <- "running"
-        cat(status)
-        while(status == "running"){
-            jobStatus <- checkJobStatus(server, jobID)
-            if (jobStatus == "successful") {
-                status <- jobStatus
-                result <- getResult(server, jobID)
-                if (result$status_code == 200) {
-                  resultBody <- parseResponseBody(result$body)
-                  urls <- unname(unlist(lapply(resultBody, function(x) x$href)))
-                  urls_with_newline <- paste(urls, collapse = "\n")
-                  con <- file(outputData, "w")
-                  writeLines(urls_with_newline, con = con)
-                  close(con)
-                }
-            } else if (jobStatus == "failed") {
-              status <- jobStatus
-            }
-        Sys.sleep(3)
+    status <- getStatusCode(server, jobID)
+    cat("tstauscode start")
+    cat(status)
+    status <- "running"
+    #cat(status)
+    while(status == "running"){
+        jobStatus <- getStatusCode(server, jobID)
+        cat("jobstatus start")
+        cat(jobStatus)
+        cat("jobstatus end")
+        if (jobStatus == "succeeded") {
+            status <- jobStatus
+            result <- getResult(server, jobID)
+            #if (result$status_code == 200) {
+            resultBody <- result
+            urls <- unname(unlist(lapply(resultBody, function(x) x$href)))
+            urls_with_newline <- paste(urls, collapse = "\n")
+            con <- file(outputData, "w")
+            writeLines(urls_with_newline, con = con)
+            close(con)
+            #}
+        } else if (jobStatus == "failed") {
+          status <- jobStatus
         }
-        cat("\n done \n")
-    } else if (status_code1 == 400) {
-    print("A query parameter has an invalid value.")
-  } else if (status_code1 == 404) {
-    print("The requested URI was not found.")
-  } else if (status_code1 == 500) {
-    print("The requested URI was not found.")
-  } else {
-    print(paste("HTTP", status_code1, "Error:", resp1$status_message))
-  }
+    Sys.sleep(3)
+    }
+    cat("\n done \n")
 }
 
 is_url <- function(x) {
@@ -147,7 +161,7 @@ args <- commandArgs(trailingOnly = TRUE)
 outputLocation <- args[2]
 
 print("--> Retrieve outputs")
-outputs <- getOutputs(inputParameters, outputLocation, server)
+#outputs <- getOutputs(inputParameters, outputLocation, server)
 print("--> Outputs retrieved")
 
 print("--> Parse inputs")
@@ -207,12 +221,14 @@ print("--> Inputs parsed")
 
 print("--> Prepare process execution")
 jsonData <- list(
-  "inputs" = inputParameters,
-  "outputs" = outputs
+  "inputs" = getParameters()
+#  "outputs" = outputs
 )
 
+#print(jsonData$inputs$inputs)
+
 print("--> Execute process")
-jobID <- executeProcess(server, inputParameters$select_process, jsonData, outputLocation)
+jobID <- executeProcess(server, inputParameters$select_process, jsonData)
 print("--> Process executed")
 
 print("--> Retrieve results")
