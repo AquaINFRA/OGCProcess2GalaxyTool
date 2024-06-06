@@ -50,7 +50,10 @@ getOutputs <- function(inputs, output, server) {
 
 executeProcess <- function(url, process, requestBodyData, cookie) {
     url <- paste(paste(paste(url, "processes/", sep = ""), process, sep = ""), "/execution", sep = "")
-    requestBodyData$inputs$cookie <- NULL
+    if(cookie != "") {
+      requestBodyData$inputs$cookie <- NULL
+    }
+    
     requestBodyData$inputs$select_process <- NULL
 
     body <- list()
