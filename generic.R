@@ -56,7 +56,7 @@ executeProcess <- function(url, process, requestBodyData, output) {
     ) %>%
     req_body_json(requestBodyData) %>%
     req_perform()
-
+    print(parseResponseBody(response$body))
     cat("\n Process executed")
     cat("\n status: ", response$status_code)
     cat("\n jobID: ", parseResponseBody(response$body)$jobID, "\n")
@@ -69,7 +69,7 @@ executeProcess <- function(url, process, requestBodyData, output) {
 checkJobStatus <- function(server, jobID) {
   response <- request(paste0(server, "jobs/", jobID)) %>%
     req_headers(
-        'accept' = 'application/json'
+        'accept' = 'application/json',
     ) %>%
     req_perform()
   jobStatus <- parseResponseBody(response$body)$status
@@ -82,7 +82,8 @@ getStatusCode <- function(server, jobID) {
   url <- paste0(server, "jobs/", jobID)
   response <- request(url) %>%
       req_headers(
-        'accept' = 'application/json'
+        'accept' = 'application/json',
+        'Content-Type' = 'application/json'
       ) %>%
       req_perform()
   return(response$status_code)
@@ -91,7 +92,8 @@ getStatusCode <- function(server, jobID) {
 getResult <- function (server, jobID) {
   response <- request(paste0(server, "jobs/", jobID, "/results")) %>%
     req_headers(
-      'accept' = 'application/json'
+      'accept' = 'application/json',
+      'Content-Type' = 'application/json'
     ) %>%
     req_perform()
   return(response)
@@ -104,6 +106,7 @@ retrieveResults <- function(server, jobID, outputData) {
         cat(status)
         while(status == "running"){
             jobStatus <- checkJobStatus(server, jobID)
+            print(jobStatus)
             if (jobStatus == "successful") {
                 status <- jobStatus
                 result <- getResult(server, jobID)
@@ -136,7 +139,8 @@ is_url <- function(x) {
   grepl("^https?://", x)
 }
 
-server <- "https://hirondelle.crim.ca/weaver/" #ogc-tb-16
+server <- "https://aqua.igb-berlin.de/pygeoapi/"
+#server <- "https://hirondelle.crim.ca/weaver/" #ogc-tb-16
 #server <- "https://ospd.geolabs.fr:8300/ogc-api/" #aqua-infra
 
 print("--> Retrieve parameters")

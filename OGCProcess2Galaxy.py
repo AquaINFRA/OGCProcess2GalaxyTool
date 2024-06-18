@@ -12,7 +12,8 @@ typeMapping = {
   "integer": "integer",
   "number": "float",
   "object": "data",
-  "string": "text"
+  "string": "text",
+  "json": "text"
 }
 
 #Recognized media types
@@ -122,28 +123,29 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
         index_i += 1
 
         #check conformance
-        with urllib.request.urlopen(api["server_url"] + "conformance") as conformanceURL:
-            #Retrieve conformance data
-            conformanceData = json.load(conformanceURL)
+        headers = {'Content-Type': 'application/json'}
+
+        req = urllib.request.Request(api["server_url"] + "conformance", headers=headers)
+        conformanceData = json.loads(urllib.request.urlopen(req).read())
             
-            #Set conformance to True
-            conformance = True
+        #Set conformance to True
+        conformance = True
 
-            #Iterate over conformance classes
-            for confClass in confClasses:
-                #Ceck if conformance class is implemented
-                if confClass not in conformanceData["conformsTo"]:
-                    #Create warnning and set conformance to False if certain conformance class is not implemented
-                    msg = "Specified API available via:" + api["server_url"] + " does not conform to " + confClass + ". This may lead to issues when converting its processes to Galaxy tools."
-                    warnings.warn(msg, Warning)
-                    conformance = False               
+        #Iterate over conformance classes
+        for confClass in confClasses:
+            #Ceck if conformance class is implemented
+            if confClass not in conformanceData["conformsTo"]:
+                #Create warnning and set conformance to False if certain conformance class is not implemented
+                msg = "Specified API available via:" + api["server_url"] + " does not conform to " + confClass + ". This may lead to issues when converting its processes to Galaxy tools."
+                warnings.warn(msg, Warning)
+                conformance = False               
 
-            #Set help text for tool
-            if conformance:
-                help.text = configJSON["help"]
-            else:
-                #If API might not be complient with OGC processes API add notification to help text
-                help.text = configJSON["help"] + " Take note that the service provided by this does not implement all nesseracy OGC API Processes conformance classes and might thus not behave as expected!"
+        #Set help text for tool
+        if conformance:
+            help.text = configJSON["help"]
+        else:
+            #If API might not be complient with OGC processes API add notification to help text
+            help.text = configJSON["help"] + " Take note that the service provided by this does not implement all nesseracy OGC API Processes conformance classes and might thus not behave as expected!"
 
         #Create process selectors
         conditional_process = ET.Element("conditional")

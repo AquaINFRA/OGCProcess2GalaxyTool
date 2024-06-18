@@ -1,0 +1,15 @@
+{
+    "servers":[
+        {
+            "server_url": "https://aqua.igb-berlin.de/pygeoapi/",
+            "included_services": ["*"],
+            "filter": "",
+            "excluded_services": []
+        }
+    ],
+    "id":"igb_berlin",
+    "title":"IGB Berlin OGC API Processes",
+    "version":"0.1.0",
+    "description": "",
+    "help": ""
+}
