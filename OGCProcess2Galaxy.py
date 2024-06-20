@@ -231,8 +231,10 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                                 schema = process["inputs"][param]["schema"]
                             
                             #If multiple schemas are possible
-                            if 'oneOf' in schema.keys(): 
+                            if ("oneOf" in schema.keys() and len(process["inputs"][param]["schema"]["oneOf"]) > 0): 
                                 #Use the first one 
+                                print(process["inputs"][param]["schema"]["oneOf"])
+                                print(process["inputs"][param])
                                 schema = process["inputs"][param]["schema"]["oneOf"][0]
                             
                             #Set param type
