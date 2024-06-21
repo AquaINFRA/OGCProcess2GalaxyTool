@@ -1,7 +1,7 @@
 {
     "servers":[
         {
-            "server_url": "https://aqua.igb-berlin.de/pygeoapi/",
+            "server_url": "https://aqua.igb-berlin.de/pygeoapi-dev/",
             "included_services": ["*"],
             "filter": "",
             "excluded_services": []
