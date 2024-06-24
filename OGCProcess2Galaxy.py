@@ -17,7 +17,7 @@ typeMapping = {
 }
 
 #Recognized media types
-mediaTypes = ["image/tiff", "image/jpeg", "image/png", "text/xml", "text/plain", "application/octet-stream"]
+mediaTypes = ["image/tiff", "image/jpeg", "image/png", "text/xml", "text/plain", "application/octet-stream", "application/json"]
 
 #Conformance classes 
 confClasses = [
@@ -161,7 +161,7 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
             
             when_list_processes = []
             #Iterate over processes
-            for process in processesData["processes"]: #only get 50 processes!
+            for process in processesData["processes"][12:13]: #only get 50 processes!
                 
                 #command information for process
                 processCommand = {"server": api["server_url"], "process": process["id"]}
@@ -231,17 +231,17 @@ def OGCAPIProcesses2Galaxy(configFile: str) -> None:
                                 schema = process["inputs"][param]["extended-schema"]
                             else: 
                                 schema = process["inputs"][param]["schema"]
-                            
+                            print(schema.keys())
                             #If multiple schemas are possible
-                            if ("oneOf" in schema.keys() and len(process["inputs"][param]["schema"]["oneOf"]) > 0): 
+                            if ("oneOf" in schema.keys()): 
                                 #Use the first one 
-                                print(process["inputs"][param]["schema"]["oneOf"])
-                                print(process["inputs"][param])
-                                schema = process["inputs"][param]["schema"]["oneOf"][0]
-                            
+                                print("test")
+                                schema = schema["oneOf"][1]["properties"]["value"]["allOf"][0]
+                            print(schema)
                             #Set param type
                             if 'type' in schema.keys(): #simple schema
                                 if schema["type"] in typeMapping.keys():
+                                    print(schema["contentMediaType"])
                                     process_input.set("type", typeMapping[schema["type"]])
                                     if "format" in schema.keys():
                                         if schema["format"] == "binary":

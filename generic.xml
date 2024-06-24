@@ -15,84 +15,10 @@
 	<inputs>
 		<conditional name="conditional_process">
 			<param name="select_process" type="select" label="Select process">
-				<option value="hello-world">hello-world: Hello World</option>
-				<option value="get-upstream-catchment-ids">get-upstream-catchment-ids: Return upstream catchment ids</option>
-				<option value="get-snapped-point">get-snapped-point: Get corrected coordinates: Snapped to nearest stream segment.</option>
-				<option value="get-snapped-point-plus">get-snapped-point-plus: Get corrected coordinates: Snapped to nearest stream segment.</option>
-				<option value="get-subcatchment-id">get-subcatchment-id: Return subcatchment id</option>
-				<option value="get-stream-segment">get-stream-segment: Return a Stream Segment as GeoJSON</option>
-				<option value="get-stream-segment-plus">get-stream-segment-plus: Return a Stream Segment as GeoJSON</option>
-				<option value="get-upstream-stream-segments">get-upstream-stream-segments: Return upstream catchment stream segments as GeoJSON</option>
-				<option value="get-upstream-bbox">get-upstream-bbox: Get Bounding Box of Upstream Catchment</option>
-				<option value="get-upstream-polygons">get-upstream-polygons: Return upstream catchment polygons as GeoJSON</option>
-				<option value="get-upstream-dissolved">get-upstream-dissolved: Get Upstream Catchment as GeoJSON Polygon Feature</option>
-				<option value="get-subset-cog">get-subset-cog: Hello World</option>
-				<option value="get-subset-polygon">get-subset-polygon: Hello World</option>
+				<option value="get-subset-by-polygon">get-subset-by-polygon: Subset by Polygon</option>
 			</param>
-			<when value="hello-world">
-				<param name="name" label="name" optional="false" value="" help="The name of the person or entity that you wish tobe echoed back as an output" type="text"/>
-				<param name="message" label="message" optional="false" value="" help="An optional message to echo as well" type="text"/>
-			</when>
-			<when value="get-upstream-catchment-ids">
-				<param name="lon" label="lon" optional="false" value="" help="Longitude...." type="text"/>
-				<param name="lat" label="lat" optional="false" value="" help="Latitude...." type="text"/>
-				<param name="comment" label="comment" optional="false" value="" help="Arbitrary string that will not be processed but returned, for user's convenience." type="text"/>
-			</when>
-			<when value="get-snapped-point">
-				<param name="lon" label="lon" optional="false" value="" help="Longitude...." type="text"/>
-				<param name="lat" label="lat" optional="false" value="" help="Latitude...." type="text"/>
-				<param name="comment" label="comment" optional="false" value="" help="Arbitrary string that will not be processed but returned, for user's convenience." type="text"/>
-			</when>
-			<when value="get-snapped-point-plus">
-				<param name="lon" label="lon" optional="false" value="" help="Longitude...." type="text"/>
-				<param name="lat" label="lat" optional="false" value="" help="Latitude...." type="text"/>
-				<param name="comment" label="comment" optional="false" value="" help="Arbitrary string that will not be processed but returned, for user's convenience." type="text"/>
-			</when>
-			<when value="get-subcatchment-id">
-				<param name="lon" label="lon" optional="false" value="" help="Longitude...." type="text"/>
-				<param name="lat" label="lat" optional="false" value="" help="Latitude...." type="text"/>
-				<param name="comment" label="comment" optional="false" value="" help="Arbitrary string that will not be processed but returned, for user's convenience." type="text"/>
-			</when>
-			<when value="get-stream-segment">
-				<param name="lon" label="lon" optional="false" value="" help="Longitude...." type="text"/>
-				<param name="lat" label="lat" optional="false" value="" help="Latitude...." type="text"/>
-				<param name="comment" label="comment" optional="false" value="" help="Arbitrary string that will not be processed but returned, for user's convenience." type="text"/>
-			</when>
-			<when value="get-stream-segment-plus">
-				<param name="lon" label="lon" optional="false" value="" help="Longitude...." type="text"/>
-				<param name="lat" label="lat" optional="false" value="" help="Latitude...." type="text"/>
-				<param name="comment" label="comment" optional="false" value="" help="Arbitrary string that will not be processed but returned, for user's convenience." type="text"/>
-			</when>
-			<when value="get-upstream-stream-segments">
-				<param name="lon" label="lon" optional="false" value="" help="Longitude...." type="text"/>
-				<param name="lat" label="lat" optional="false" value="" help="Latitude...." type="text"/>
-				<param name="comment" label="comment" optional="false" value="" help="Arbitrary string that will not be processed but returned, for user's convenience." type="text"/>
-			</when>
-			<when value="get-upstream-bbox">
-				<param name="lon" label="lon" optional="false" value="" help="Longitude...." type="text"/>
-				<param name="lat" label="lat" optional="false" value="" help="Latitude...." type="text"/>
-				<param name="comment" label="comment" optional="false" value="" help="Arbitrary string that will not be processed but returned, for user's convenience." type="text"/>
-				<param name="get_type" label="get_type" optional="false" value="" help="Can be &quot;feature&quot; or &quot;polygon&quot;." type="text"/>
-			</when>
-			<when value="get-upstream-polygons">
-				<param name="lon" label="lon" optional="false" value="" help="Longitude...." type="text"/>
-				<param name="lat" label="lat" optional="false" value="" help="Latitude...." type="text"/>
-				<param name="comment" label="comment" optional="false" value="" help="Arbitrary string that will not be processed but returned, for user's convenience." type="text"/>
-			</when>
-			<when value="get-upstream-dissolved">
-				<param name="lon" label="lon" optional="false" value="" help="Longitude...." type="text"/>
-				<param name="lat" label="lat" optional="false" value="" help="Latitude...." type="text"/>
-				<param name="comment" label="comment" optional="false" value="" help="Arbitrary string that will not be processed but returned, for user's convenience." type="text"/>
-				<param name="get_type" label="get_type" optional="false" value="" help="Can be &quot;feature&quot;, &quot;polygon&quot; or &quot;feature_collection&quot;." type="text"/>
-			</when>
-			<when value="get-subset-cog">
-				<param name="north" label="north" optional="false" value="" help="Northernmost coordinate (in WGS84 decimal degrees, max 85)" type="float"/>
-				<param name="south" label="south" optional="false" value="" help="Sourthernmost coordinate (in WGS84 decimal degrees, min 65)" type="float"/>
-				<param name="west" label="west" optional="false" value="" help="Westernmost coordinate (in WGS84 decimal degrees, min 0)" type="float"/>
-				<param name="east" label="east" optional="false" value="" help="Easternmost coordinate (in WGS84 decimal degrees, max 20)" type="float"/>
-			</when>
-			<when value="get-subset-polygon">
-				<param name="polygon" label="polygon" optional="false" value="" help="Polygon GeoJSON (in WGS84 decimal degrees, max 85)" type="text"/>
+			<when value="get-subset-by-polygon">
+				<param name="polygon" label="polygon" optional="false" value="" help="Link to GeoJSON polygon in file (url)." type="data" format="txt"/>
 			</when>
 		</conditional>
 	</inputs>
